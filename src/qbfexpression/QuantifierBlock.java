@@ -5,11 +5,13 @@ import java.util.List;
 public abstract class QuantifierBlock {
 	public int quantifiercount = 0, unicount = 0;
 	// a priority of the quantifier
+	public Quantifier[] quantifiers;
 	public int[] order;
 	public int[] poscount;
 	public int[] negcount;
 	public boolean[] isexist;
 	public QuantifierBlock(int n) {
+		this.quantifiers = new Quantifier[n+1];
 		this.quantifiercount = n;
 		this.poscount = new int[n+1];
 		this.negcount = new int[n+1];

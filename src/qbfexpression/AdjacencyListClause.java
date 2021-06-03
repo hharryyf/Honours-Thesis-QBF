@@ -40,7 +40,6 @@ public class AdjacencyListClause implements Disjunction {
 	}
 
 
-
 	@Override
 	public boolean contains(int val) {
 		if (evaluate() != -1) return false;
@@ -75,7 +74,16 @@ public class AdjacencyListClause implements Disjunction {
 	}
 
 
-
+    public List<Integer> getContradiction() {
+    	List<Integer> ret = new ArrayList<>();
+    	for (Pair<Integer, Integer> p : this.literal) {
+    		if (p.second == 0) {
+    			ret.add(p.first);
+    		}
+    	}
+    	return ret;
+    }
+	
 	@Override
 	public List<Integer> getVariable() {
 		List<Integer> ret = new ArrayList<>();
@@ -105,7 +113,33 @@ public class AdjacencyListClause implements Disjunction {
 		
 		this.literal.add(new Pair<>(val, -1));
 	}
-
+    
+	protected boolean hasUnit(AdjacencyListFormula f) {
+		if (evaluate() == -1 && this.existcount == 1) {
+			int target = 0, lv = Integer.MAX_VALUE;
+			for (Pair<Integer, Integer> p : this.literal) {
+				if (p.second == -1 && f.isMax(p.first)) {
+					target = p.first;
+				} 
+				
+				if (p.second == -1 && !f.isMax(p.first)) {
+					lv = Math.min(lv, f.getLevel(p.first));
+				}
+			}
+			
+			if (target == 0) {
+				System.err.println("bad");
+				System.exit(0);
+			}
+			
+			if (f.getLevel(target) < lv) {
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
     public void set(int v, AdjacencyListFormula f, int val, int id) {
 		if (v < 0) {
 			System.err.println("negative v assigned to formula " + id + " !");
@@ -169,6 +203,7 @@ public class AdjacencyListClause implements Disjunction {
 					f.incProved(-1);
 				} else {
 					f.incDisproved(-1);
+					f.addDisprove(id, false);
 				}
 			} else {
 				if (after == -1) {
@@ -188,6 +223,7 @@ public class AdjacencyListClause implements Disjunction {
 					f.incProved(1);
 				} else {
 					f.incDisproved(1);
+					f.addDisprove(id, true);
 				}
 			}
 		}

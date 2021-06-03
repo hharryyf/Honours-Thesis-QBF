@@ -72,6 +72,7 @@ public class FrequencyBlock extends QuantifierBlock {
 				}
 			}
 			this.quantifier.add(new Pair<Integer, Quantifier>(order[q.getVal()], q));
+			super.quantifiers[q.getVal()] = q;
 		}
 	}
 
@@ -132,7 +133,7 @@ public class FrequencyBlock extends QuantifierBlock {
 				this.unicount--; 
 			}
 			this.quantifiercount--;
-			quantifier.remove(new Pair<>(order[v], new Quantifier(isMax(v), v)));
+			quantifier.remove(new Pair<>(order[v], super.quantifiers[v]));
 		}
 	}
 }

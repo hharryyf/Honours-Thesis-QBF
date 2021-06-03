@@ -20,7 +20,7 @@ public class Main {
         		Result ret = ResultGenerator.getInstance();
         		if (args.length == 0) {
         			fo = rd.read(0);
-        			Solver s = new QDLLI();
+        			Solver s = new QDLLRBJ();
         			ret.setTruth(s.solve(fo));
         		} else {
         			fo = rd.read(0);
