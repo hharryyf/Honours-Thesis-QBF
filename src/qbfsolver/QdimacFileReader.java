@@ -1,5 +1,7 @@
 package qbfsolver;
 import qbfexpression.*;
+//import java.io.FileWriter;
+//import java.io.IOException;
 import java.util.Scanner;
 
 public class QdimacFileReader {
@@ -50,7 +52,16 @@ public class QdimacFileReader {
 			}
 		}
 		sc.close();
-		ret.normalize();
+		ret.normalize();/*
+		try {
+			FileWriter myWriter = new FileWriter("out.txt");
+			myWriter.write(ret.toString());
+			myWriter.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}*/
+		
 		return ret;
 	}
 }

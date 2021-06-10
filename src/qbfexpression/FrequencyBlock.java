@@ -25,17 +25,12 @@ public class FrequencyBlock extends QuantifierBlock {
 		return this.negcount[id] + this.poscount[id];
 	}
 	
-	private void updateFreq(int v, int to) {
-		
-	}
 	
 	public void updatePositive(int v, int inc) {
-		updateFreq(v, getFreq(v) + inc);
 		this.poscount[v] += inc;
 	}
 	
 	public void updateNegative(int v, int inc) {
-		updateFreq(v, getFreq(v) + inc);
 		this.negcount[v] += inc;
 	}
 	
@@ -107,6 +102,7 @@ public class FrequencyBlock extends QuantifierBlock {
 		}
 		
 		Collections.sort(mp);
+		// System.out.println(mp);
 		count = Math.max(Math.min(count, 4), 1);
 		List<Quantifier> ret = new ArrayList<Quantifier>();
 		int i = 0, j = mp.size() - 1;
@@ -118,7 +114,21 @@ public class FrequencyBlock extends QuantifierBlock {
 		
 		return ret;
 	}
-
+	
+	@Override
+	public boolean istopMax() {
+		if (this.quantifier.isEmpty()) {
+			System.err.println("cannot call this method when there's no quantifier");
+			System.exit(1);
+		}
+		return this.quantifier.first().second.isMax();
+	}
+	
+	@Override
+	public int size() {
+		return this.quantifier.size();
+	}
+ 	
 	@Override
 	public void dropQuantifier() {
 		int v = this.quantifier.first().getSecond().getVal();
@@ -135,5 +145,17 @@ public class FrequencyBlock extends QuantifierBlock {
 			this.quantifiercount--;
 			quantifier.remove(new Pair<>(order[v], super.quantifiers[v]));
 		}
+	}
+	
+	public String toString() {
+		String ret = "";
+		for (Pair<Integer, Quantifier> p : this.quantifier) {
+			if (p.second.isMax()) {
+				ret += "e " + p.second.getVal() + " 0\n";
+			} else {
+				ret += "a " + p.second.getVal() + " 0\n";
+			}
+		}
+		return ret;
 	}
 }

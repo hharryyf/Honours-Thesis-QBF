@@ -10,7 +10,7 @@ public class AdjacencyListClause implements Disjunction {
 	private int existcount = 0;
 	private int proved = 0, disproved = 0;
 	// [literal, value (-1, 0, 1), 0 means -literal, 1 means good, -1 means pending]
-	private List<Pair<Integer, Integer>> literal;
+	protected List<Pair<Integer, Integer>> literal;
 	private boolean trivial = false;
 	// this unassigned stored all the unassigned literals at the point the formula changed state
 	// from -1 -> 0/1
@@ -20,6 +20,10 @@ public class AdjacencyListClause implements Disjunction {
 		this.existcount = 0;
 		this.disproved = this.proved = 0;
 		this.unassigned = new ArrayList<>();
+	}
+	
+	public int getExist() {
+		return this.existcount;
 	}
 	
 	public void incExist(int val) {
@@ -114,30 +118,17 @@ public class AdjacencyListClause implements Disjunction {
 		this.literal.add(new Pair<>(val, -1));
 	}
     
-	protected boolean hasUnit(AdjacencyListFormula f) {
-		if (evaluate() == -1 && this.existcount == 1) {
-			int target = 0, lv = Integer.MAX_VALUE;
-			for (Pair<Integer, Integer> p : this.literal) {
-				if (p.second == -1 && f.isMax(p.first)) {
-					target = p.first;
-				} 
-				
-				if (p.second == -1 && !f.isMax(p.first)) {
-					lv = Math.min(lv, f.getLevel(p.first));
-				}
-			}
-			
-			if (target == 0) {
-				System.err.println("bad");
-				System.exit(0);
-			}
-			
-			if (f.getLevel(target) < lv) {
-				return true;
+	protected boolean hasUnit(AdjacencyListFormula f, int v) {
+		if (!this.contains(v)) return false;
+		if (evaluate() != -1 || this.existcount != 1) return false;
+		for (Pair<Integer, Integer> p : this.literal) {
+			if (p.second != 0 && !f.isMax(p.first) && (f.getLevel(p.first) < f.getLevel(v))) {
+				return false;
 			}
 		}
+			
 		
-		return false;
+		return true;
 	}
 	
     public void set(int v, AdjacencyListFormula f, int val, int id) {
@@ -265,7 +256,7 @@ public class AdjacencyListClause implements Disjunction {
 	}
 
 	public String toString() {
-		return "[" + this.literal.toString() + " " + this.disproved + " " + this.proved + " " + this.existcount + " " + this.evaluate() + "]";
+		return "{" + this.literal.toString() + " " + this.disproved + " " + this.proved + " " + this.existcount + " " + this.evaluate() + "}";
 	}
 
 	@Override

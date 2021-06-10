@@ -5,8 +5,13 @@ public class CmdArgs {
 	private int bfU = 3;
 	private int bfE = 3;
 	private double R = 0.1;
+	private boolean debug = false;
 	public CmdArgs() {
 		
+	}
+	
+	public boolean getDebug() {
+		return debug;
 	}
 	
 	public CmdArgs(int type) {

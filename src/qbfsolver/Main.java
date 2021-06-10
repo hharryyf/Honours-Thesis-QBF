@@ -25,13 +25,13 @@ public class Main {
         		} else {
         			fo = rd.read(0);
         			System.out.println(fo.getClass());
-        			Solver s = new DeepPNS();
-        			s.solve(fo);
+        			Solver s = new QDLLR();
+        			ret.setTruth(s.solve(fo));
         		}	
         		return ResultGenerator.getInstance();
             });
 
-            System.out.println(f.get(200000, TimeUnit.SECONDS));
+            System.out.println(f.get(900, TimeUnit.SECONDS));
             
         } catch (final TimeoutException e) {
             System.out.println("UNSOLVED NA");

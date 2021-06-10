@@ -14,6 +14,8 @@ import org.sat4j.specs.ContradictionException;
 import org.sat4j.specs.ISolver;
 import org.sat4j.specs.TimeoutException;
 
+import qbfsolver.ResultGenerator;
+// import utilstructure.BHOMvector;
 import utilstructure.Pair;
 
 public class AdjacencyListFormula implements CnfExpression {
@@ -185,6 +187,12 @@ public class AdjacencyListFormula implements CnfExpression {
 			d.set(v, this, -1, id);
 		}
 		
+		boolean debug = ResultGenerator.getCommandLine().getDebug();
+		if (debug) {
+			System.out.println("unassign " + v);
+			System.out.println(this);
+			System.out.println(this.currentassign);
+		}
 		if (this.currentassign.isEmpty() || Math.abs(this.currentassign.getLast().first) != v) {
 			System.err.println("there's a problem");
 			System.err.println(currentassign);
@@ -194,28 +202,45 @@ public class AdjacencyListFormula implements CnfExpression {
 			Pair<Integer, Character> lastassign = this.currentassign.removeLast();
 			if (r != null) {
 				if (r.satisfied) {
-					// for a satisfied reason, we can anything other than a branching
+					// for a satisfied reason, we can drop anything other than a branching
 					// variable
 					if (lastassign.second != 'N' || isMax(lastassign.first)) { 
 						r.literals.remove(lastassign.first);
 					}
 				} else {
+					//System.out.println("before backtrack " + r.literals + " " + lastassign.second + " " + lastassign.first);
 					// for existential literal, things are a bit complicated
-					if (lastassign.second == 'P' || lastassign.second == 'B') {
+					if (lastassign.second == 'P' || lastassign.second == 'B' || !isMax(lastassign.first)) {
 						r.literals.remove(lastassign.first);
 					} else if (lastassign.second == 'U') {
 						r.literals.remove(lastassign.first);
+						boolean found = false;
 						for (Integer id : this.varToformula.get(Math.abs(v))) {
 							AdjacencyListClause d = this.formula.get(id);
-							if (d.hasUnit(this)) {
+							if (d.hasUnit(this, lastassign.first)) {
 								List<Integer> contradict = d.getContradiction();
+								//System.out.println("before unit " + r.literals);
 								for (Integer cc : contradict) {
 									r.literals.add(-cc);
 								}
+								
+								if (debug) {
+									System.out.println("found the unit thing");
+									System.out.println(d);
+									System.out.println("after unit " + r.literals);
+								}
+								found = true;
 								break;
 							}
 						}
+						
+						if (!found) {
+							System.err.println("not found!");
+							System.exit(0);
+						}
 					}
+					
+					//System.out.println("after backtrack " + r.literals);
 				}
 			}
 		}
@@ -249,6 +274,7 @@ public class AdjacencyListFormula implements CnfExpression {
 	
 	private void eliminate_useless_quantifier() {
 		for (Integer id : this.useless) {
+			// System.out.println("drop " + id);
 			this.dropquantifier(id);
 			if (!this.currentassign.isEmpty() && Math.abs(this.currentassign.getLast().first) == Math.abs(id)) {
 				this.currentassign.getLast().second = 'B';
@@ -310,6 +336,26 @@ public class AdjacencyListFormula implements CnfExpression {
 			System.err.println("hasn't called normal!");
 			System.exit(0);
 		}
+		/*
+		boolean type = this.block.istopMax();
+		//System.out.println("peek");
+		List<Quantifier> q = this.block.peek(2, type);
+		int i;
+		BHOMvector vc = null;
+		for (i = 0 ; i < q.size(); ++i) {
+			BHOMvector curr = new BHOMvector(q.get(i));
+			for (Integer id : this.varToformula.get(curr.getQuantifier().getVal())) {
+				if (this.formula.get(id).evaluate() == -1) {
+					curr.add(this.formula.get(id).getExist());
+				}
+			}
+			//System.out.println(curr);
+			if (vc == null || vc.compareTo(curr) == 1) {
+				vc = curr;
+			}
+		}
+		//System.out.println(vc);
+		 * */
 		return this.block.peek();
 	}
 
@@ -435,6 +481,7 @@ public class AdjacencyListFormula implements CnfExpression {
 
 	@Override
 	public void normalize() {
+		
 		for (int i = 1; i <= n; ++i) {
 			if (block.hasQuantifier(i)) continue;
 			this.addquantifier(new Quantifier(isMax(i), i));
@@ -446,15 +493,16 @@ public class AdjacencyListFormula implements CnfExpression {
 			}
 		}
 		
-		eliminate_useless_quantifier();
 		this.setNormal();
+		eliminate_useless_quantifier();
+		// System.out.println(this.block.size());
+		
 		this.block.unicount = 0;
 		for (int i = 1; i <= n; ++i) {
 			if (this.getFreq(i) > 0 && !this.isMax(i)) this.block.unicount++;
 			if (this.getPosfreq(i) == 0 && this.getNegfreq(i) != 0) this.pure.add(-i);
 			if (this.getPosfreq(i) > 0 && this.getNegfreq(i) == 0) this.pure.add(i);
 		}
-		
 		for (int i = 0; i < formula.size(); ++i) {
 			int lv = Integer.MAX_VALUE, cnt = 0, target = 0;
 			List<Integer> ret = this.formula.get(i).getLiteral();
@@ -463,24 +511,33 @@ public class AdjacencyListFormula implements CnfExpression {
 					target = v;
 					cnt++;
 				} else {
-					lv = Math.min(lv, target);
+					lv = Math.min(lv, this.getLevel(target));
 				}
 			}
 			
 			if (target != 0 && cnt == 1 && lv > this.getLevel(target)) {
 				this.addUnit(target);
+				//System.out.println(this.formula.get(i) + " has unit " + target);
 			}
 		}
 		
+		//System.out.println(unit);
 		this.simplify();
 		this.commit();
+		//System.out.println(this.block.size());
+		//System.out.println(this.currentassign);
+		//this.currentassign.clear();
+		//System.exit(0);
 	}
 	
 	private boolean check(int v, HashSet<Integer> ass) {
-		//System.out.println("----check------- " + v + " --------");
-		//System.out.println("current assign " + ass);
+		boolean debug = ResultGenerator.getCommandLine().getDebug();
+		if (debug) {
+			System.out.println("----check------- " + v + " --------");
+			System.out.println("current assign " + ass);
+		}
 		for (Integer id : this.varToformulainit.get(Math.abs(v))) {
-			//System.out.println("formula with id= " + id);
+			if (debug) System.out.println("formula with id= " + id);
 			AdjacencyListClause d = this.formula.get(id);
 			boolean in = false, ok = false;
 			List<Integer> lit = d.getAll();
@@ -490,7 +547,7 @@ public class AdjacencyListFormula implements CnfExpression {
 				}
 				
 				if (l != v && ass.contains(l)) {
-					//System.out.println("contains assign " + l);
+					if (debug) System.out.println("contains assign " + l + " " + d);
 					ok = true;
 				}
 			}
@@ -503,6 +560,13 @@ public class AdjacencyListFormula implements CnfExpression {
 	public Reason getReason() {
 		int res = -1;
 		HashSet<Integer> nonproved = new HashSet<>();
+		boolean debug = ResultGenerator.getCommandLine().getDebug();
+		if (debug) {
+			System.out.println("before we compute the reason");
+			System.out.println(this.currentassign);
+			System.out.println(this);
+		}
+		
 		if (this.disproved > 0) {
 			res = 0;
 		} else if (this.proved == this.fcount) {
@@ -539,8 +603,13 @@ public class AdjacencyListFormula implements CnfExpression {
 			}
 		}
 		
+		if (res == -1) {
+			System.err.println("invalid call to reason!");
+			System.exit(1);
+		}
+		
 		Reason ret = new Reason();
-		ret.satisfied = res == 1;
+		ret.satisfied = (res == 1 || res == 2);
 		// SAT solver is called
 		if (res == 2) {
 			for (Pair<Integer, Character> p : this.currentassign) {
@@ -574,27 +643,36 @@ public class AdjacencyListFormula implements CnfExpression {
 						//System.out.println("check " + cand);
 						iter.remove();
 						ass.remove(cand);
-					} else {
-						//System.out.println("check fail " + cand);
 					}
 				}
 				ret.literals.addAll(li);
 			} else {
 				if (!this.disprovedformula.isEmpty()) {
-					int id = this.disprovedformula.iterator().next();
+					Iterator<Integer> biter = this.disprovedformula.iterator();
+					//while (biter.hasNext()) {
+					int id = biter.next();
+						//System.out.println("before assign " + ret.literals);
 					for (Integer cc : this.formula.get(id).getContradiction()) {
 						if (isMax(cc)) {
 							ret.literals.add(-cc);
 						}
 					}
+					//}
+					//System.out.println(this.formula.get(id).literal);
+					//System.out.println("after assign " + ret.literals);
+				} else {
+					System.err.println("strange behavior");
+					System.exit(1);
 				}
 			}
 		}
-		/*if (res == 0 || res == 1) {
+		if (debug) {
+			System.out.println("after we compute the reason");
 			System.out.println(res + " " + ret.literals);
-		} else {
-			System.out.println("sat determined " + res);
-		}*/
+			System.out.println(this.currentassign);
+			System.out.println(this);
+		}
+		
 		return ret;
 	}
 
@@ -638,5 +716,21 @@ public class AdjacencyListFormula implements CnfExpression {
 	public CnfExpression duplicate() {
 		return this;
 	}
-
+	
+	public String toString() {
+		String ret = "";
+		int acccnt = 0;
+		for (AdjacencyListClause d : this.formula) {
+			if (d.evaluate() == -1) {
+				acccnt += 1;
+				for (Integer it : d.getLiteral()) {
+					ret += it + " ";
+				}
+				ret += "0\n";
+			}
+		}
+		
+		String rett2 = block.toString();
+		return "p cnf " + this.n + " " + acccnt + "\n" + rett2 + ret;
+	}
 }
