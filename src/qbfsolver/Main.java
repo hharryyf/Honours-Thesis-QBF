@@ -18,20 +18,20 @@ public class Main {
             	QdimacFileReader rd = new QdimacFileReader();
         		CnfExpression fo;
         		Result ret = ResultGenerator.getInstance();
-        		if (args.length == 0) {
+        		if (args.length == 1) {
         			fo = rd.read(0);
         			Solver s = new QDLLRBJ();
         			ret.setTruth(s.solve(fo));
         		} else {
         			fo = rd.read(0);
         			System.out.println(fo.getClass());
-        			Solver s = new QDLLR();
-        			ret.setTruth(s.solve(fo));
+        			Solver s = new DeepPNSWithReason();
+        			s.solve(fo);
         		}	
         		return ResultGenerator.getInstance();
             });
 
-            System.out.println(f.get(900, TimeUnit.SECONDS));
+            System.out.println(f.get(3000, TimeUnit.SECONDS));
             
         } catch (final TimeoutException e) {
             System.out.println("UNSOLVED NA");

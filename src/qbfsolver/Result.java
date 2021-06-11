@@ -30,6 +30,10 @@ public class Result {
 		this.nodecount++;
 	}
 	
+	public int getNode() {
+		return this.nodecount;
+	}
+	
 	public String toString() {
 		return truth + " " + iterations + " " + nodecount;
 	}

@@ -107,7 +107,7 @@ public class QDLLRBJ implements Solver {
 	
 	@Override
 	public boolean solve(CnfExpression f) {
-		System.out.println("enter QDLL-BJ solver");
+		System.out.println("enter QDLL Backjumping solver");
 		return solvebj((AdjacencyListFormula)f).first;
 	}
 

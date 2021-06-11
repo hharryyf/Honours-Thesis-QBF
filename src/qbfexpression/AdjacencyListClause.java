@@ -127,7 +127,6 @@ public class AdjacencyListClause implements Disjunction {
 			}
 		}
 			
-		
 		return true;
 	}
 	

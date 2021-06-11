@@ -4,7 +4,6 @@ public class CmdArgs {
 	private int type = 0;
 	private int bfU = 3;
 	private int bfE = 3;
-	private double R = 0.1;
 	private boolean debug = false;
 	public CmdArgs() {
 		
@@ -19,12 +18,18 @@ public class CmdArgs {
 	}
 	
 	public double getR() {
-		return this.R;
+		int iter = ResultGenerator.getInstance().getNode();
+		double ret = 0.1;
+		if (iter <= 1000000) {
+			ret = (iter / 20000) * (1.0 / 100);
+		} else {
+			ret = 1.0 - (iter / 20000) * (1.0 / 100);
+		}
+		if (ret > 1.0) ret = 1.0;
+		if (ret < 0.0) ret = 0.0;
+		return ret;
 	}
-	
-	public void setR(double R) {
-		this.R = R;
-	}
+
 	
 	public int getBfE() {
 		return this.bfE;
