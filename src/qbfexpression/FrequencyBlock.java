@@ -70,7 +70,15 @@ public class FrequencyBlock extends QuantifierBlock {
 			super.quantifiers[q.getVal()] = q;
 		}
 	}
-
+	
+	@Override
+	public void prepend(Quantifier q) {
+		isexist[q.getVal()] = true;
+		order[q.getVal()] = 0;
+		this.quantifier.add(new Pair<Integer, Quantifier>(order[q.getVal()], q));
+		super.quantifiers[q.getVal()] = q;
+	}
+	
 	@Override
 	public Quantifier peek() {
 		boolean type = this.quantifier.first().getSecond().isMax();

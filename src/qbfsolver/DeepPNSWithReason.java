@@ -24,7 +24,8 @@ public class DeepPNSWithReason implements Solver {
 		}
 		AdjacencyListFormula f = (AdjacencyListFormula) formula;
 		PNSNodeWithReason root = new PNSNodeWithReason(f, 1), curr = root;
-		int i = 0, tolvisited = 0;
+		int i = 0;
+		long tolvisited = 0;
 		Stack<AdjacencyListFormula> stk = new Stack<AdjacencyListFormula>();
 		while (i <= this.maxT && !root.isSolved()) {
 			if (i % 1000 == 0) {

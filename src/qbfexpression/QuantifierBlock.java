@@ -30,4 +30,5 @@ public abstract class QuantifierBlock {
 	public abstract void updateNegative(int v, int inc);
 	public abstract int size();
 	public abstract boolean istopMax();
+	public abstract void prepend(Quantifier q);
 }

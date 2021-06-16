@@ -46,6 +46,9 @@ public class QdimacFileReader {
 				if (!c.isEmpty()) {
 					ret.addcnf(c);
 				} else {
+					System.err.println("try to insert an empty clause");
+					System.out.println("UNSAT");
+					System.exit(0);
 					ret.setSatisfied(false);
 				}
 				m--;

@@ -19,14 +19,8 @@ public class CmdArgs {
 	
 	public double getR() {
 		int iter = ResultGenerator.getInstance().getNode();
-		double ret = 0.1;
-		if (iter <= 1000000) {
-			ret = (iter / 20000) * (1.0 / 100);
-		} else {
-			ret = 1.0 - (iter / 20000) * (1.0 / 100);
-		}
-		if (ret > 1.0) ret = 1.0;
-		if (ret < 0.0) ret = 0.0;
+		double ret = 0.0;
+		if (((iter / 10000) & 1) == 1) ret = 0.5;
 		return ret;
 	}
 

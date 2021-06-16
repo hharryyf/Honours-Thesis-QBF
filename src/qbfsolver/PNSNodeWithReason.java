@@ -148,7 +148,7 @@ public class PNSNodeWithReason {
 		}
 		
 		if ((ret == null && !this.right.isSolved()) 
-			|| (ret != null && ret.dpn() >= this.right.dpn() && !this.right.isSolved())) {
+			|| (ret != null && ret.dpn() > this.right.dpn() && !this.right.isSolved())) {
 			idx = -1;
 			ret = this.right;
 		}

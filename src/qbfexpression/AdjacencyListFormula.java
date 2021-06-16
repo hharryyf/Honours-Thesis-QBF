@@ -327,6 +327,9 @@ public class AdjacencyListFormula implements CnfExpression {
 		// add an empty clause
 		if (c.isEmpty()) {
 			this.disproved++;
+			System.err.println("try to insert an empty clause");
+			System.out.println("UNSAT");
+			System.exit(0);
 		}
 	}
 
@@ -336,26 +339,6 @@ public class AdjacencyListFormula implements CnfExpression {
 			System.err.println("hasn't called normal!");
 			System.exit(0);
 		}
-		/*
-		boolean type = this.block.istopMax();
-		//System.out.println("peek");
-		List<Quantifier> q = this.block.peek(2, type);
-		int i;
-		BHOMvector vc = null;
-		for (i = 0 ; i < q.size(); ++i) {
-			BHOMvector curr = new BHOMvector(q.get(i));
-			for (Integer id : this.varToformula.get(curr.getQuantifier().getVal())) {
-				if (this.formula.get(id).evaluate() == -1) {
-					curr.add(this.formula.get(id).getExist());
-				}
-			}
-			//System.out.println(curr);
-			if (vc == null || vc.compareTo(curr) == 1) {
-				vc = curr;
-			}
-		}
-		//System.out.println(vc);
-		 * */
 		return this.block.peek();
 	}
 
@@ -484,7 +467,9 @@ public class AdjacencyListFormula implements CnfExpression {
 		
 		for (int i = 1; i <= n; ++i) {
 			if (block.hasQuantifier(i)) continue;
-			this.addquantifier(new Quantifier(isMax(i), i));
+			// this.addquantifier();
+			this.block.prepend(new Quantifier(isMax(i), i));
+			System.out.println("not normal");
 		}
 		
 		for (int i = 1; i <= n; ++i) {
@@ -649,17 +634,12 @@ public class AdjacencyListFormula implements CnfExpression {
 			} else {
 				if (!this.disprovedformula.isEmpty()) {
 					Iterator<Integer> biter = this.disprovedformula.iterator();
-					//while (biter.hasNext()) {
 					int id = biter.next();
-						//System.out.println("before assign " + ret.literals);
 					for (Integer cc : this.formula.get(id).getContradiction()) {
 						if (isMax(cc)) {
 							ret.literals.add(-cc);
 						}
 					}
-					//}
-					//System.out.println(this.formula.get(id).literal);
-					//System.out.println("after assign " + ret.literals);
 				} else {
 					System.err.println("strange behavior");
 					System.exit(1);

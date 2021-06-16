@@ -31,7 +31,7 @@ public class Main {
         		return ResultGenerator.getInstance();
             });
 
-            System.out.println(f.get(3000, TimeUnit.SECONDS));
+            System.out.println(f.get(30000, TimeUnit.SECONDS));
             
         } catch (final TimeoutException e) {
             System.out.println("UNSOLVED NA");
