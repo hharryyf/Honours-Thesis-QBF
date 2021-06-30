@@ -6,10 +6,10 @@ import java.util.TreeMap;
 
 import qbfexpression.Quantifier;
 
-public class BHOMvector implements Comparable<BHOMvector> {
+public class BOMHCount implements Comparable<BOMHCount> {
 	protected TreeMap<Integer, Integer> vc;
 	private Quantifier q;
-	public BHOMvector(Quantifier q) {
+	public BOMHCount(Quantifier q) {
 		this.vc = new TreeMap<>();
 		this.q = q;
 	}
@@ -23,7 +23,7 @@ public class BHOMvector implements Comparable<BHOMvector> {
 	}
 	
 	@Override
-	public int compareTo(BHOMvector other) {
+	public int compareTo(BOMHCount other) {
 		Iterator<Map.Entry<Integer, Integer>> it = vc.entrySet().iterator();
 		Iterator<Map.Entry<Integer, Integer>> it2 = other.vc.entrySet().iterator();
 		while (it.hasNext() && it2.hasNext()) {

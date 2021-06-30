@@ -1,6 +1,7 @@
 package qbfexpression;
 
 import java.util.List;
+import java.util.TreeMap;
 
 public abstract class QuantifierBlock {
 	public int quantifiercount = 0, unicount = 0;
@@ -31,4 +32,5 @@ public abstract class QuantifierBlock {
 	public abstract int size();
 	public abstract boolean istopMax();
 	public abstract void prepend(Quantifier q);
+	protected abstract String toString(TreeMap<Integer, Integer> squeeze);
 }

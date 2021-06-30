@@ -1,18 +1,22 @@
 package qbfsolver;
 import qbfexpression.*;
+
+import java.io.File;
+import java.io.FileNotFoundException;
 //import java.io.FileWriter;
 //import java.io.IOException;
 import java.util.Scanner;
 
 public class QdimacFileReader {
-	public CnfExpression read(int type) {
-		Scanner sc = new Scanner(System.in);
+	public CnfExpression read(int type) throws FileNotFoundException {
+		File myObj = new File("formula.txt");
+		Scanner sc = new Scanner(myObj);
 		String first = sc.nextLine();
 		first = first.trim();
 		String[] s = first.split("\\s+");
 		int n = Integer.valueOf(s[2]);
 		int m = Integer.valueOf(s[3]);
-		CnfExpression ret = new AdjacencyListFormula(n, m);
+		CnfExpression ret = new AdjacencyListFormulaWithReason(n, m);
 		int i;
 		while (m > 0) {
 			first = sc.nextLine();
@@ -36,7 +40,7 @@ public class QdimacFileReader {
 				}
 			} else {
 				// Disjunction c = new DisjunctionDefault();
-				Disjunction c = new AdjacencyListClause();
+				Disjunction c = new AdjacencyListClauseWithReason();
 				for (i = 0 ; i < s.length; ++i) {
 					if (Integer.valueOf(s[i]) != 0) {
 						c.add(Integer.valueOf(s[i]));
@@ -46,7 +50,7 @@ public class QdimacFileReader {
 				if (!c.isEmpty()) {
 					ret.addcnf(c);
 				} else {
-					System.err.println("try to insert an empty clause");
+					System.out.println("try to insert an empty clause");
 					System.out.println("UNSAT");
 					System.exit(0);
 					ret.setSatisfied(false);
@@ -55,16 +59,7 @@ public class QdimacFileReader {
 			}
 		}
 		sc.close();
-		ret.normalize();/*
-		try {
-			FileWriter myWriter = new FileWriter("out.txt");
-			myWriter.write(ret.toString());
-			myWriter.close();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-		
+		ret.normalize();		
 		return ret;
 	}
 }

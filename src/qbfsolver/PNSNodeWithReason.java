@@ -3,7 +3,7 @@ package qbfsolver;
 import java.util.ArrayList;
 import java.util.List;
 
-import qbfexpression.AdjacencyListFormula;
+import qbfexpression.AdjacencyListFormulaWithReason;
 import qbfexpression.Quantifier;
 import qbfexpression.Reason;
 
@@ -15,7 +15,7 @@ public class PNSNodeWithReason {
 	private int pn, dn, depth;
 	private double deep;
 	private boolean valid = false;
-	public PNSNodeWithReason(AdjacencyListFormula f, int depth) {
+	public PNSNodeWithReason(AdjacencyListFormulaWithReason f, int depth) {
 		Result res = ResultGenerator.getInstance();
 		res.setNode();
 		this.deep = 1.0 / depth;
@@ -27,14 +27,17 @@ public class PNSNodeWithReason {
 			this.dn = PNSNode.inf;
 			this.reason = f.getReason();
 			this.valid = true;
+			//System.out.println("expand terminal");
 		} else if (val == 0) {
 			this.pn = PNSNode.inf;
 			this.dn = 0;
 			this.reason = f.getReason();
 			this.valid = true;
+			//System.out.println("expand terminal");
 		} else {
 			this.pn = 1;
 			this.dn = 1;
+			// System.out.println(f);
 			this.splitnode = f.peek();
 			if (this.splitnode.isMax()) {
 				this.dn = 2;
@@ -113,7 +116,7 @@ public class PNSNodeWithReason {
 		this.left = this.right = null;
 	}
 	
-	public void expansion(AdjacencyListFormula f) {
+	public void expansion(AdjacencyListFormulaWithReason f) {
 		if (f.evaluate() != -1) {
 			System.err.println("bad!, invalid expansion");
 			System.exit(0);
@@ -136,15 +139,29 @@ public class PNSNodeWithReason {
 		R.parent = this;
 		this.right = R;
 		f.undo(this.right.reason);		
+		/*
+			if (this.right.isWin() && this.splitnode.isMax()) {
+				System.out.println("solved");
+			}
+			
+			if (!this.right.isWin() && !this.splitnode.isMax()) {
+				System.out.println("solved");
+			}
+		*/
 	}
 	
-	public PNSNodeWithReason MPN(AdjacencyListFormula f) {
+	public PNSNodeWithReason MPN(AdjacencyListFormulaWithReason f) {
 		if (this.isTerminal()) return null;
 		PNSNodeWithReason ret = null;
+		boolean debug = ResultGenerator.getCommandLine().getDebug();
 		int idx = 0;
 		if (ret == null && !this.left.isSolved()) {
 			ret = this.left;
 			idx = 1;
+		}
+		
+		if (debug) {
+			System.out.println(this.splitnode.isMax() ? "exist " : " universe");
 		}
 		
 		if ((ret == null && !this.right.isSolved()) 
@@ -206,6 +223,9 @@ public class PNSNodeWithReason {
 				if (!this.right.isSolved()) {
 					// case when the pruning condition can be triggered
 					if (this.isSolved() || !this.left.reason.contains(this.splitnode.getVal())) {
+						/*if (!this.isSolved()) {
+							System.out.println("prun");
+						}*/
 						this.reason = this.left.reason;
 						this.valid = true;
 						this.prun();
@@ -231,6 +251,9 @@ public class PNSNodeWithReason {
 				}
 			} else if (this.right.valid) {
 				if (this.isSolved() || !this.right.reason.contains(this.splitnode.getVal())) {
+					/*if (!this.isSolved()) {
+						System.out.println("prun");
+					}*/
 					this.reason = this.right.reason;
 					this.valid = true;
 					this.prun();

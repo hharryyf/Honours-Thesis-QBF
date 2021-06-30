@@ -21,6 +21,7 @@ public class CmdArgs {
 		int iter = ResultGenerator.getInstance().getNode();
 		double ret = 0.0;
 		if (((iter / 10000) & 1) == 1) ret = 0.5;
+		//if (iter % 100000 > 99990) ret = 1.0;
 		return ret;
 	}
 

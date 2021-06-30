@@ -3,7 +3,7 @@ package qbfsolver;
 import java.util.ArrayList;
 import java.util.List;
 
-import qbfexpression.AdjacencyListFormula;
+import qbfexpression.AdjacencyListFormulaWithReason;
 import qbfexpression.CnfExpression;
 import qbfexpression.Quantifier;
 
@@ -122,7 +122,7 @@ public class PNSNode {
 					fp.set(candidate.get(j).getVal());
 				}
 				
-				if (f.getClass() != AdjacencyListFormula.class) {
+				if (f.getClass() != AdjacencyListFormulaWithReason.class) {
 					fp.dropquantifier(candidate.get(j).getVal());
 				}
 			}
@@ -162,7 +162,7 @@ public class PNSNode {
 			}
 			//f.dropquantifier(f.peek().getVal());
 			// f.dropquantifier();
-			if (f.getClass() != AdjacencyListFormula.class) {
+			if (f.getClass() != AdjacencyListFormulaWithReason.class) {
 				f.dropquantifier(candidate.get(i).getVal());
 			}
 		}

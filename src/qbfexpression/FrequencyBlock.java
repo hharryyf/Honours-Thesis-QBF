@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import utilstructure.Pair;
 
@@ -89,7 +90,7 @@ public class FrequencyBlock extends QuantifierBlock {
 	public int maxSameQuantifier(boolean type) {
 		int count = 0;
 		Iterator <Pair<Integer,Quantifier>> it = quantifier.iterator();
-		while (count < 4 && it.hasNext()) {
+		while (count < 20 && it.hasNext()) {
 			if (it.next().getSecond().isMax() != type) break;
 			count++;
 		}
@@ -110,8 +111,7 @@ public class FrequencyBlock extends QuantifierBlock {
 		}
 		
 		Collections.sort(mp);
-		// System.out.println(mp);
-		count = Math.max(Math.min(count, 4), 1);
+		count = Math.max(Math.min(count, 20), 1);
 		List<Quantifier> ret = new ArrayList<Quantifier>();
 		int i = 0, j = mp.size() - 1;
 		while (i < count && j >= 0) {
@@ -155,15 +155,47 @@ public class FrequencyBlock extends QuantifierBlock {
 		}
 	}
 	
-	public String toString() {
-		String ret = "";
+	protected String toString(TreeMap<Integer, Integer> mp) {
+		StringBuilder ret = new StringBuilder();
+		int i = 0;
+		boolean ismax = true;
+		TreeSet<Integer> st = new TreeSet<>();
+		ArrayList<ArrayList<Integer>> list = new ArrayList<>();
+		ArrayList<Character> front = new ArrayList<>();
+		ArrayList<Integer> curr = new ArrayList<>();
 		for (Pair<Integer, Quantifier> p : this.quantifier) {
-			if (p.second.isMax()) {
-				ret += "e " + p.second.getVal() + " 0\n";
-			} else {
-				ret += "a " + p.second.getVal() + " 0\n";
+			if (i == 0 || ismax != p.second.isMax()) {
+				if (!curr.isEmpty()) {
+					list.add(curr);
+					front.add(ismax ? 'e' : 'a');
+				}
+				curr = new ArrayList<>();
 			}
+			curr.add(p.second.getVal());
+			st.add(p.second.getVal());
+			ismax = p.second.isMax();
+			++i;
 		}
-		return ret;
+		
+		int j = 1;
+		for (Integer v : st) {
+			mp.put(v, j++);
+		}
+		
+		if (!curr.isEmpty()) {
+			list.add(curr);
+			front.add(ismax ? 'e' : 'a');
+		}
+		
+		for (i = 0 ; i < list.size(); ++i) {
+			ret.append(front.get(i));
+			ret.append(' ');
+			for (Integer v : list.get(i)) {
+				ret.append(mp.get(v));
+				ret.append(' ');
+			}
+			ret.append("0\n");
+		}
+		return ret.toString();
 	}
 }

@@ -1,25 +1,28 @@
 package qbfexpression;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import utilstructure.Pair;
 
-public class AdjacencyListClause implements Disjunction {
+public class AdjacencyListClauseWithReason implements Disjunction {
 
 	private int existcount = 0;
 	private int proved = 0, disproved = 0;
+	private HashSet<Integer> checkedliterals;
 	// [literal, value (-1, 0, 1), 0 means -literal, 1 means good, -1 means pending]
 	protected List<Pair<Integer, Integer>> literal;
 	private boolean trivial = false;
 	// this unassigned stored all the unassigned literals at the point the formula changed state
 	// from -1 -> 0/1
 	private List<Integer> unassigned;
-	public AdjacencyListClause() {
+	public AdjacencyListClauseWithReason() {
 		this.literal = new ArrayList<>();
 		this.existcount = 0;
 		this.disproved = this.proved = 0;
 		this.unassigned = new ArrayList<>();
+		this.checkedliterals = new HashSet<>();
 	}
 	
 	public int getExist() {
@@ -43,10 +46,11 @@ public class AdjacencyListClause implements Disjunction {
 		return false;
 	}
 
-
+	
+	
 	@Override
 	public boolean contains(int val) {
-		if (evaluate() != -1) return false;
+		if (evaluate() != -1) return false;/*
 		int i;
 		for (i = 0 ; i < literal.size(); ++i) {
 			if (val == literal.get(i).first) {
@@ -54,7 +58,8 @@ public class AdjacencyListClause implements Disjunction {
 			}
 		}
 		
-		return false;
+		return false;*/
+		return this.checkedliterals.contains(val);
 	}
 
 
@@ -115,10 +120,16 @@ public class AdjacencyListClause implements Disjunction {
 			return;
 		}
 		
+		if (contains(val)) {
+			// System.out.println("duplicate " + val);
+			return;
+		}
+		
+		this.checkedliterals.add(val);
 		this.literal.add(new Pair<>(val, -1));
 	}
     
-	protected boolean hasUnit(AdjacencyListFormula f, int v) {
+	protected boolean hasUnit(AdjacencyListFormulaWithReason f, int v) {
 		if (!this.contains(v)) return false;
 		if (evaluate() != -1 || this.existcount != 1) return false;
 		for (Pair<Integer, Integer> p : this.literal) {
@@ -130,7 +141,7 @@ public class AdjacencyListClause implements Disjunction {
 		return true;
 	}
 	
-    public void set(int v, AdjacencyListFormula f, int val, int id) {
+    public void set(int v, AdjacencyListFormulaWithReason f, int val, int id) {
 		if (v < 0) {
 			System.err.println("negative v assigned to formula " + id + " !");
 			System.exit(1);

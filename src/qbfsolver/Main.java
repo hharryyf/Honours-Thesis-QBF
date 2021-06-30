@@ -15,14 +15,17 @@ public class Main {
 		final ExecutorService service = Executors.newSingleThreadExecutor();
         try {
                 final Future<Object> f = service.submit(() -> {
+                QdimacsFilePreprocessor p = new QdimacsFilePreprocessor(); 
             	QdimacFileReader rd = new QdimacFileReader();
         		CnfExpression fo;
         		Result ret = ResultGenerator.getInstance();
-        		if (args.length == 1) {
+        		if (args.length == 0) {
+        			p.preprocess();
         			fo = rd.read(0);
         			Solver s = new QDLLRBJ();
         			ret.setTruth(s.solve(fo));
         		} else {
+        			p.preprocess();
         			fo = rd.read(0);
         			System.out.println(fo.getClass());
         			Solver s = new DeepPNSWithReason();
