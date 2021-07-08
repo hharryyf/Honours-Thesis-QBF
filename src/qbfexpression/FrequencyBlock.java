@@ -6,6 +6,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
+import qbfsolver.ResultGenerator;
 import utilstructure.Pair;
 
 public class FrequencyBlock extends QuantifierBlock {
@@ -23,6 +25,9 @@ public class FrequencyBlock extends QuantifierBlock {
 	
 	private int getFreq(int id) {
 		if (id < 0) id = -id;
+		if (ResultGenerator.dlis) {
+			return Math.max(this.negcount[id], this.poscount[id]);
+		}
 		return this.negcount[id] + this.poscount[id];
 	}
 	

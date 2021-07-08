@@ -238,10 +238,14 @@ public class PNSNodeWithReason {
 						this.left.reason.resolve(this.right.reason, this.splitnode.getVal());
 						this.reason = this.left.reason;
 					} else if (this.isWin() == this.right.isWin()) {
-						this.right.reason.resolve(this.left.reason, this.splitnode.getVal());
+						if (this.right.reason.contains(this.splitnode.getVal())) {
+							this.right.reason.resolve(this.left.reason, this.splitnode.getVal());
+						}
 						this.reason = this.right.reason;
 					} else if (this.isWin() == this.left.isWin()) {
-						this.left.reason.resolve(this.right.reason, this.splitnode.getVal());
+						if (this.left.reason.contains(this.splitnode.getVal())) {
+							this.left.reason.resolve(this.right.reason, this.splitnode.getVal());
+						}
 						this.reason = this.left.reason;
 					} else {
 						System.err.println("invalid!");

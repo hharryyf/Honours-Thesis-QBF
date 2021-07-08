@@ -19,7 +19,7 @@ public class Main {
             	QdimacFileReader rd = new QdimacFileReader();
         		CnfExpression fo;
         		Result ret = ResultGenerator.getInstance();
-        		if (args.length == 0) {
+        		if (args.length == 1) {
         			p.preprocess();
         			fo = rd.read(0);
         			Solver s = new QDLLRBJ();

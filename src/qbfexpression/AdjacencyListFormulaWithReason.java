@@ -225,7 +225,9 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 								List<Integer> contradict = d.getContradiction();
 								//System.out.println("before unit " + r.literals);
 								for (Integer cc : contradict) {
-									r.literals.add(-cc);
+									if (isMax(cc)) {
+										r.literals.add(-cc);
+									}
 								}
 								
 								if (debug) {
@@ -258,6 +260,7 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 		if (isMax(v)) {
 			this.set(v, 'U');
 		} else {
+			// System.err.println("universal?");
 			this.set(-v, 'U');
 		}
 		return true;
@@ -649,7 +652,8 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 					}
 				}
 				
-				Iterator<Integer> iter = li.descendingIterator();
+				// Iterator<Integer> iter = li.descendingIterator();
+				Iterator<Integer> iter = li.iterator();
 				while (iter.hasNext()) {
 					int cand = iter.next();
 					if (checktrue(cand, ass)) {

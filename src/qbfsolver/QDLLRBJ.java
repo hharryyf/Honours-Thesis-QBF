@@ -1,6 +1,6 @@
 package qbfsolver;
 
-//import java.util.Random;
+import java.util.Random;
 
 import qbfexpression.AdjacencyListFormulaWithReason;
 import qbfexpression.CnfExpression;
@@ -15,7 +15,7 @@ public class QDLLRBJ implements Solver {
 		boolean debug = ResultGenerator.getCommandLine().getDebug();
 		//Random r = new Random();
 		//int idx = r.nextInt(2) == 0 ? 1 : -1;
-		// int idx = 1;
+		//int idx = 1;
 		
 		rr.setIteration(1 + rr.getIteration());
 		/*if (rr.getIteration() >= 4000001) {
@@ -43,6 +43,12 @@ public class QDLLRBJ implements Solver {
 		Quantifier q = f.peek();
 		boolean type = q.isMax();
 		int idx = 1;
+		if (ResultGenerator.dlis) {
+			idx = f.getPosfreq(q.getVal()) >= f.getNegfreq(q.getVal()) ? 1 : -1;
+			if (!q.isMax()) {
+				idx *= -1;
+			}
+		}
 		if (type) {
 			
 			//System.out.println("splitnode= " + q.getVal());
@@ -75,7 +81,7 @@ public class QDLLRBJ implements Solver {
 			f.commit();
 			Pair<Boolean, Reason> res2 = solvebj(f, d + 1);
 			f.undo(res2.second);
-			if (res2.first == false) {
+			if (res2.first == false && res2.second.contains(q.getVal())) {
 				if (debug) {
 					System.out.println("resolve things " + res2.second.literals + " " + res.second.literals);
 				}
@@ -115,7 +121,7 @@ public class QDLLRBJ implements Solver {
 		Pair<Boolean, Reason> res2 = solvebj(f, d + 1);
 		f.undo(res2.second);
 		
-		if (res2.first == true) {
+		if (res2.first == true && res2.second.contains(q.getVal())) {
 			if (debug) {
 				System.out.println("resolve things " + res2.second.literals + " " + res.second.literals);
 			}
