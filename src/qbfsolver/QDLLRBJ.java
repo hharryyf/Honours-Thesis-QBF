@@ -1,7 +1,5 @@
+  
 package qbfsolver;
-
-import java.util.Random;
-
 import qbfexpression.AdjacencyListFormulaWithReason;
 import qbfexpression.CnfExpression;
 import qbfexpression.Quantifier;
@@ -13,10 +11,6 @@ public class QDLLRBJ implements Solver {
 	private Pair<Boolean, Reason> solvebj(AdjacencyListFormulaWithReason f, int d) {
 		Result rr = ResultGenerator.getInstance();
 		boolean debug = ResultGenerator.getCommandLine().getDebug();
-		//Random r = new Random();
-		//int idx = r.nextInt(2) == 0 ? 1 : -1;
-		//int idx = 1;
-		
 		rr.setIteration(1 + rr.getIteration());
 		/*if (rr.getIteration() >= 4000001) {
 			System.out.println("UNSOLVE");
@@ -66,12 +60,9 @@ public class QDLLRBJ implements Solver {
 			}
 			if (res.first || !res.second.contains(q.getVal())) {
 				if (!res.first) {
-					//if (debug) {
-						System.out.print("p-E " + q.getVal());
-					//}
-				}
-				// System.out.println(" early exit at level " + depth + " it= " + rr.getIteration());
-				System.out.println(" d=" + d + " r=" + rr.getIteration());
+					System.out.print("p-E " + q.getVal());
+					System.out.println(" d=" + d + " r=" + rr.getIteration());
+				}				
 				res.second.satisfied = res.first;
 				return res;
 			}
@@ -94,7 +85,7 @@ public class QDLLRBJ implements Solver {
 			res2.second.satisfied = res2.first;
 			return res2;
 		}
-		//System.out.println("splitnode= " + q.getVal());
+		
 		f.set(q.getVal() * idx);
 		f.dropquantifier(q.getVal());
 		f.simplify();
@@ -108,10 +99,9 @@ public class QDLLRBJ implements Solver {
 		if (!res.first || !res.second.contains(q.getVal())) {
 			if (res.first) {
 				System.out.print("p-U " + q.getVal());
+				System.out.println(" d=" + d + " r=" + rr.getIteration());
 			}
 			res.second.satisfied = res.first;
-			System.out.println(" d=" + d + " r=" + rr.getIteration());
-			//System.out.println(" early exit at depth " + depth + " it= " + rr.getIteration());
 			return res;
 		}
 		f.set(-q.getVal() * idx);

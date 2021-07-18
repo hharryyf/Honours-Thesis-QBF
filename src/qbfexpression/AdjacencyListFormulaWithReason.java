@@ -463,6 +463,7 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 				this.unassign(it, r);
 			}
 		}
+		
 		this.pure.clear();
 		this.unit.clear();
 		this.useless.clear();
@@ -500,7 +501,7 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 			if (block.hasQuantifier(i)) continue;
 			// this.addquantifier();
 			this.block.prepend(new Quantifier(isMax(i), i));
-			System.out.println("not normal");
+			// System.out.println("not normal");
 		}
 		
 		for (int i = 1; i <= n; ++i) {
@@ -570,7 +571,29 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 			
 			if (in && !ok) return false;
 		}
+		//System.out.println("check ok" + v);
 		return true;
+	}
+	
+	private void checkvalid(Set<Integer> ass) {
+		int i;
+		
+		for (i = 0 ; i < formula.size(); ++i) {
+			AdjacencyListClauseWithReason d = formula.get(i);
+			boolean ok = false;
+			for (Integer v : d.getAll()) {
+				if (ass.contains(v)) {
+					ok = true;
+					break;
+				}
+			}
+			
+			if (!ok) {
+				System.err.println("wrong on " + d);
+				System.err.println("ass= " + ass);
+				System.exit(0);
+			}
+		}
 	}
 	
 	public Reason getReason() {
@@ -647,13 +670,16 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 					if (p.second != 'B') {
 						ass.add(p.first);
 					}
-					if (!isMax(p.first)) {
+					if (!isMax(p.first) && p.second != 'B') {
 						li.add(p.first);
-					}
+					}	
 				}
 				
-				// Iterator<Integer> iter = li.descendingIterator();
-				Iterator<Integer> iter = li.iterator();
+				//Iterator<Integer> iter = li.descendingIterator();
+				//Iterator<Integer> iter = li.iterator();
+				//if (ResultGenerator.getInstance().getIteration() >= 885) {
+				Iterator<Integer> iter = li.descendingIterator();
+				
 				while (iter.hasNext()) {
 					int cand = iter.next();
 					if (checktrue(cand, ass)) {
@@ -663,8 +689,15 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 					}
 				}
 				ret.literals.addAll(li);
+				if (debug) checkvalid(ass);
+				//}
 			} else {
 				if (!this.disprovedformula.isEmpty()) {
+					/*
+					System.out.println(this.disprovedformula.size());
+					for (Integer cc : this.disprovedformula) {
+					    System.out.println(this.formula.get(cc));
+					}*/
 					Iterator<Integer> biter = this.disprovedformula.iterator();
 					int id = biter.next();
 					for (Integer cc : this.formula.get(id).getContradiction()) {
@@ -730,31 +763,105 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 		return this;
 	}
 	
+	private boolean checkTrivialtruth() {
+		ISolver s = SolverFactory.newDefault();
+		s.setTimeout(900);
+		s.newVar(this.n + 1);
+		s.setExpectedNumberOfClauses(this.fcount);
+		for (AdjacencyListClauseWithReason d : this.formula) {
+			if (d.evaluate() == -1) {
+				List<Integer> li = d.getLiteral();
+				List<Integer> list = new ArrayList<>();
+				for (Integer it : li) {
+					if (isMax(it)) {
+						list.add(it);
+					}
+				}
+				int [] clause = list.stream().mapToInt(Integer::intValue).toArray();
+				try {
+					s.addClause(new VecInt(clause));
+				} catch (ContradictionException e) {
+					return false;
+				}
+			}
+		}
+		
+		boolean ret = false;
+		try {
+			ret = s.isSatisfiable();
+		} catch (TimeoutException e) {
+			e.printStackTrace();
+		}
+		
+		return ret;
+	}
+	
+	private boolean checkTrivialfalse() {
+		ISolver s = SolverFactory.newDefault();
+		s.setTimeout(900);
+		s.newVar(this.n + 1);
+		s.setExpectedNumberOfClauses(this.fcount);
+		for (AdjacencyListClauseWithReason d : this.formula) {
+			if (d.evaluate() == -1) {
+				List<Integer> list = d.getLiteral();
+				int [] clause = list.stream().mapToInt(Integer::intValue).toArray();
+				try {
+					s.addClause(new VecInt(clause));
+				} catch (ContradictionException e) {
+					return true;
+				}
+			}
+		}
+		
+		boolean ret = false;
+		try {
+			ret = s.isSatisfiable();
+		} catch (TimeoutException e) {
+			e.printStackTrace();
+		}
+		
+		return ret ? false : true;
+	}
+	
 	public String toString() {
 		StringBuilder ret = new StringBuilder();
 		int val = evaluate();
-		if (val == 1) {
+		if (val == 1 || checkTrivialtruth()) {
 			ret.append("p cnf 1 0\n");
-		} else if (val == 0) {
+			return ret.toString();
+		} else if (val == 0 || checkTrivialfalse()) {
 			ret.append("p cnf 1 1\n0\n");
+			return ret.toString();
 		}
 		
-		if (val != -1) return ret.toString();
 		TreeMap<Integer, Integer> squeeze = new TreeMap<>();
 		String rett2 = block.toString(squeeze);
+		Set<String> oc = new HashSet<>();
 		int acccnt = 0;
 		for (AdjacencyListClauseWithReason d : this.formula) {
 			if (d.evaluate() == -1) {
-				acccnt += 1;
+				StringBuilder cu = new StringBuilder();
+				ArrayList<Integer> now = new ArrayList<>();
 				for (Integer it : d.getLiteral()) {
 					if (it < 0) {
-						ret.append(-squeeze.get(-it));
+						now.add(-squeeze.get(-it));
 					} else {
-						ret.append(squeeze.get(it));
+						now.add(squeeze.get(it));
 					}
-					ret.append(' ');
 				}
-				ret.append("0\n");
+				
+				Collections.sort(now);
+				for (Integer it : now) {
+					cu.append(it);
+					cu.append(' ');
+				}
+				
+				cu.append("0\n");
+				if (!oc.contains(cu.toString())) {
+					ret.append(cu);
+					oc.add(cu.toString());
+					acccnt++;
+				}
 			}
 		}
 		
