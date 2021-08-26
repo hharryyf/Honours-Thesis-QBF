@@ -1,5 +1,7 @@
   
 package qbfsolver;
+import java.util.Random;
+
 import qbfexpression.AdjacencyListFormulaWithReason;
 import qbfexpression.CnfExpression;
 import qbfexpression.Quantifier;
@@ -43,6 +45,12 @@ public class QDLLRBJ implements Solver {
 				idx *= -1;
 			}
 		}
+		
+		if (ResultGenerator.rand) {
+			Random r = new Random();
+			idx = r.nextInt(2) == 0 ? 1 : -1;
+		}
+		
 		if (type) {
 			
 			//System.out.println("splitnode= " + q.getVal());

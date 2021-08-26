@@ -217,36 +217,36 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 					if (lastassign.second == 'P' || lastassign.second == 'B' || !isMax(lastassign.first)) {
 						r.literals.remove(lastassign.first);
 					} else if (lastassign.second == 'U') {
-						r.literals.remove(lastassign.first);
-						boolean found = false;
-						for (Integer id : this.varToformula.get(Math.abs(v))) {
-							AdjacencyListClauseWithReason d = this.formula.get(id);
-							if (d.hasUnit(this, lastassign.first)) {
-								List<Integer> contradict = d.getContradiction();
-								//System.out.println("before unit " + r.literals);
-								for (Integer cc : contradict) {
-									if (isMax(cc)) {
-										r.literals.add(-cc);
+						if (r.contains(lastassign.first)) {
+							boolean found = false;
+							for (Integer id : this.varToformula.get(Math.abs(v))) {
+								AdjacencyListClauseWithReason d = this.formula.get(id);
+								if (d.hasUnit(this, lastassign.first)) {
+									List<Integer> contradict = d.getContradiction();
+									for (Integer cc : contradict) {
+										if (isMax(cc)) {
+											r.literals.add(-cc);
+										}
 									}
+									
+									if (debug) {
+										System.out.println("found the unit thing");
+										System.out.println(d);
+										System.out.println("after unit " + r.literals);
+									}
+									found = true;
+									break;
 								}
-								
-								if (debug) {
-									System.out.println("found the unit thing");
-									System.out.println(d);
-									System.out.println("after unit " + r.literals);
-								}
-								found = true;
-								break;
 							}
-						}
-						
-						if (!found) {
-							System.err.println("not found!");
-							System.exit(0);
-						}
+							
+							if (!found) {
+								System.err.println("not found!");
+								System.exit(0);
+							}
+						} 
+						r.literals.remove(lastassign.first);
+						r.literals.remove(-lastassign.first);
 					}
-					
-					//System.out.println("after backtrack " + r.literals);
 				}
 			}
 		}
@@ -600,6 +600,7 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 		int res = -1;
 		HashSet<Integer> nonproved = new HashSet<>();
 		boolean debug = ResultGenerator.getCommandLine().getDebug();
+		int[] curr = null;
 		if (debug) {
 			System.out.println("before we compute the reason");
 			System.out.println(this.currentassign);
@@ -629,8 +630,8 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 				}
 				
 				try {
-					boolean curr = s.isSatisfiable();
-					if (curr) {
+					curr = s.findModel();
+					if (curr != null) {
 						res = 2;
 					} else {
 						res = -2;
@@ -650,22 +651,23 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 		Reason ret = new Reason();
 		ret.satisfied = (res == 1 || res == 2);
 		// SAT solver is called
-		if (res == 2) {
-			for (Pair<Integer, Character> p : this.currentassign) {
-				if (!isMax(p.first)) {
-					ret.literals.add(p.first);
-				}
-			}	
-		} else if (res == -2) {
+		if (res == -2) {
 			for (Pair<Integer, Character> p : this.currentassign) {
 				if (isMax(p.first) && nonproved.contains(-p.first)) {
 					ret.literals.add(p.first);
 				}
 			}
 		} else {
-			if (res == 1) {
+			if (res == 1 || res == 2) {
 				HashSet<Integer> ass = new HashSet<>();
 				LinkedList<Integer> li = new LinkedList<>();
+				if (res == 2) {
+					for (int i = 0 ; i < curr.length; ++i) {
+						ass.add(curr[i]);
+						//System.out.print(curr[i] + " ");
+					}
+					//System.out.println();
+				}
 				for (Pair<Integer, Character> p : this.currentassign) {
 					if (p.second != 'B') {
 						ass.add(p.first);
@@ -675,29 +677,19 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 					}	
 				}
 				
-				//Iterator<Integer> iter = li.descendingIterator();
-				//Iterator<Integer> iter = li.iterator();
-				//if (ResultGenerator.getInstance().getIteration() >= 885) {
 				Iterator<Integer> iter = li.descendingIterator();
 				
 				while (iter.hasNext()) {
 					int cand = iter.next();
 					if (checktrue(cand, ass)) {
-						//System.out.println("check " + cand);
 						iter.remove();
 						ass.remove(cand);
 					}
 				}
 				ret.literals.addAll(li);
 				if (debug) checkvalid(ass);
-				//}
 			} else {
 				if (!this.disprovedformula.isEmpty()) {
-					/*
-					System.out.println(this.disprovedformula.size());
-					for (Integer cc : this.disprovedformula) {
-					    System.out.println(this.formula.get(cc));
-					}*/
 					Iterator<Integer> biter = this.disprovedformula.iterator();
 					int id = biter.next();
 					for (Integer cc : this.formula.get(id).getContradiction()) {
@@ -711,6 +703,7 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 				}
 			}
 		}
+		
 		if (debug) {
 			System.out.println("after we compute the reason");
 			System.out.println(res + " " + ret.literals);
@@ -826,7 +819,7 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 	public String toString() {
 		StringBuilder ret = new StringBuilder();
 		int val = evaluate();
-		if (val == 1 || checkTrivialtruth()) {
+		if (val == 1 || (val == -1 && checkTrivialtruth())) {
 			ret.append("p cnf 1 0\n");
 			return ret.toString();
 		} else if (val == 0 || checkTrivialfalse()) {

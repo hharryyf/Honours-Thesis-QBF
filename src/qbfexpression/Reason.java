@@ -15,8 +15,15 @@ public class Reason implements Comparable<Reason> {
 	}
 	
 	public void resolve(Reason other, int v) {
-		for (Integer it : other.literals) {
-			literals.add(it);
+		if (this.literals.size() > other.literals.size()) {
+			for (Integer it : other.literals) {
+				literals.add(it);
+			}
+		} else {
+			for (Integer it : this.literals) {
+				other.literals.add(it);
+			}
+			this.literals = other.literals;
 		}
 		literals.remove(v);
 		literals.remove(-v);

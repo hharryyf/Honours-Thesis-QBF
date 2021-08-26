@@ -70,6 +70,7 @@ public class QdimacsFilePreprocessor {
 		ret.normalize();
 		try {
 			FileWriter myWriter = new FileWriter("formula.txt");
+			System.out.println("finish preprocessing");
 			myWriter.write(ret.toString());
 			myWriter.close();
 		} catch (IOException e) {
