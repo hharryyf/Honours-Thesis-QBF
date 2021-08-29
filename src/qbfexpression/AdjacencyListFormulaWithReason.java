@@ -14,6 +14,7 @@ import org.sat4j.core.VecInt;
 import org.sat4j.minisat.SolverFactory;
 import org.sat4j.specs.ContradictionException;
 import org.sat4j.specs.ISolver;
+import org.sat4j.specs.IVecInt;
 import org.sat4j.specs.TimeoutException;
 
 import qbfsolver.ResultGenerator;
@@ -38,6 +39,7 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 	private LinkedList<Integer> usedvar;
 	private boolean normalized;
 	private LinkedList<Pair<Integer, Character>> currentassign;
+	private ISolver satsolver;
 	public AdjacencyListFormulaWithReason(int n, int fcount) {
 		int i;
 		this.block = new FrequencyBlock(n);
@@ -63,6 +65,10 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 		this.unit = new HashSet<>();
 		this.useless = new HashSet<>();
 		this.currentassign = new LinkedList<>();
+		this.satsolver = SolverFactory.newDefault();
+		this.satsolver.newVar(this.n + 1);
+		this.satsolver.setExpectedNumberOfClauses(this.fcount);
+		this.satsolver.setTimeout(30000);
 	}
 	
 	public void incProved(int inc) {
@@ -332,7 +338,7 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 		
 		formula.add((AdjacencyListClauseWithReason) c);
 		// add an empty clause
-		if (c.isEmpty()) {
+		if (c.isEmpty() || c.evaluate() == 0) {
 			this.disproved++;
 			System.err.println("try to insert an empty clause");
 			System.out.println("UNSAT");
@@ -541,6 +547,23 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 		//System.out.println(unit);
 		this.simplify();
 		this.commit();
+		for (AdjacencyListClauseWithReason d : this.formula) {
+			if (d.evaluate() == -1) {
+				List<Integer> li = d.getLiteral();
+				List<Integer> list = new ArrayList<>();
+				for (Integer it : li) {
+					list.add(it);
+				}
+				int [] clause = list.stream().mapToInt(Integer::intValue).toArray();
+				try {
+					this.satsolver.addClause(new VecInt(clause));
+				} catch (ContradictionException e) {
+					System.out.println("UNSAT");
+					System.exit(0);
+				}
+			}
+		}
+		
 		//System.out.println(this.block.size());
 		//System.out.println(this.currentassign);
 		//this.currentassign.clear();
@@ -598,7 +621,6 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 	
 	public Reason getReason() {
 		int res = -1;
-		HashSet<Integer> nonproved = new HashSet<>();
 		boolean debug = ResultGenerator.getCommandLine().getDebug();
 		int[] curr = null;
 		if (debug) {
@@ -607,30 +629,23 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 			System.out.println(this);
 		}
 		
+		IVecInt vc = new VecInt(), vcu = new VecInt();
 		if (this.disproved > 0) {
 			res = 0;
 		} else if (this.proved == this.fcount) {
 			res = 1;
 		} else {
 			if (this.block.unicount == 0) {
-				ISolver s = SolverFactory.newDefault();
-				s.setTimeout(900);
-				s.newVar(this.n + 1);
-				s.setExpectedNumberOfClauses(this.fcount);
-				for (AdjacencyListClauseWithReason d : this.formula) {
-					if (d.evaluate() != -1) continue;
-					List<Integer> list = d.getLiteral();
-					nonproved.addAll(d.getContradiction());
-					int [] clause = list.stream().mapToInt(Integer::intValue).toArray();
-					try {
-						s.addClause(new VecInt(clause));
-					} catch (ContradictionException e) {
-						res = -2;
+				for (Pair<Integer, Character> p : this.currentassign) {
+					vc.push(p.first);
+					if (!isMax(p.first)) {
+						vcu.push(p.first);
 					}
 				}
 				
+				
 				try {
-					curr = s.findModel();
+					curr = this.satsolver.findModel(vc);
 					if (curr != null) {
 						res = 2;
 					} else {
@@ -652,11 +667,29 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 		ret.satisfied = (res == 1 || res == 2);
 		// SAT solver is called
 		if (res == -2) {
+			boolean fg = true;
 			for (Pair<Integer, Character> p : this.currentassign) {
-				if (isMax(p.first) && nonproved.contains(-p.first)) {
+				try {
+					if (fg && !this.satsolver.isSatisfiable(vcu)) {
+						/*System.out.println(this.satsolver.isSatisfiable());
+						System.out.println(this.currentassign);
+						System.out.println(vcu + " " + ret.literals);*/
+						break;
+					}
+					fg = false;
+				} catch (TimeoutException e) {
+					e.printStackTrace();
+					System.exit(0);
+				}
+				
+				if (isMax(p.first) && p.second == 'N') {
+					vcu.push(p.first);
 					ret.literals.add(p.first);
+					fg = true;
 				}
 			}
+			
+			//System.out.println(vcu + " " + ret.literals);
 		} else {
 			if (res == 1 || res == 2) {
 				HashSet<Integer> ass = new HashSet<>();
@@ -720,23 +753,14 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 		if (this.proved == this.fcount) return 1;
 		if (ResultGenerator.satsolver) {
 			if (this.block.unicount == 0) {
-				ISolver s = SolverFactory.newDefault();
-				s.setTimeout(900);
-				s.newVar(this.n + 1);
-				s.setExpectedNumberOfClauses(this.fcount);
-				for (Disjunction d : this.formula) {
-					if (d.evaluate() != -1) continue;
-					List<Integer> list = d.getLiteral();
-					int [] clause = list.stream().mapToInt(Integer::intValue).toArray();
-					try {
-						s.addClause(new VecInt(clause));
-					} catch (ContradictionException e) {
-						return 0;
-					}
+				IVecInt vc = new VecInt();
+				for (Pair<Integer, Character> p : this.currentassign) {
+					vc.push(p.first);
 				}
 				
+				//System.out.println(vc);
 				try {
-					boolean curr = s.isSatisfiable();
+					boolean curr = this.satsolver.isSatisfiable(vc);
 					if (curr) {
 						return 1;
 					}
@@ -816,9 +840,47 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 		return ret ? false : true;
 	}
 	
+	
+	private int evaluate_1() {
+		if (this.disproved > 0) return 0;
+		if (this.proved == this.fcount) return 1;
+		if (ResultGenerator.satsolver) {
+			if (this.block.unicount == 0) {
+				ISolver s = SolverFactory.newDefault();
+				s.setTimeout(900);
+				s.newVar(this.n + 1);
+				s.setExpectedNumberOfClauses(this.fcount);
+				for (Disjunction d : this.formula) {
+					if (d.evaluate() != -1) continue;
+					List<Integer> list = d.getLiteral();
+					int [] clause = list.stream().mapToInt(Integer::intValue).toArray();
+					try {
+						s.addClause(new VecInt(clause));
+					} catch (ContradictionException e) {
+						return 0;
+					}
+				}
+				
+				try {
+					boolean curr = s.isSatisfiable();
+					if (curr) {
+						return 1;
+					}
+					
+					return 0;
+				} catch (TimeoutException e) {
+					e.printStackTrace();
+				}
+				return -1;
+			}
+		}
+		return -1;
+	}
+	
+	
 	public String toString() {
 		StringBuilder ret = new StringBuilder();
-		int val = evaluate();
+		int val = evaluate_1();
 		if (val == 1 || (val == -1 && checkTrivialtruth())) {
 			ret.append("p cnf 1 0\n");
 			return ret.toString();

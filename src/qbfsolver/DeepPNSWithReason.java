@@ -1,6 +1,7 @@
 package qbfsolver;
 
 import java.util.Stack;
+
 import qbfexpression.AdjacencyListFormulaWithReason;
 import qbfexpression.CnfExpression;
 

@@ -16,31 +16,39 @@ This shows a very signicicant improvement in the simpler gttt4x4 instances, half
 6. 29/6/2021: Implement a baseline version of the BOMH heuristic, combine with disable the SAT solver, 3 block group instances can be solved.
 It seems like it is necessary to decide how to compute a more accurate set of reasons for the case when the SAT solver is called.
 
+7. 29/8/2021: Two modifications were done: 
+
+1) Adapt inversion quantifier block into the backjumping, and combine the SAT solver with the backjumping algorithm. After this modification, 6 to 10 out of 13 block group instances can be solved depends on different branching heuristics.
+
+2) Add trivial truth and trivial false into preprocessing, the impl group becomes meaningless.
+
 Current solver strength (30 minutes for QDLL or 4000000 node expansions for DeepPNS):
 
-CHAIN 12/12 (QDLL + DLIS heuristic)
+CHAIN 12/12 (QDLL + DLCS heuristic)
 
-BLOCK 3/13 (QDLL + Backjumping + BOMH heuristic)
+BLOCK 6-10/13 (QDLL + Backjumping + SAT4j + DLCS/BHOM/DLIS/RAND heuristic)
 
-comp 6/8 (QDLL/DeepPNS + SAT4j)
+comp 6/8 (QDLL/DeepPNS + Backjumping + SAT4j)
 
-k_dum_n 3/21 (QDLL + Backjumping)
+c432 4/8 (DeepPNS + Backjumping + trivial truth preprocessing + SAT4j)
 
-k_dum_p 4/21 (QDLL + Backjumping)
+k_dum_n 3/21 (QDLL + Backjumping + SAT4j)
 
-k_path_n 3/21 (QDLL + Backjumping)
+k_dum_p 6/21 (QDLL + Backjumping + SAT4j)
 
-k_path_p 4/21 (QDLL + Backjumping)
+k_path_n 3/21 (QDLL + Backjumping + SAT4j)
 
-term1 4/8 (QDLL + SAT4j)
+k_path_p 5/21 (QDLL + Backjumping + SAT4j)
+
+term1 5/8 (QDLL + SAT4j + trivial truth preprocessing)
 
 TOILET 5/5 (DeepPNS + Backjumping)
 
-k_ph_n 4/21 (QDLL + Backjumping)
+k_ph_n 5/21 (QDLL + Backjumping)
 
 k_ph_p 5/21 (QDLL + Backjumping)
 
-gttt4x4 encoded 47/95 (DeepPNS + Backjumping + SAT4j)
+gttt4x4 encoded 52/95 (DeepPNS + Backjumping + SAT4j)
 
 
 
