@@ -34,12 +34,16 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 	public int proved = 0, disproved = 0;
 	// record the assigned variables in the last assignment
 	public LinkedList<LinkedList<Integer>> assigned;
-	private HashSet<Integer> pure, unit, useless;
-	private Set<Integer> provedformula, disprovedformula;
+	protected HashSet<Integer> pure;
+	protected HashSet<Integer> unit;
+	protected HashSet<Integer> useless;
+	private Set<Integer> provedformula;
+	protected Set<Integer> disprovedformula;
 	private LinkedList<Integer> usedvar;
 	private boolean normalized;
-	private LinkedList<Pair<Integer, Character>> currentassign;
+	protected LinkedList<Pair<Integer, Character>> currentassign;
 	private ISolver satsolver;
+	public Set<Integer> learnedunit;
 	public AdjacencyListFormulaWithReason(int n, int fcount) {
 		int i;
 		this.block = new FrequencyBlock(n);
@@ -263,6 +267,10 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 		if (unit.isEmpty()) return false;
 		int v = unit.iterator().next();
 		unit.remove(v);
+		if (ResultGenerator.learnpreprocess) {
+			System.out.println("learn unit " + v);
+			this.learnedunit.add(v);
+		}
 		if (isMax(v)) {
 			this.set(v, 'U');
 		} else {
@@ -277,6 +285,10 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 		if (pure.isEmpty()) return false;
 		int v = pure.iterator().next();
 		pure.remove(v);
+		if (ResultGenerator.learnpreprocess) {
+			System.out.println("learn pure " + v);
+			this.learnedunit.add(v);
+		}
 		if (isMax(v)) {
 			this.set(v, 'P');
 		} else {
@@ -289,6 +301,10 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 		for (Integer id : this.useless) {
 			// System.out.println("drop " + id);
 			this.dropquantifier(id);
+			if (ResultGenerator.learnpreprocess) {
+				System.out.println("learn broken " + id);
+				this.learnedunit.add(id);
+			}
 			if (!this.currentassign.isEmpty() && Math.abs(this.currentassign.getLast().first) == Math.abs(id)) {
 				this.currentassign.getLast().second = 'B';
 			}
@@ -893,14 +909,21 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 		String rett2 = block.toString(squeeze);
 		Set<String> oc = new HashSet<>();
 		int acccnt = 0;
+		if (ResultGenerator.cdcl) {
+			this.formula.sort(new FormulaComparator());
+		}
 		for (AdjacencyListClauseWithReason d : this.formula) {
 			if (d.evaluate() == -1) {
 				StringBuilder cu = new StringBuilder();
 				ArrayList<Integer> now = new ArrayList<>();
 				for (Integer it : d.getLiteral()) {
 					if (it < 0) {
+						if (!squeeze.containsKey(-it)) {
+							continue;
+						}
 						now.add(-squeeze.get(-it));
 					} else {
+						if (!squeeze.containsKey(it)) continue;
 						now.add(squeeze.get(it));
 					}
 				}

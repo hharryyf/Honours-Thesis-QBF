@@ -1,5 +1,6 @@
 package qbfsolver;
 
+import qbfexpression.AdjacencyListFormulaCDCL;
 import qbfexpression.CnfExpression;
 import qbfexpression.Quantifier;
 
@@ -11,12 +12,17 @@ public class QDLLR implements Solver {
 			if (f == null) return true;
 			if (f.getn() <= 0) return true;
 			int ret = f.evaluate();
-			if (ret == 0) return false;
+			if (ret == 0) {
+				if (ResultGenerator.cdcl) {
+					((AdjacencyListFormulaCDCL) f).getConflict();
+				}
+				return false;
+			}
 			if (ret == 1) return true;
 			boolean type = f.peek().isMax();
 			if (type) {
 				Quantifier q = f.peek();
-				f.set(q.getVal());
+				f.set(-q.getVal());
 				f.dropquantifier(q.getVal());
 				f.simplify();
 				f.commit();
@@ -25,7 +31,7 @@ public class QDLLR implements Solver {
 				if (res) {
 					return true;
 				}
-				f.set(-q.getVal());
+				f.set(q.getVal());
 				f.dropquantifier(q.getVal());
 				f.simplify();
 				f.commit();
@@ -36,7 +42,7 @@ public class QDLLR implements Solver {
 			
 			
 			Quantifier q = f.peek();
-			f.set(q.getVal());
+			f.set(-q.getVal());
 			f.dropquantifier(q.getVal());
 			f.simplify();
 			f.commit();
@@ -45,7 +51,7 @@ public class QDLLR implements Solver {
 			if (!res) {
 				return false;
 			}
-			f.set(-q.getVal());
+			f.set(q.getVal());
 			f.dropquantifier(q.getVal());
 			f.simplify();
 			f.commit();

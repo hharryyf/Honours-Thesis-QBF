@@ -97,7 +97,7 @@ public class AdjacencyListClauseWithReason implements Disjunction {
 	public List<Integer> getVariable() {
 		List<Integer> ret = new ArrayList<>();
 		for (Pair<Integer, Integer> p : this.literal) {
-			if (p.second == -1) {
+			if (p.second.intValue() == -1) {
 				ret.add(Math.abs(p.first));
 			}
 		}

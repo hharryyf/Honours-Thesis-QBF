@@ -23,7 +23,13 @@ public class QdimacFileReader {
 		String[] s = first.split("\\s+");
 		int n = Integer.valueOf(s[2]);
 		int m = Integer.valueOf(s[3]);
-		CnfExpression ret = new AdjacencyListFormulaWithReason(n, m);
+		CnfExpression ret = null;
+		if (ResultGenerator.cdcl) {
+			ret = new AdjacencyListFormulaCDCL(n, m);
+		} else {
+			ret = new AdjacencyListFormulaWithReason(n, m);
+		}
+		
 		int i;
 		while (m > 0) {
 			first = sc.nextLine();

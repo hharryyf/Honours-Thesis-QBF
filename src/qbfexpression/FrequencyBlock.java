@@ -203,4 +203,8 @@ public class FrequencyBlock extends QuantifierBlock {
 		}
 		return ret.toString();
 	}
+	
+	public String toString() {
+		return this.quantifier.toString();
+	}
 }

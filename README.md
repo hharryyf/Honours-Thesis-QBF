@@ -22,6 +22,8 @@ It seems like it is necessary to decide how to compute a more accurate set of re
 
 2) Add trivial truth and trivial false into preprocessing, the impl group becomes meaningless.
 
+8. 3/9/2021: QCDCL preprocessor, not sure if the idea is correct
+
 Current solver strength (30 minutes for QDLL or 4000000 node expansions for DeepPNS):
 
 CHAIN 12/12 (QDLL + DLCS heuristic)
@@ -36,17 +38,25 @@ k_dum_n 3/21 (QDLL + Backjumping + SAT4j)
 
 k_dum_p 6/21 (QDLL + Backjumping + SAT4j)
 
-k_path_n 3/21 (QDLL + Backjumping + SAT4j)
+k_lin_n 3/21 (QDLL + Backjumping + SAT4j)
 
-k_path_p 5/21 (QDLL + Backjumping + SAT4j)
+k_lin_p 5/21 (QDLL + Backjumping + SAT4j) -> 21/21 (QCDCL preprocess + Backjumping + SAT4j)
 
-term1 5/8 (QDLL + SAT4j + trivial truth preprocessing)
+k_path_n 3/21 (QDLL + Backjumping + SAT4j) -> 4/21 (QCDCL preprocess + Backjumping + SAT4j)
 
-TOILET 5/5 (DeepPNS + Backjumping)
+k_path_p 5/21 (QDLL + Backjumping + SAT4j) -> 21/21 (QCDCL preprocess + Backjumping + SAT4j)
+
+k_d4_n 2/21  (QDLL + Backjumping + SAT4j) -> 3/21 (QCDCL preprocess + Backjumping + SAT4j)
+
+k_d4_p 6/21  (QDLL + Backjumping + SAT4j) -> 21/21 (QCDCL preprocess + Backjumping + SAT4j)
 
 k_ph_n 5/21 (QDLL + Backjumping)
 
 k_ph_p 5/21 (QDLL + Backjumping)
+
+term1 5/8 (QDLL + SAT4j + trivial truth preprocessing)
+
+TOILET 5/5 (DeepPNS + Backjumping)
 
 gttt4x4 encoded 52/95 (DeepPNS + Backjumping + SAT4j)
 
