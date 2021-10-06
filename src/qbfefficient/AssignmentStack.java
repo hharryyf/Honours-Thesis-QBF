@@ -33,6 +33,8 @@ public class AssignmentStack {
 	 * 
 	 * @param v :: integer, a literal
 	 * @param type :: character, the type of assignment (unit or branching)
+	 * for this variable, 'U' means unit in original formula, 'E' means unit in lemma, 'A' means unit in model
+	 * 'N' means branching variable
 	 * @param id :: integer, clause related to this assignment, if type = N,  id = -1
 	 */
     public void assign(int v, char type, int id) {

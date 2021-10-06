@@ -31,6 +31,8 @@ public class QuantifierPrefixVSIDS {
 			mx = Math.max(mx, depth[i]);
 		}
 		
+		this.heuristic.clear();
+		
 		for (i = 0; i <= mx; ++i) {
 			this.heuristic.add(new TreeSet<>());
 		}

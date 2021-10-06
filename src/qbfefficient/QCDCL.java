@@ -19,28 +19,28 @@ public class QCDCL {
 		Quantifier q = f.peek();
 		if (q.isMax()) {
 			f.set(q.getVal());
-			f.unitpropagation();
+			f.simplify();
 			boolean res = solve(f);
 			f.undo();
 			if (res) {
 				return true;
 			}
 			f.set(-q.getVal());
-			f.unitpropagation();
+			f.simplify();
 			res = solve(f);
 			f.undo();
 			return res;
 		}
 		
 		f.set(q.getVal());
-		f.unitpropagation();
+		f.simplify();
 		boolean res = solve(f);
 		f.undo();
 		if (!res) {
 			return false;
 		}
 		f.set(-q.getVal());
-		f.unitpropagation();
+		f.simplify();
 		res = solve(f);
 		f.undo();
 		return res;
