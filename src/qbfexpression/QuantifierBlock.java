@@ -33,4 +33,7 @@ public abstract class QuantifierBlock {
 	public abstract boolean istopMax();
 	public abstract void prepend(Quantifier q);
 	protected abstract String toString(TreeMap<Integer, Integer> squeeze);
+
+	public abstract boolean isOuter(int v);
+	public abstract List<Integer> getUniverse();
 }

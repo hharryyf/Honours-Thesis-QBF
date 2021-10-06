@@ -14,6 +14,13 @@ public class Reason implements Comparable<Reason> {
 		return literals.contains(v) || literals.contains(-v);
 	}
 	
+	public Reason duplicate() {
+		Reason r = new Reason();
+		r.satisfied = this.satisfied;
+		r.literals = new HashSet<Integer>(this.literals);
+		return r;
+	}
+	
 	public void resolve(Reason other, int v) {
 		if (this.literals.size() > other.literals.size()) {
 			for (Integer it : other.literals) {

@@ -48,6 +48,7 @@ public class CDCLPreprocessor {
 		ResultGenerator.cdcl = true;
 		fo = rd.read(0);
 		for (i = 0 ; i < 1000; ++i) {
+			System.out.println("round " + i);
 			preprocess((AdjacencyListFormulaCDCL) fo);
 			AdjacencyListFormulaCDCL f = (AdjacencyListFormulaCDCL) fo;
 			f.learn();

@@ -18,6 +18,18 @@ public class FrequencyBlock extends QuantifierBlock {
 		this.quantifier = new TreeSet<>();
 	}
 	
+	@Override
+	public List<Integer> getUniverse() {
+		List<Integer> ret = new ArrayList<>();
+		for (Pair<Integer, Quantifier> p : this.quantifier) {
+			if (!p.second.isMax()) {
+				ret.add(p.second.getVal());
+			}
+		}
+		
+		return ret;
+	}
+	
 	private boolean isMax(int val) {
 		if (val < 0) val = -val;
 		return this.isexist[val];
@@ -206,5 +218,17 @@ public class FrequencyBlock extends QuantifierBlock {
 	
 	public String toString() {
 		return this.quantifier.toString();
+	}
+
+	@Override
+	public boolean isOuter(int v) {
+		boolean type = this.isMax(v);
+		Iterator<Pair<Integer, Quantifier>> it = quantifier.iterator();
+		while (it.hasNext()) {
+			Quantifier q = it.next().getSecond();
+			if (q.isMax() != type) break;
+			if (q.getVal() == Math.abs(v)) return true;
+		}
+		return false;
 	}
 }

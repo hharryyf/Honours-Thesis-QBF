@@ -18,7 +18,14 @@ public class QDLLRBJ implements Solver {
 			System.out.println("UNSOLVE");
 			System.exit(0);
 		}*/
+		Random r = new Random();
 		if (f == null) return new Pair<Boolean, Reason>(true, null);
+		/*
+		if ((d <= 30 && r.nextInt(10) < 5) || (d > 30 && r.nextInt(5000) == 5)) {
+			Reason rt = f.checkTrivial();
+			if (rt != null) new Pair<Boolean, Reason>(false, rt);
+		}
+		*/
 		if (f.getn() <= 0) return new Pair<Boolean, Reason>(true, null);
 		int ret = f.evaluate();
 		if (ret == 0) {
@@ -47,7 +54,6 @@ public class QDLLRBJ implements Solver {
 		}
 		
 		if (ResultGenerator.rand) {
-			Random r = new Random();
 			idx = r.nextInt(2) == 0 ? 1 : -1;
 		}
 		

@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
@@ -41,7 +42,7 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 	protected Set<Integer> disprovedformula;
 	private LinkedList<Integer> usedvar;
 	private boolean normalized;
-	protected LinkedList<Pair<Integer, Character>> currentassign;
+	public LinkedList<Pair<Integer, Character>> currentassign;
 	private ISolver satsolver;
 	public Set<Integer> learnedunit;
 	public AdjacencyListFormulaWithReason(int n, int fcount) {
@@ -283,6 +284,7 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 	private boolean pure_literal_elimination() {
 		if (terminal()) return false;
 		if (pure.isEmpty()) return false;
+		if (ResultGenerator.nopure && ResultGenerator.cdcl && !ResultGenerator.learnpreprocess) return false;
 		int v = pure.iterator().next();
 		pure.remove(v);
 		if (ResultGenerator.learnpreprocess) {
@@ -684,6 +686,7 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 		// SAT solver is called
 		if (res == -2) {
 			boolean fg = true;
+			// System.out.println("UNSAT reason with SAT");
 			for (Pair<Integer, Character> p : this.currentassign) {
 				try {
 					if (fg && !this.satsolver.isSatisfiable(vcu)) {
@@ -893,7 +896,6 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 		return -1;
 	}
 	
-	
 	public String toString() {
 		StringBuilder ret = new StringBuilder();
 		int val = evaluate_1();
@@ -909,21 +911,27 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 		String rett2 = block.toString(squeeze);
 		Set<String> oc = new HashSet<>();
 		int acccnt = 0;
-		if (ResultGenerator.cdcl) {
+		/*if (ResultGenerator.cdcl) {
 			this.formula.sort(new FormulaComparator());
-		}
+		}*/
 		for (AdjacencyListClauseWithReason d : this.formula) {
 			if (d.evaluate() == -1) {
+				List<Integer> list = d.getLiteral();
+				if (d.isLearned() && list.size() > 16) continue;
 				StringBuilder cu = new StringBuilder();
 				ArrayList<Integer> now = new ArrayList<>();
-				for (Integer it : d.getLiteral()) {
+				for (Integer it : list) {
 					if (it < 0) {
 						if (!squeeze.containsKey(-it)) {
+							//System.out.println("here we are");
 							continue;
 						}
 						now.add(-squeeze.get(-it));
 					} else {
-						if (!squeeze.containsKey(it)) continue;
+						if (!squeeze.containsKey(it)) {
+							//System.out.println("bad here we are");
+							continue;
+						}
 						now.add(squeeze.get(it));
 					}
 				}
@@ -945,5 +953,58 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 		
 		
 		return "p cnf " + this.block.size() + " " + acccnt + "\n" + rett2 + ret.toString();
+	}
+
+	public Reason checkTrivial() {
+		IVecInt vc = new VecInt(), vcu = new VecInt();
+		for (Pair<Integer, Character> p : this.currentassign) {
+			vc.push(p.first);
+			if (!isMax(p.first)) {
+				vcu.push(p.first);
+			}
+		}
+		
+		List<Integer> uni = this.block.getUniverse();
+		for (Integer v : uni) {
+			Random r = new Random();
+			if (r.nextInt(2) == 1) {
+				vc.push(v);
+				vcu.push(v);
+			} else {
+				vc.push(-v);
+				vcu.push(-v);
+			}
+		}
+		
+		try {
+			if (this.satsolver.isSatisfiable(vc)) return null;
+		} catch (TimeoutException e) {
+			e.printStackTrace();
+		}
+		
+		boolean fg = true;
+		Reason ret = new Reason();
+		for (Pair<Integer, Character> p : this.currentassign) {
+			try {
+				if (fg && !this.satsolver.isSatisfiable(vcu)) {
+					break;
+				}
+				fg = false;
+			} catch (TimeoutException e) {
+				e.printStackTrace();
+				System.exit(0);
+			}
+			
+			if (isMax(p.first) && p.second == 'N') {
+				vcu.push(p.first);
+				ret.literals.add(p.first);
+				fg = true;
+			}
+		}
+		
+		// System.out.println("other uni= " + uni);
+		System.out.println("trivial condition triggered!");
+		//System.out.println(ret.literals);
+		return ret;
 	}
 }

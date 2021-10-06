@@ -7,7 +7,7 @@ import java.util.List;
 import utilstructure.Pair;
 
 public class AdjacencyListClauseWithReason implements Disjunction {
-
+	private boolean learned = false;
 	private int existcount = 0;
 	private int proved = 0, disproved = 0;
 	private HashSet<Integer> checkedliterals;
@@ -23,6 +23,14 @@ public class AdjacencyListClauseWithReason implements Disjunction {
 		this.disproved = this.proved = 0;
 		this.unassigned = new ArrayList<>();
 		this.checkedliterals = new HashSet<>();
+	}
+	
+	public void setLearn() {
+		this.learned = true;
+	}
+	
+	public boolean isLearned() {
+		return this.learned;
 	}
 	
 	public int getExist() {

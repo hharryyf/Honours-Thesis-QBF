@@ -30,7 +30,7 @@ CHAIN 12/12 (QDLL + DLCS heuristic)
 
 BLOCK 6-10/13 (QDLL + Backjumping + SAT4j + DLCS/BHOM/DLIS/RAND heuristic)
 
-comp 6/8 (QDLL/DeepPNS + Backjumping + SAT4j)
+comp 6/8 (QDLL/DeepPNS + Backjumping + SAT4j) -> 8/8 (QCDCL preprocess + Backjumping + SAT4j)
 
 c432 4/8 (DeepPNS + Backjumping + trivial truth preprocessing + SAT4j)
 
@@ -38,7 +38,7 @@ k_dum_n 3/21 (QDLL + Backjumping + SAT4j)
 
 k_dum_p 6/21 (QDLL + Backjumping + SAT4j)
 
-k_lin_n 3/21 (QDLL + Backjumping + SAT4j)
+k_lin_n 3/21 (QDLL + Backjumping + SAT4j) -> 4/21 (QCDCL preprocess + Backjumping + SAT4j)
 
 k_lin_p 5/21 (QDLL + Backjumping + SAT4j) -> 21/21 (QCDCL preprocess + Backjumping + SAT4j)
 
@@ -54,9 +54,13 @@ k_ph_n 5/21 (QDLL + Backjumping)
 
 k_ph_p 5/21 (QDLL + Backjumping)
 
-term1 5/8 (QDLL + SAT4j + trivial truth preprocessing)
+term1 5/8 (QDLL + SAT4j + trivial truth preprocessing) -> 6/8 (QCDCL preprocess + Backjumping + SAT4j)
 
 TOILET 5/5 (DeepPNS + Backjumping)
+
+TREE 12/14 (QDLL + SAT4j + trivial truth preprocessing) -> 14/14 (QCDCL preprocess + Backjumping + SAT4j)
+
+longn 0/2 -> 2/2 (QCDCL preprocess + Backjumping + SAT4j)
 
 gttt4x4 encoded 52/95 (DeepPNS + Backjumping + SAT4j)
 

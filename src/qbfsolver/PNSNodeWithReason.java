@@ -2,22 +2,25 @@ package qbfsolver;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import qbfexpression.AdjacencyListFormulaWithReason;
 import qbfexpression.Quantifier;
 import qbfexpression.Reason;
 
 public class PNSNodeWithReason {
-	private Quantifier splitnode;
-	private PNSNodeWithReason left = null, right = null, parent = null;
+	Quantifier splitnode;
+	int visited = 0;
+	PNSNodeWithReason left = null, right = null, parent = null;
 	// reason exists if and only if the node has been proved/disproved
-	private Reason reason = null;
-	private int pn, dn, depth;
-	private double deep;
-	private boolean valid = false;
+	Reason reason = null;
+	int pn, dn, depth;
+	double deep;
+	boolean valid = false;
 	public PNSNodeWithReason(AdjacencyListFormulaWithReason f, int depth) {
 		Result res = ResultGenerator.getInstance();
 		res.setNode();
+		this.visited = 1;
 		this.deep = 1.0 / depth;
 		this.depth = depth;
 		this.left = this.right = this.parent = null;
@@ -45,6 +48,22 @@ public class PNSNodeWithReason {
 				this.pn = 2;
 			}
 		}
+	}
+	
+	protected boolean playout(AdjacencyListFormulaWithReason f) {
+	    int val = f.evaluate();
+	    if (val == 0) return false;
+	    if (val == 1) return true;
+	    Quantifier qq = f.peek();
+	    Random r = new Random();
+	    int idx = r.nextInt(2) == 0 ? 1 : -1;
+		f.set(qq.getVal() * idx);
+		f.dropquantifier(qq.getVal());
+		f.simplify();
+		f.commit();
+		boolean ret = playout(f);
+		f.undo();
+		return ret;
 	}
 	
 	public Reason getReason() {
@@ -139,15 +158,6 @@ public class PNSNodeWithReason {
 		R.parent = this;
 		this.right = R;
 		f.undo(this.right.reason);		
-		/*
-			if (this.right.isWin() && this.splitnode.isMax()) {
-				System.out.println("solved");
-			}
-			
-			if (!this.right.isWin() && !this.splitnode.isMax()) {
-				System.out.println("solved");
-			}
-		*/
 	}
 	
 	public PNSNodeWithReason MPN(AdjacencyListFormulaWithReason f) {
