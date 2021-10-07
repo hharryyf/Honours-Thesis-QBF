@@ -1,15 +1,13 @@
 package qbfefficient;
 
 import java.util.List;
-
-import qbfexpression.Conflict;
 import qbfexpression.Quantifier;
 
 public interface EfficientQBFFormula {
 	// method related to clauses
 	public void addClause(List<Integer> c);
 	public void learn(List<Integer> c);
-	public Conflict getReason();
+	public ConflictSolution getReason();
 	// method related to set literal
 	public void set(int v);
 	public void undo();

@@ -4,14 +4,17 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Scanner;
 
 import qbfexpression.AdjacencyListClauseWithReason;
 import qbfexpression.AdjacencyListFormulaWithReason;
-import qbfexpression.CnfExpression;
 import qbfexpression.Disjunction;
 import qbfexpression.Quantifier;
+import utilstructure.Pair;
 
 public class TwoWatchedLiteralConstructor {
 	public TwoWatchedLiteralFormula read() throws FileNotFoundException {
@@ -73,7 +76,7 @@ public class TwoWatchedLiteralConstructor {
 		String[] s = first.split("\\s+");
 		int n = Integer.valueOf(s[2]);
 		int m = Integer.valueOf(s[3]);
-		CnfExpression ret = new AdjacencyListFormulaWithReason(n, m);
+		AdjacencyListFormulaWithReason ret = new AdjacencyListFormulaWithReason(n, m);
 		int i;
 		while (m > 0) {
 			first = sc.nextLine();
@@ -97,17 +100,25 @@ public class TwoWatchedLiteralConstructor {
 				}
 			} else {
 				Disjunction c = new AdjacencyListClauseWithReason();
+				List<Pair<Integer, Integer>> list = new ArrayList<>();
 				HashSet<Integer> st = new HashSet<>();
 				for (i = 0 ; i < s.length; ++i) {
 					if (Integer.valueOf(s[i]) != 0) {
 						st.add(Integer.valueOf(s[i]));
+						list.add(new Pair<>(ret.getLevel(Integer.valueOf(s[i])), Integer.valueOf(s[i])));
 					}
 				}
 				
+				Collections.sort(list);
+				
+				while (!list.isEmpty() && !ret.isMax(list.get(list.size() - 1).second)) {
+					list.remove(list.size() - 1);
+				}
+				
 				boolean trivial = false;
-				for (Integer v : st) {
-					c.add(v);
-					if (st.contains(-v)) {
+				for (Pair<Integer, Integer> v : list) {
+					c.add(v.second);
+					if (st.contains(-v.second)) {
 						trivial = true;
 					}
 				}

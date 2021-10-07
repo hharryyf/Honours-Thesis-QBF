@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
-import qbfexpression.Conflict;
 import qbfexpression.Quantifier;
 import utilstructure.Pair;
 
@@ -24,8 +22,8 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	public TwoWatchedLiteralFormula(int n) {
 		this.assign = new AssignmentStack();
 		this.quantifier = new QuantifierPrefixVSIDS(n);
-		this.original = new TwoWatchedLiteralStack(n, this);
-		this.lemma = new TwoWatchedLiteralStack(n, this);
+		this.original = new TwoWatchedLiteralClauseStack(n, this);
+		this.lemma = new TwoWatchedLiteralClauseStack(n, this);
 		this.permanantUnit = new TreeSet<>();
 		this.qlist = new ArrayList<>();
 	}
@@ -74,6 +72,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		this.assign.assign(v, 'N', -1);
 		this.quantifier.remove(v);
 		this.original.set(v);
+		this.lemma.set(v);
 	}
 	
 	@Override
@@ -198,7 +197,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	} 
 	
 	@Override
-	public Conflict getReason() {
+	public ConflictSolution getReason() {
 		if (this.lemma.evaluate() == 0) return this.lemma.getConflict();
 		return this.original.getConflict();
 	}

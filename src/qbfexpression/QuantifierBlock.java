@@ -18,6 +18,7 @@ public abstract class QuantifierBlock {
 		this.negcount = new int[n+1];
 		this.order = new int[n+1];
 		this.isexist = new boolean[n+1];
+		for (int i = 0 ; i <= n; ++i) this.isexist[i] = true;
 	}
 	
 	public abstract void insert(Quantifier q, boolean normalized);

@@ -12,7 +12,7 @@ public class ResultGenerator {
 	public static boolean rand = false;
 	public static boolean variate = false;
 	public static boolean randomplayout = true;
-	public static int maximumLearn = 1000;
+	public static int maximumLearn = 2000;
 	public static int triviallimit = 20;
 	public static Result getInstance() {
 		if (ret == null) {

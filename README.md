@@ -24,6 +24,8 @@ It seems like it is necessary to decide how to compute a more accurate set of re
 
 8. 3/9/2021: QCDCL preprocessor, not sure if the idea is correct
 
+9. 7/10/2021: 2-watched-literal data structure for QBF implemented
+
 Current solver strength (30 minutes for QDLL or 4000000 node expansions for DeepPNS):
 
 CHAIN 12/12 (QDLL + DLCS heuristic)
