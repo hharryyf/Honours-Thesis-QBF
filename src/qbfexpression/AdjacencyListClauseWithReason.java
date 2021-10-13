@@ -154,7 +154,7 @@ public class AdjacencyListClauseWithReason implements Disjunction {
 			System.err.println("negative v assigned to formula " + id + " !");
 			System.exit(1);
 		}
-		
+
 		int before = evaluate();
 		if (val == -1) {
 			for (Pair<Integer, Integer> p : this.literal) {

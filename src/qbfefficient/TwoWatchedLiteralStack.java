@@ -19,4 +19,5 @@ public abstract class TwoWatchedLiteralStack {
 	public abstract int evaluate();
 	public abstract void init();
 	public abstract ConflictSolution getConflict();
+	public abstract ConflictSolution getSolution();
 }

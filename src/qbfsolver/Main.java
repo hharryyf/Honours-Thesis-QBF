@@ -7,6 +7,7 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import qbfefficient.TwoWatchedLiteralFormula;
 import qbfexpression.CnfExpression;
 
 public class Main {
@@ -20,10 +21,18 @@ public class Main {
         		CnfExpression fo;
         		Result ret = ResultGenerator.getInstance();
         		if (args.length == 0) {
+        			final long start = System.currentTimeMillis();
         			p.preprocess();
         			fo = rd.read(0);
         			Solver s = new QDLLRBJ();
-        			ret.setTruth(s.solve(fo));
+        			boolean r = s.solve(fo);
+        			ret.setTruth(r);
+        			final long end = System.currentTimeMillis();
+        			long cnt = TwoWatchedLiteralFormula.setcount, cnt2 = TwoWatchedLiteralFormula.clause_iter;
+        			System.out.println("#branching= " + ResultGenerator.getInstance().getIteration() + " #ass= " 
+        			              + cnt + " #clause iterate= " + cnt2 +
+        			              "\nclause iterated per ass= " + (1.0 * cnt2 / (cnt + 1)) + 
+        			              "\ntotal time " + (1.0 * (end-start) / 1000));
         		} else {
         			p.preprocess();
         			fo = rd.read(0);
@@ -34,9 +43,13 @@ public class Main {
         		return ResultGenerator.getInstance();
             });
 
-            System.out.println(f.get(30000, TimeUnit.SECONDS));
+            System.out.println(f.get(900, TimeUnit.SECONDS));
             
         } catch (final TimeoutException e) {
+        	long cnt = TwoWatchedLiteralFormula.setcount, cnt2 = TwoWatchedLiteralFormula.clause_iter;
+			System.out.println("#branching= " + ResultGenerator.getInstance().getIteration() + " #ass= " 
+			              + cnt + " #clause iterate= " + cnt2 +
+			              "\nclause iterated per ass= " + (1.0 * cnt2 / (cnt + 1)));
             System.out.println("UNSOLVED NA");
             service.shutdown();
             System.exit(0);

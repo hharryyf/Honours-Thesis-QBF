@@ -18,6 +18,7 @@ import org.sat4j.specs.ISolver;
 import org.sat4j.specs.IVecInt;
 import org.sat4j.specs.TimeoutException;
 
+import qbfefficient.TwoWatchedLiteralFormula;
 import qbfsolver.ResultGenerator;
 // import utilstructure.BOMHCount;
 import utilstructure.BOMHVector;
@@ -200,6 +201,7 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 			int id = this.usedformula.get(v).pollLast();
 			AdjacencyListClauseWithReason d = this.formula.get(id);
 			d.set(v, this, -1, id);
+			TwoWatchedLiteralFormula.clause_iter++;
 		}
 		
 		boolean debug = ResultGenerator.getCommandLine().getDebug();
@@ -268,7 +270,7 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 		if (unit.isEmpty()) return false;
 		int v = unit.iterator().next();
 		unit.remove(v);
-		if (ResultGenerator.learnpreprocess) {
+		if (ResultGenerator.learnpreprocess && ResultGenerator.cdcl) {
 			System.out.println("learn unit " + v);
 			this.learnedunit.add(v);
 		}
@@ -284,7 +286,7 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 	private boolean pure_literal_elimination() {
 		if (terminal()) return false;
 		if (pure.isEmpty()) return false;
-		if (ResultGenerator.nopure && ResultGenerator.cdcl && !ResultGenerator.learnpreprocess) return false;
+		if (ResultGenerator.nopure && !ResultGenerator.learnpreprocess) return false;
 		int v = pure.iterator().next();
 		pure.remove(v);
 		if (ResultGenerator.learnpreprocess) {
@@ -445,9 +447,10 @@ public class AdjacencyListFormulaWithReason implements CnfExpression {
 			if (this.provedformula.contains(id)) continue;
 			AdjacencyListClauseWithReason d = this.formula.get(id);
 			d.set(Math.abs(v), this, v > 0 ? 1 : 0, id);
+			TwoWatchedLiteralFormula.clause_iter++;
 			this.usedformula.get(Math.abs(v)).add(id);
 		}
-		
+		if (TwoWatchedLiteralFormula.timer) TwoWatchedLiteralFormula.setcount += 1;
 		this.dropquantifier(v);
 		return true;
 	}

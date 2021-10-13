@@ -19,6 +19,14 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	private List<Quantifier> qlist;
 	private Set<Integer> permanantUnit;
 	private boolean locked = false;
+	public static enum Method {
+		BT, BJ, CDCLSBJ, QCDCL
+	}
+	// static command-line-argument region
+	public static int maxclause = 2500, maxcube = 2500;
+	public static long setcount = 0, clause_iter = 0;
+	public static boolean timer = true;
+	public static Method solvertype = Method.BJ;
 	public TwoWatchedLiteralFormula(int n) {
 		this.assign = new AssignmentStack();
 		this.quantifier = new QuantifierPrefixVSIDS(n);
@@ -69,6 +77,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	@Override
 	public void set(int v) {
 		if (this.assign.hasVar(v)) return;
+		if (TwoWatchedLiteralFormula.timer) TwoWatchedLiteralFormula.setcount += 1;
 		this.assign.assign(v, 'N', -1);
 		this.quantifier.remove(v);
 		this.original.set(v);
@@ -81,20 +90,50 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		return this.quantifier.depth[v];
 	}
 	
-	@Override
-	public void undo() {
+	private void undoBJ(ConflictBJ reason) {
 		while (!this.assign.literal.isEmpty() && this.assign.peek().second.first != 'N') {
 			Pair<Integer, Pair<Character, Integer>> pair = this.assign.unassign();
+			if (!reason.isSolution()) {
+				if (reason.contains(pair.first)) {
+					ConflictSolution other = new ConflictBJ(false);
+					if (pair.second.second == -1) {
+						reason.drop(null, pair.first);
+					} else {
+						other.addLiteral(this, this.original.formula.get(pair.second.second));
+					    reason.resolve(other, pair.first, this);
+					}
+				}
+			}
 			this.quantifier.insert(pair.first);
 			this.original.unassign(pair.first);
-			this.lemma.unassign(pair.first);
 		}
 		
 		if (!this.assign.literal.isEmpty()) {
 			Pair<Integer, Pair<Character, Integer>> pair = this.assign.unassign();
 			this.quantifier.insert(pair.first);
 			this.original.unassign(pair.first);
-			this.lemma.unassign(pair.first);
+		}
+	}
+	
+	@Override
+	public void undo(ConflictSolution reason) {
+	    if (TwoWatchedLiteralFormula.solvertype == Method.BT) {
+	    	while (!this.assign.literal.isEmpty() && this.assign.peek().second.first != 'N') {
+				Pair<Integer, Pair<Character, Integer>> pair = this.assign.unassign();
+				this.quantifier.insert(pair.first);
+				this.original.unassign(pair.first);
+			}
+			
+			if (!this.assign.literal.isEmpty()) {
+				Pair<Integer, Pair<Character, Integer>> pair = this.assign.unassign();
+				this.quantifier.insert(pair.first);
+				this.original.unassign(pair.first);
+			}
+	    } else if (TwoWatchedLiteralFormula.solvertype == Method.BJ) {
+	    	if (reason == null) MyError.abort("null reason for backjumping solver");
+			undoBJ((ConflictBJ) reason);
+		} else {
+			
 		}
 	}
 	
@@ -123,9 +162,8 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 			} else {
 				entry = this.lemma.unit.firstEntry();
 				propagate(entry.getKey(), 'E', entry.getValue());
-				this.original.unit.remove(entry.getKey());
+				this.lemma.unit.remove(entry.getKey());
 			}
-			
 		}
 		
 		
@@ -142,7 +180,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 			this.original.contradict.add(id);
 			return;
 		}
-		
+		if (TwoWatchedLiteralFormula.timer) TwoWatchedLiteralFormula.setcount += 1;
 		this.assign.assign(v, type, id);
 		this.quantifier.remove(v);
 		this.original.set(v);
@@ -198,7 +236,24 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	
 	@Override
 	public ConflictSolution getReason() {
-		if (this.lemma.evaluate() == 0) return this.lemma.getConflict();
-		return this.original.getConflict();
+		if (evaluate() == 1) {
+			return this.original.getSolution();
+		} else {
+			return this.original.getConflict();
+		}
+	}
+
+	@Override
+	public boolean isassigned(int v) {
+		return this.assign.hasVar(v);
+	}
+
+	@Override
+	public TwoWatchedLiteralClause unitId(int v) {
+		// TODO Auto-generated method stub
+		Pair<Character, Integer> cid = this.assign.getUnit(v);
+		if (cid.first == 'U') return this.original.formula.get(cid.second);
+		if (cid.first == 'E') return this.lemma.formula.get(cid.second);
+		return null;
 	}
 }

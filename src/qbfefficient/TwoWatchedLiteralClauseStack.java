@@ -1,11 +1,16 @@
 package qbfefficient;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
+import utilstructure.Pair;
 
 
 public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
@@ -128,6 +133,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			if (this.counter.issat(entry.getKey())) continue;
 			// iterate through the existential and see if we can watch one of it to watch
 			// such that we watch two existential
+			TwoWatchedLiteralFormula.clause_iter++;
 			TwoWatchedLiteralClause wr = this.formula.get(entry.getKey());
 			boolean found = false;
 			for (int i = 0; i < wr.existential.size(); ++i) {
@@ -186,6 +192,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			// again simple case, when the clause is satisfied, ignore it
 			Map.Entry<Integer, Integer> entry = iter.next();
 			if (this.counter.issat(entry.getKey())) continue;
+			TwoWatchedLiteralFormula.clause_iter++;
 			// the clause that contains this watched existential literal
 			TwoWatchedLiteralClause wr = this.formula.get(entry.getKey());
 			// if we are watching two existential literals
@@ -353,10 +360,84 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 	
 	@Override
 	public ConflictSolution getConflict() {
-		// TODO get the clause corresponds to the conflict
+		if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ) {
+			// learning strategy is Backjumping
+			// get the clause corresponds to the conflict
+			TwoWatchedLiteralClause C = this.formula.get(contradict.first());
+			ConflictSolution ret = new ConflictBJ(false);
+			// and clear out the conflict
+			this.contradict.clear();
+			ret.addLiteral(this.f, C);
+			return ret;
+		}
 		
-		// and clear out the conflict
-		this.contradict.clear();
+		return null;
+	}
+	
+	// v is the universal literal, 
+	private boolean canremove(int v, Set<Integer> ass) {
+		if (f.isMax(v)) MyError.abort("canremove: v is existential, invariant broken");
+		List<Integer> list = null;
+		if (v < 0) {
+			list = this.varNegToid.get(-v);
+	    } else {
+	    	list = this.varPosToid.get(v);
+	    }
+		
+		for (Integer id : list) {
+			boolean ok = false;
+	    	for (Integer u : this.formula.get(id).existential) {
+	    		if (ass.contains(u)) {
+	    			ok = true;
+	    			break;
+	    		}
+	    	}
+	    	
+	    	if (!ok) {
+		    	for (Integer u : this.formula.get(id).universal) {
+		    		if (ass.contains(u)) {
+		    			ok = true;
+		    			break;
+		    		}
+		    	}
+	    	}
+	    	
+	    	if (!ok) {
+	    		return false;
+	    	}
+	    }
+		
+		return true;
+	}
+	
+	@Override
+	public ConflictSolution getSolution() {
+		if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ) {
+			// learning strategy is Backjumping
+			HashSet<Integer> ass = new HashSet<>(f.assign.literal);
+			LinkedList<Integer> ret = new LinkedList<>();
+			for (Pair<Integer, Pair<Character, Integer>> p : f.assign.assignment) {
+				if (!f.isMax(p.first)) {
+					ret.addFirst(p.first);
+				}
+			}
+			
+			Iterator<Integer> iter = ret.iterator();
+			while (iter.hasNext()) {
+				int v = iter.next();
+				ass.remove(v);
+				if (canremove(v, ass)) {
+					iter.remove();
+				} else {
+					ass.add(v);
+				}
+			}
+			
+			ConflictSolution c = new ConflictBJ(true);
+			c.addAssignment(f, ret);
+			return c;
+		}
+		
 		return null;
 	}
 }

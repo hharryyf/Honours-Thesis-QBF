@@ -10,12 +10,14 @@ public interface EfficientQBFFormula {
 	public ConflictSolution getReason();
 	// method related to set literal
 	public void set(int v);
-	public void undo();
+	public void undo(ConflictSolution reason);
 	public void simplify();
 	public int evaluate();
 	// method related to quantifier
 	public Quantifier peek();
 	public void addQuantifier(Quantifier q);
+	public boolean isassigned(int v);
+	public TwoWatchedLiteralClause unitId(int v);
 	public int depth(int v);
 	public boolean isMax(int v);
 	// normalized
