@@ -66,4 +66,10 @@ public class TwoWatchedLiteralCubeStack extends TwoWatchedLiteralStack {
 		return null;
 	}
 
+	@Override
+	public void learn(List<Integer> c) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

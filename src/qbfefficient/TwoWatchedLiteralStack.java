@@ -14,6 +14,7 @@ public abstract class TwoWatchedLiteralStack {
 	protected TreeSet<Integer> contradict;
 	protected TwoWatchedLiteralFormula f;
 	public abstract void addClause(List<Integer> c);
+	public abstract void learn(List<Integer> c);
 	public abstract void set(int v);
 	public abstract void unassign(int v);
 	public abstract int evaluate();

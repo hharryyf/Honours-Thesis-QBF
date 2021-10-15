@@ -14,8 +14,9 @@ import utilstructure.Pair;
  * */
 public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	protected AssignmentStack assign;
+	protected int originalsize;
 	protected QuantifierPrefixVSIDS quantifier;
-	private TwoWatchedLiteralStack original, lemma;
+	private TwoWatchedLiteralStack original;
 	private List<Quantifier> qlist;
 	private Set<Integer> permanantUnit;
 	private boolean locked = false;
@@ -31,7 +32,6 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		this.assign = new AssignmentStack();
 		this.quantifier = new QuantifierPrefixVSIDS(n);
 		this.original = new TwoWatchedLiteralClauseStack(n, this);
-		this.lemma = new TwoWatchedLiteralClauseStack(n, this);
 		this.permanantUnit = new TreeSet<>();
 		this.qlist = new ArrayList<>();
 	}
@@ -70,8 +70,17 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	}
 	
 	@Override
+	/**
+	 * condition, c must be in minimal form
+	 */
 	public void learn(List<Integer> c) {
-		
+		if (c.isEmpty()) return;
+		if (c.size() == 1) {
+			this.permanantUnit.add(c.get(0));
+			return;
+		}
+		if (this.originalsize + TwoWatchedLiteralFormula.maxclause == this.original.formula.size()) return;
+		this.original.learn(c);
 	}
 	
 	@Override
@@ -81,13 +90,16 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		this.assign.assign(v, 'N', -1);
 		this.quantifier.remove(v);
 		this.original.set(v);
-		this.lemma.set(v);
 	}
 	
 	@Override
 	public int depth(int v) {
 		if (v < 0) v = -v;
 		return this.quantifier.depth[v];
+	}
+	
+	protected int decisionLevel(int v) {
+		return this.assign.literal.getOrDefault(v, -1);
 	}
 	
 	private void undoBJ(ConflictBJ reason) {
@@ -139,9 +151,9 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	
 	@Override
 	public int evaluate() {
-		int v1 = this.original.evaluate(), v2 = this.lemma.evaluate();
-		if (v1 == 0 || v2 == 0) return 0;
-		if (v1 == 1 && v2 == 1) return 1;
+		int v1 = this.original.evaluate();
+		if (v1 == 0) return 0;
+		if (v1 == 1) return 1;
 		return -1;
 	}
 	
@@ -153,22 +165,17 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 			propagate(v, 'U', -1);
 		}
 		
-		while ((!this.original.unit.isEmpty() || !this.lemma.unit.isEmpty()) && evaluate() == -1) {
+		while ((!this.original.unit.isEmpty()) && evaluate() == -1) {
 			Map.Entry<Integer, Integer> entry = null;
 			if (!this.original.unit.isEmpty()) {
 				entry = this.original.unit.firstEntry();
 				propagate(entry.getKey(), 'U', entry.getValue());
 				this.original.unit.remove(entry.getKey());
-			} else {
-				entry = this.lemma.unit.firstEntry();
-				propagate(entry.getKey(), 'E', entry.getValue());
-				this.lemma.unit.remove(entry.getKey());
 			}
 		}
 		
 		
 		this.original.unit.clear();
-		this.lemma.unit.clear();
 	}
 	
 	private void propagate(int v, char type, int id) {
@@ -229,6 +236,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 			this.quantifier.normalized();
 			this.original.init();
 			this.locked = true;
+			this.originalsize = this.original.formula.size();
 		} else {
 			// TODO, things to do during restart
 		}
@@ -253,7 +261,6 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		// TODO Auto-generated method stub
 		Pair<Character, Integer> cid = this.assign.getUnit(v);
 		if (cid.first == 'U') return this.original.formula.get(cid.second);
-		if (cid.first == 'E') return this.lemma.formula.get(cid.second);
 		return null;
 	}
 }

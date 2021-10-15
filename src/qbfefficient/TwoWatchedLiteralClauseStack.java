@@ -1,12 +1,11 @@
 package qbfefficient;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
@@ -375,7 +374,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 	}
 	
 	// v is the universal literal, 
-	private boolean canremove(int v, Set<Integer> ass) {
+	private boolean canremove(int v, Map<Integer, Integer> ass) {
 		if (f.isMax(v)) MyError.abort("canremove: v is existential, invariant broken");
 		List<Integer> list = null;
 		if (v < 0) {
@@ -387,7 +386,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 		for (Integer id : list) {
 			boolean ok = false;
 	    	for (Integer u : this.formula.get(id).existential) {
-	    		if (ass.contains(u)) {
+	    		if (ass.containsKey(u)) {
 	    			ok = true;
 	    			break;
 	    		}
@@ -395,7 +394,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 	    	
 	    	if (!ok) {
 		    	for (Integer u : this.formula.get(id).universal) {
-		    		if (ass.contains(u)) {
+		    		if (ass.containsKey(u)) {
 		    			ok = true;
 		    			break;
 		    		}
@@ -414,7 +413,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 	public ConflictSolution getSolution() {
 		if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ) {
 			// learning strategy is Backjumping
-			HashSet<Integer> ass = new HashSet<>(f.assign.literal);
+			HashMap<Integer, Integer> ass = new HashMap<>(f.assign.literal);
 			LinkedList<Integer> ret = new LinkedList<>();
 			for (Pair<Integer, Pair<Character, Integer>> p : f.assign.assignment) {
 				if (!f.isMax(p.first)) {
@@ -429,7 +428,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 				if (canremove(v, ass)) {
 					iter.remove();
 				} else {
-					ass.add(v);
+					ass.put(v, 0);
 				}
 			}
 			
@@ -439,5 +438,51 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 		}
 		
 		return null;
+	}
+
+	@Override
+	public void learn(List<Integer> c) {
+		TwoWatchedLiteralClause ret = new TwoWatchedLiteralClause();
+		ret.setFormula(f);
+		int mx = -1, l = -1;
+		for (Integer v : c) {
+			if (v > 0) {
+				this.varPosToid.get(v).add(this.formula.size());
+			} else {
+				this.varNegToid.get(-v).add(this.formula.size());
+			}
+			ret.addLiteral(v);
+			int level = f.decisionLevel(v);
+			if (f.isassigned(v) && mx < level) {
+				l = v;
+				mx = level;
+			}
+		}
+		
+		ret.setId(this.formula.size());
+		this.formula.add(ret);
+		int i = this.formula.size() - 1, j;
+		for (j = 0 ; j < this.formula.get(i).existential.size(); ++j) {
+			int v = this.formula.get(i).existential.get(j);
+			if ((v > 0 && Math.abs(v) == Math.abs(l)) || (v > 0 && !f.isassigned(v))) {
+				this.watchedFormulaPos.get(v).put(i, j);
+				this.formula.get(i).watchedE.add(j);
+			} else if ((v < 0 && Math.abs(v) == Math.abs(l)) || (v < 0 && !f.isassigned(v))) {
+				this.watchedFormulaNeg.get(-v).put(i, j);
+				this.formula.get(i).watchedE.add(j);
+			}
+		}
+		
+		for (j = 0 ; j < this.formula.get(i).universal.size(); ++j) {
+			int v = this.formula.get(i).universal.get(j);
+			if ((v > 0 && Math.abs(v) == Math.abs(l)) || (v > 0 && !f.isassigned(v))) {
+				this.watchedFormulaPos.get(v).put(i, j);
+				this.formula.get(i).watchedU.add(j);
+			} else if ((v < 0 && Math.abs(v) == Math.abs(l)) || (v < 0 && !f.isassigned(v))) {
+				this.watchedFormulaNeg.get(-v).put(i, j);
+				this.formula.get(i).watchedU.add(j);
+			}
+			
+		}
 	}
 }
