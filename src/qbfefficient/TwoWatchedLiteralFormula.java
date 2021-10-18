@@ -27,7 +27,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	public static int maxclause = 2500, maxcube = 2500;
 	public static long setcount = 0, clause_iter = 0;
 	public static boolean timer = true;
-	public static Method solvertype = Method.BJ;
+	public static Method solvertype = Method.CDCLSBJ;
 	public TwoWatchedLiteralFormula(int n) {
 		this.assign = new AssignmentStack();
 		this.quantifier = new QuantifierPrefixVSIDS(n);
@@ -74,13 +74,19 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	 * condition, c must be in minimal form
 	 */
 	public void learn(List<Integer> c) {
+		//return;
 		if (c.isEmpty()) return;
+		// System.out.println("learn " + c);
 		if (c.size() == 1) {
 			this.permanantUnit.add(c.get(0));
+			//System.out.println(this.assign.assignment);
+			//System.out.println("learn " + c);
 			return;
 		}
 		if (this.originalsize + TwoWatchedLiteralFormula.maxclause == this.original.formula.size()) return;
 		this.original.learn(c);
+		//System.out.println(this.assign.assignment);
+		//System.out.println("learn " + c);
 	}
 	
 	@Override
@@ -99,7 +105,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	}
 	
 	protected int decisionLevel(int v) {
-		return this.assign.literal.getOrDefault(v, -1);
+		return this.assign.literal.getOrDefault(-v, -1);
 	}
 	
 	private void undoBJ(ConflictBJ reason) {
@@ -127,6 +133,48 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		}
 	}
 	
+	private void undoCDCLSBJ(ConflictCDCLSBJ reason) {
+		while (!this.assign.literal.isEmpty() && this.assign.peek().second.first != 'N') {
+			Pair<Integer, Pair<Character, Integer>> pair = this.assign.unassign();
+			if (!reason.isSolution()) {
+				if (reason.contains(-pair.first)) {
+					ConflictSolution other = new ConflictCDCLSBJ(false);
+					if (pair.second.second == -1) {
+						List<Integer> vc = new ArrayList<>();
+						vc.add(pair.first);
+						other.addAssignment(this, vc);
+						reason.resolve(other, pair.first, this);
+					} else {
+						other.addLiteral(this, this.original.formula.get(pair.second.second));
+					    reason.resolve(other, pair.first, this);
+					}
+				}
+			}
+			this.quantifier.insert(pair.first);
+			this.original.unassign(pair.first);
+		}
+		
+		if (!this.assign.literal.isEmpty()) {
+			Pair<Integer, Pair<Character, Integer>> pair = this.assign.unassign();
+			boolean learned = reason.isUIP(this, pair.first);
+			List<Integer> ret = null;
+			if (learned) {
+				ret = reason.allLiteral();
+				//for (Integer v : ret) {
+				//	this.quantifier.score[Math.abs(v)] += 2.0;
+				//}
+			}
+			this.quantifier.insert(pair.first);
+			this.original.unassign(pair.first);
+			if (learned) {
+				//System.out.println(this.assign.assignment);
+				//System.out.println(this.assign.unit);
+				//System.out.println("start learning: branch= " + pair.first);
+				this.learn(ret);
+			}
+		}
+	}
+	
 	@Override
 	public void undo(ConflictSolution reason) {
 	    if (TwoWatchedLiteralFormula.solvertype == Method.BT) {
@@ -144,8 +192,9 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	    } else if (TwoWatchedLiteralFormula.solvertype == Method.BJ) {
 	    	if (reason == null) MyError.abort("null reason for backjumping solver");
 			undoBJ((ConflictBJ) reason);
-		} else {
-			
+		} else if (TwoWatchedLiteralFormula.solvertype == Method.CDCLSBJ) {
+			if (reason == null) MyError.abort("null reason for cdclsbj solver");
+			undoCDCLSBJ((ConflictCDCLSBJ) reason);
 		}
 	}
 	
@@ -159,9 +208,10 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	
 	@Override
 	public void simplify() {
+		// System.out.println("enter simp");
 		for (Integer v : this.permanantUnit) {
 			if (evaluate() != -1) break;
-			if (this.assign.hasVar(v)) continue;
+			if (this.assign.hasLiteral(v)) continue;
 			propagate(v, 'U', -1);
 		}
 		
@@ -174,8 +224,8 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 			}
 		}
 		
-		
 		this.original.unit.clear();
+		// System.out.println("exit simp");
 	}
 	
 	private void propagate(int v, char type, int id) {
@@ -184,13 +234,20 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		}
 		
 		if (this.assign.hasLiteral(-v)) {
-			this.original.contradict.add(id);
+			if (id != -1) {
+				this.original.contradict.add(id);
+			} else {
+				this.original.conflictunit.add(v);
+			}
 			return;
 		}
 		if (TwoWatchedLiteralFormula.timer) TwoWatchedLiteralFormula.setcount += 1;
 		this.assign.assign(v, type, id);
 		this.quantifier.remove(v);
 		this.original.set(v);
+		if (evaluate() == -1 && this.permanantUnit.contains(-v)) {
+			this.original.conflictunit.add(-v);
+		}
 	}
 	
 	@Override
@@ -260,7 +317,17 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	public TwoWatchedLiteralClause unitId(int v) {
 		// TODO Auto-generated method stub
 		Pair<Character, Integer> cid = this.assign.getUnit(v);
-		if (cid.first == 'U') return this.original.formula.get(cid.second);
+		if (cid == null) return null;
+		if (cid.first == 'U' && cid.second != -1) return this.original.formula.get(cid.second);
+		if (cid.first == 'U' && cid.second == -1) {
+			TwoWatchedLiteralClause c = new TwoWatchedLiteralClause();
+			if (isMax(v)) {
+				c.existential.add(v);
+			} else {
+				c.universal.add(v);
+			}
+			return c;
+		} 
 		return null;
 	}
 }

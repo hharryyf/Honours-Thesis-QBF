@@ -11,7 +11,7 @@ public abstract class TwoWatchedLiteralStack {
 	protected List<Map<Integer, Integer>> watchedFormulaPos;
 	protected List<Map<Integer, Integer>> watchedFormulaNeg;
 	protected TreeMap<Integer, Integer> unit;
-	protected TreeSet<Integer> contradict;
+	protected TreeSet<Integer> contradict, conflictunit;
 	protected TwoWatchedLiteralFormula f;
 	public abstract void addClause(List<Integer> c);
 	public abstract void learn(List<Integer> c);

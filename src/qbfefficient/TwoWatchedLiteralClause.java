@@ -45,6 +45,6 @@ public class TwoWatchedLiteralClause implements Comparable<TwoWatchedLiteralClau
 	}
 	
 	public String toString() {
-		return this.existential.toString().concat(" " + this.universal.toString());
+		return this.existential.toString().concat(" " + this.universal.toString()).concat("watch " + this.watchedE + " " + this.watchedU);
 	}
 }

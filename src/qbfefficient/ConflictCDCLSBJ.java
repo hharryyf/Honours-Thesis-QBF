@@ -1,5 +1,6 @@
 package qbfefficient;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -19,6 +20,14 @@ public class ConflictCDCLSBJ extends ConflictSolution {
 		this.opencount = false;
 	}
 	
+	public List<Integer> allLiteral() {
+		List<Integer> ret = new ArrayList<>();
+		for (Pair<Integer, Integer> p : depth) {
+			ret.add(p.second);
+		}
+		return ret;
+	}
+	
 	@Override
 	public int compareTo(ConflictSolution o) {
 		Integer it = new Integer(this.size());
@@ -30,13 +39,13 @@ public class ConflictCDCLSBJ extends ConflictSolution {
 	public void addLiteral(EfficientQBFFormula f, TwoWatchedLiteralClause c) {
 		for (Integer v : c.existential) {
 			depth.add(new Pair<>(f.depth(v), v));
-			if (f.isassigned(v)) this.opencount = true;
+			if (!f.isassigned(v)) this.opencount = true;
 			literal.add(v);
 		}
 		
 		for (Integer v : c.universal) {
 			depth.add(new Pair<>(f.depth(v), v));
-			if (f.isassigned(v)) this.opencount = true;
+			if (!f.isassigned(v)) this.opencount = true;
 			literal.add(v);
 		}
 	}
@@ -46,7 +55,7 @@ public class ConflictCDCLSBJ extends ConflictSolution {
 		// assume c is in T-minimal form
 		for (Integer v : c) {
 			depth.add(new Pair<>(f.depth(v), v));
-			if (f.isassigned(v)) this.opencount = true;
+			if (!f.isassigned(v)) this.opencount = true;
 			literal.add(v);
 		}
 	}
@@ -67,11 +76,12 @@ public class ConflictCDCLSBJ extends ConflictSolution {
 		ret.literal.remove(v);
 		ret.depth.remove(new Pair<>(f.depth(v), v));
 		ret.depth.remove(new Pair<>(f.depth(v), -v));
-		while (!depth.isEmpty()) {
-			Pair<Integer, Integer> d = depth.last();
-			if (this.satisfied != f.isMax(d.second)) {
-				literal.remove(d.second);
-				depth.remove(d);
+		while (!ret.depth.isEmpty()) {
+			Pair<Integer, Integer> d = ret.depth.last();
+			// System.out.println("consider q-res " + d);
+			if (this.satisfied == f.isMax(d.second)) {
+				ret.literal.remove(d.second);
+				ret.depth.remove(d);
 			} else {
 				break;
 			}
@@ -81,6 +91,8 @@ public class ConflictCDCLSBJ extends ConflictSolution {
 		for (Integer u : ret.literal) {
 			if (!f.isassigned(u)) this.opencount = true;
 		}
+		
+		//System.out.println("q resolution " + w1 + " " + w2 + " get " + ret + " " + ret.depth);
 		return ret;
 	}
 	
@@ -111,6 +123,7 @@ public class ConflictCDCLSBJ extends ConflictSolution {
 		}
 		
 		if (!find) {
+			System.out.println(w1.literal + " " + w2.literal + " " + v);
 			MyError.abort("cannot find the unit, something's wrong");
 		}
 		
@@ -123,10 +136,12 @@ public class ConflictCDCLSBJ extends ConflictSolution {
 		if (other.getClass() != ConflictCDCLSBJ.class) MyError.abort("resolve different clase");
 		if (other.satisfied != this.satisfied) MyError.abort("resolve different type");
 		if (!this.satisfied) {
+			//System.out.print("resolve " + this);
 			ConflictCDCLSBJ ret = rec_c_resolve(f, this, (ConflictCDCLSBJ) other, v);
 			this.literal = ret.literal;
 			this.depth = ret.depth;
 			this.opencount = ret.opencount;
+			//System.out.println(" and " + other + " get " + this);
 		} else {
 			for (Integer u : ((ConflictCDCLSBJ) other).literal) {
 				this.literal.add(u);
@@ -157,7 +172,12 @@ public class ConflictCDCLSBJ extends ConflictSolution {
 	// v is the current assigned left-right branch
 	public boolean isUIP(EfficientQBFFormula f, int v) {
 		if (this.opencount) return false;
-		if (this.literal.contains(-v) && !f.isassigned(-v)) return true;
+		if (this.satisfied) return false;
+		if (f.isMax(v) && this.literal.contains(-v) && !f.isassigned(-v)) return true;
 		return false;
+	}
+	
+	public String toString() {
+		return this.literal.toString();
 	}
 }

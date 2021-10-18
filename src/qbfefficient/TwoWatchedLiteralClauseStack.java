@@ -18,6 +18,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 		this.formula = new ArrayList<>();
 		this.unit = new TreeMap<>();
 		this.contradict = new TreeSet<>();
+		this.conflictunit = new TreeSet<>();
 		this.varNegToid = new ArrayList<>();
 		this.varPosToid = new ArrayList<>();
 		this.watchedFormulaPos = new ArrayList<>();
@@ -59,7 +60,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 				this.counter.addsat(w);
 			}
 		}
-		
+		// System.out.println("set " + v);
 		twowatchedassign(v);
 	}
 	
@@ -112,6 +113,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 				adjustTwoWatchExistential(v, mp);
 			}
 		}
+		
 	}
 	
 	/**
@@ -153,6 +155,10 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			//System.out.println(this.assign.assignment);
 			//System.out.println("clause " + entry.getKey() + " " + wr.existential + " " + wr.universal);
 			// if we fail to find one, we must find a universal that is outside the watched existential
+			if (wr.watchedE.isEmpty()) {
+				System.out.println(this.f.assign.assignment);
+				System.out.println(wr);
+			}
 			int existV = wr.existential.get(wr.watchedE.first());
 			for (int i = 0; i < wr.universal.size(); ++i) {
 				// has found an unwatched existential literal
@@ -307,6 +313,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 	
 	@Override
 	public void unassign(int v) {
+		// System.out.println("unset " + v);
 		if (v > 0) {
 			for (Integer id : this.varPosToid.get(v)) {
 				this.counter.removesat(id);
@@ -325,7 +332,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 	@Override
 	public int evaluate() {
 		if (this.counter.satClause() == this.formula.size()) return 1;
-		if (!this.contradict.isEmpty()) return 0;
+		if (!this.contradict.isEmpty() || !this.conflictunit.isEmpty()) return 0;
 		return -1;
 	}
 	
@@ -367,6 +374,22 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			// and clear out the conflict
 			this.contradict.clear();
 			ret.addLiteral(this.f, C);
+			return ret;
+		} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
+			ConflictSolution ret = new ConflictCDCLSBJ(false);
+			if (!this.contradict.isEmpty()) {
+				TwoWatchedLiteralClause C = this.formula.get(contradict.first());
+				//System.out.println("conflict " + C);
+				//System.out.println("ass= " + f.assign.assignment);
+				// and clear out the conflict
+				ret.addLiteral(this.f, C);
+			} else {
+				List<Integer> vc = new ArrayList<>();
+				vc.add(this.conflictunit.first());
+				ret.addAssignment(f, vc);
+			}
+			this.contradict.clear();
+			this.conflictunit.clear();
 			return ret;
 		}
 		
@@ -411,7 +434,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 	
 	@Override
 	public ConflictSolution getSolution() {
-		if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ) {
+		if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
 			// learning strategy is Backjumping
 			HashMap<Integer, Integer> ass = new HashMap<>(f.assign.literal);
 			LinkedList<Integer> ret = new LinkedList<>();
@@ -432,7 +455,12 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 				}
 			}
 			
-			ConflictSolution c = new ConflictBJ(true);
+			ConflictSolution c = null;
+			if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ) {
+				c = new ConflictBJ(true);
+			} else {
+				c = new ConflictCDCLSBJ(true);
+			}
 			c.addAssignment(f, ret);
 			return c;
 		}
@@ -453,6 +481,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			}
 			ret.addLiteral(v);
 			int level = f.decisionLevel(v);
+			// System.out.println(v + " level= " + level);
 			if (f.isassigned(v) && mx < level) {
 				l = v;
 				mx = level;
@@ -461,28 +490,39 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 		
 		ret.setId(this.formula.size());
 		this.formula.add(ret);
-		int i = this.formula.size() - 1, j;
-		for (j = 0 ; j < this.formula.get(i).existential.size(); ++j) {
+		int i = this.formula.size() - 1, j, cnt = 0;
+		for (j = 0 ; j < this.formula.get(i).existential.size() && cnt < 2; ++j) {
 			int v = this.formula.get(i).existential.get(j);
 			if ((v > 0 && Math.abs(v) == Math.abs(l)) || (v > 0 && !f.isassigned(v))) {
 				this.watchedFormulaPos.get(v).put(i, j);
 				this.formula.get(i).watchedE.add(j);
+				++cnt;
 			} else if ((v < 0 && Math.abs(v) == Math.abs(l)) || (v < 0 && !f.isassigned(v))) {
 				this.watchedFormulaNeg.get(-v).put(i, j);
 				this.formula.get(i).watchedE.add(j);
+				++cnt;
 			}
 		}
 		
-		for (j = 0 ; j < this.formula.get(i).universal.size(); ++j) {
+		for (j = 0 ; j < this.formula.get(i).universal.size() && cnt < 2; ++j) {
 			int v = this.formula.get(i).universal.get(j);
 			if ((v > 0 && Math.abs(v) == Math.abs(l)) || (v > 0 && !f.isassigned(v))) {
 				this.watchedFormulaPos.get(v).put(i, j);
 				this.formula.get(i).watchedU.add(j);
+				++cnt;
 			} else if ((v < 0 && Math.abs(v) == Math.abs(l)) || (v < 0 && !f.isassigned(v))) {
 				this.watchedFormulaNeg.get(-v).put(i, j);
 				this.formula.get(i).watchedU.add(j);
+				++cnt;
 			}
 			
 		}
+		
+		if (this.formula.get(i).watchedE.isEmpty()) {
+			System.out.println(this.formula.get(i));
+			System.out.println(f.assign.assignment);
+			MyError.abort("fail to watch 2 literals");
+		}
+		//System.out.println("another literal " + l + " learn clause " + ret);
 	}
 }

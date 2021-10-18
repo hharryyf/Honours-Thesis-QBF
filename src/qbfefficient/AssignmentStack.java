@@ -75,7 +75,7 @@ public class AssignmentStack {
     		return this.unit.get(l);
     	}
     	
-    	MyError.abort(l + " is not unit");
+    	// MyError.abort(l + " is not unit");
     	return null;
     }
 }
