@@ -79,14 +79,10 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		// System.out.println("learn " + c);
 		if (c.size() == 1) {
 			this.permanantUnit.add(c.get(0));
-			//System.out.println(this.assign.assignment);
-			//System.out.println("learn " + c);
 			return;
 		}
 		if (this.originalsize + TwoWatchedLiteralFormula.maxclause == this.original.formula.size()) return;
 		this.original.learn(c);
-		//System.out.println(this.assign.assignment);
-		//System.out.println("learn " + c);
 	}
 	
 	@Override
@@ -169,7 +165,6 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 			if (learned) {
 				//System.out.println(this.assign.assignment);
 				//System.out.println(this.assign.unit);
-				//System.out.println("start learning: branch= " + pair.first);
 				this.learn(ret);
 			}
 		}

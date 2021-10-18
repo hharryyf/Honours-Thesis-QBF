@@ -379,8 +379,6 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			ConflictSolution ret = new ConflictCDCLSBJ(false);
 			if (!this.contradict.isEmpty()) {
 				TwoWatchedLiteralClause C = this.formula.get(contradict.first());
-				//System.out.println("conflict " + C);
-				//System.out.println("ass= " + f.assign.assignment);
 				// and clear out the conflict
 				ret.addLiteral(this.f, C);
 			} else {
