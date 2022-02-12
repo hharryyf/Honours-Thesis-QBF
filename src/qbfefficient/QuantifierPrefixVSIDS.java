@@ -8,6 +8,7 @@ import qbfexpression.Quantifier;
 import utilstructure.Pair;
 
 public class QuantifierPrefixVSIDS {
+	protected String lm = new String("QUANTIFIER_BLOCK");
 	private boolean normalized = false;
 	protected int[] depth;
 	protected Quantifier[] quantifier;
@@ -45,14 +46,14 @@ public class QuantifierPrefixVSIDS {
 	}
 	
 	public void remove(int q) {
-		if (!this.normalized) MyError.abort("cannot remove quantifier when norlalized is false");
+		if (!this.normalized) MyLog.log(lm, true, "cannot remove quantifier when norlalized is false");
 		if (q < 0) q = -q;
 		int d = this.depth[q];
 		this.heuristic.get(d).remove(new Pair<Double, Integer>(score[q], q));
 	}
 	
     public void insert(int q) {
-    	if (!this.normalized) MyError.abort("cannot call this insertion method when norlalized is false");
+    	if (!this.normalized) MyLog.log(lm, true, "cannot call this insertion method when norlalized is false");
     	if (q < 0) q = -q;
     	int d = this.depth[q];
     	this.heuristic.get(d).add(new Pair<Double, Integer>(score[q], q));
@@ -75,7 +76,7 @@ public class QuantifierPrefixVSIDS {
 	 */
 	
 	public Quantifier peek() {
-		if (!this.normalized) MyError.abort("cannot peek quantifier when norlalized is false");
+		if (!this.normalized) MyLog.log(lm, true, "cannot peek quantifier when norlalized is false");
 		int i;
 		Pair<Double, Integer> ret = null;
 		for (i = 0 ; i < heuristic.size(); ++i) {
@@ -93,7 +94,7 @@ public class QuantifierPrefixVSIDS {
 			}
 		}
 		
-		if (ret == null) MyError.abort("invariant broken, no quantifier remaining");
+		if (ret == null) MyLog.log(lm, true, "invariant broken, no quantifier remaining");
 		return this.quantifier[ret.second];
 	}
 	
@@ -104,7 +105,7 @@ public class QuantifierPrefixVSIDS {
 	 */
 	
 	public void updateWeight(int q, double v) {
-		if (!this.normalized) MyError.abort("cannot update VSIDS score when norlalized is false");
+		if (!this.normalized) MyLog.log(lm, true, "cannot update VSIDS score when norlalized is false");
 		if (q < 0) q = -q;
 		this.remove(q);
 		this.score[q] = v;

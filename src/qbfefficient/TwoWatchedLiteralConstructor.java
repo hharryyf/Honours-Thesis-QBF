@@ -17,6 +17,7 @@ import qbfexpression.Quantifier;
 import utilstructure.Pair;
 
 public class TwoWatchedLiteralConstructor {
+	public String lm = new String("QDIMAC_READER");
 	public TwoWatchedLiteralFormula read() throws FileNotFoundException {
 		File myObj = new File("formula.txt");
 		Scanner sc = new Scanner(myObj);
@@ -59,7 +60,7 @@ public class TwoWatchedLiteralConstructor {
 				if (!c.isEmpty()) {
 					ret.addClause(c.getLiteral());
 				} else {
-					MyError.abort("try to insert an empty clause\nUNSAT");
+					MyLog.log(lm, true, "try to insert an empty clause\nUNSAT");
 				}
 				m--;
 			}

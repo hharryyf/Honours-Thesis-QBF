@@ -10,6 +10,7 @@ import java.util.TreeSet;
 import utilstructure.Pair;
 
 public class ConflictCDCLSBJ extends ConflictSolution {
+	protected String lm = new String("CONFLICT_LN_SOLUTION_BJ");
 	private Set<Integer> literal;
 	private boolean opencount = false;
 	private TreeSet<Pair<Integer, Integer>> depth;
@@ -124,17 +125,19 @@ public class ConflictCDCLSBJ extends ConflictSolution {
 		
 		if (!find) {
 			System.out.println(w1.literal + " " + w2.literal + " " + v);
-			MyError.abort("cannot find the unit, something's wrong");
+			MyLog.log(lm, true, "cannot find the unit, something's wrong");
 		}
 		
+		// System.out.println("annoying case, resolve away " + l);
+		//System.out.println(w1 + " " + w);
 		w = qresolution(f, w1, w, l);
 		return rec_c_resolve(f, w, w2, v);
 	}
 	
 	@Override
 	public void resolve(ConflictSolution other, int v, EfficientQBFFormula f) {
-		if (other.getClass() != ConflictCDCLSBJ.class) MyError.abort("resolve different clase");
-		if (other.satisfied != this.satisfied) MyError.abort("resolve different type");
+		if (other.getClass() != ConflictCDCLSBJ.class) MyLog.log(lm, true, "resolve different clase");
+		if (other.satisfied != this.satisfied) MyLog.log(lm, true, "resolve different type");
 		if (!this.satisfied) {
 			//System.out.print("resolve " + this);
 			ConflictCDCLSBJ ret = rec_c_resolve(f, this, (ConflictCDCLSBJ) other, v);
@@ -164,7 +167,7 @@ public class ConflictCDCLSBJ extends ConflictSolution {
 
 	@Override
 	public void drop(EfficientQBFFormula f, int v) {
-		if (f == null) MyError.abort("formula cannot be null");
+		if (f == null) MyLog.log(lm, true, "formula cannot be null");
 		depth.remove(new Pair<>(f.depth(v), v));
 		literal.remove(v);
 	}

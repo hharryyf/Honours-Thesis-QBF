@@ -8,6 +8,7 @@ import java.util.Map;
 import utilstructure.Pair;
 
 public class AssignmentStack {
+	protected String lm = new String("ASSIGNMENT_STACK");
 	protected LinkedList<Pair<Integer, Pair<Character, Integer>>> assignment;
 	protected Map<Integer, Integer> literal;
 	// literal, (type, id)
@@ -42,7 +43,7 @@ public class AssignmentStack {
 	 * @param id :: integer, clause related to this assignment, if type = N,  id = -1
 	 */
     public void assign(int v, char type, int id) {
-    	if (hasVar(v)) MyError.abort("reassign variable");
+    	if (hasVar(v)) MyLog.log(lm, true, "reassign variable");
     	this.literal.put(v, this.literal.size());
     	this.assignment.add(new Pair<>(v, new Pair<>(type, id)));
     	if (type != 'N') {
@@ -62,7 +63,7 @@ public class AssignmentStack {
      * @return last assignment
      */
     public Pair<Integer, Pair<Character, Integer>> unassign() {
-    	if (this.literal.isEmpty()) MyError.abort("unassign empty assignment");
+    	if (this.literal.isEmpty()) MyLog.log(lm, true, "unassign empty assignment");
     	this.literal.remove(this.peek().first);
     	if (this.peek().second.first != 'N') {
     		this.unit.remove(this.peek().first);

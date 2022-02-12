@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SatisfiedCounter {
+	protected String lm = new String("SATISFIED_COUNTER");
 	private int count = 0;
 	protected Map<Integer, Integer> sat;
 	public SatisfiedCounter() {
@@ -40,7 +41,7 @@ public class SatisfiedCounter {
 	 */
 	public void removesat(int v) {
 		int tol = sat.getOrDefault(v, 0);
-		if (tol == 0) MyError.abort("remove satisfied clause before adding in");
+		if (tol == 0) MyLog.log(lm, true, "remove satisfied clause before adding in");
 		
 		if (tol == 1) {
 			this.count--;

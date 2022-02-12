@@ -13,12 +13,15 @@ import utilstructure.Pair;
  * Two watched literal data structure for QBF
  * */
 public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
+	protected String lm = new String("2_WL_FORMULA");
 	protected AssignmentStack assign;
-	protected int originalsize;
+	protected int originalsize, varsize;
 	protected QuantifierPrefixVSIDS quantifier;
 	private TwoWatchedLiteralStack original;
 	private List<Quantifier> qlist;
 	private Set<Integer> permanantUnit;
+	protected List<List<Pair<Integer, Integer>>> dependgraph;
+	protected Set<Pair<Integer, Integer>> tempunit;
 	private boolean locked = false;
 	public static enum Method {
 		BT, BJ, CDCLSBJ, QCDCL
@@ -26,14 +29,18 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	// static command-line-argument region
 	public static int maxclause = 2500, maxcube = 2500;
 	public static long setcount = 0, clause_iter = 0;
-	public static boolean timer = true;
+	public static boolean timer = true, depend = false, debug = false, rand = false, vsids = false;
 	public static Method solvertype = Method.CDCLSBJ;
 	public TwoWatchedLiteralFormula(int n) {
+		this.varsize = n;
+		this.tempunit = new TreeSet<>();
 		this.assign = new AssignmentStack();
 		this.quantifier = new QuantifierPrefixVSIDS(n);
 		this.original = new TwoWatchedLiteralClauseStack(n, this);
 		this.permanantUnit = new TreeSet<>();
 		this.qlist = new ArrayList<>();
+		this.dependgraph = new ArrayList<>();
+		for (int i = 0 ; i <= 2 * n; ++i) this.dependgraph.add(new ArrayList<>());
 	}
 	
 	@Override
@@ -44,7 +51,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	
 	@Override
 	public void addClause(List<Integer> c) {
-		if (locked) MyError.abort("cannot insert clause after normalized, call learn instead");
+		if (locked) MyLog.log(lm, true, "cannot insert clause after normalized, call learn instead");
 		ArrayList<Pair<Integer, Integer>> curr= new ArrayList<>();
 		ArrayList<Integer> list = new ArrayList<>();
 		for (Integer v : c) {
@@ -57,7 +64,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		}
 	    
 		if (curr.isEmpty()) {
-			MyError.abort("try to insert empty clause!\nUNSAT\n");
+			MyLog.log(lm, true, "try to insert empty clause!\nUNSAT\n");
 		}
 		
 		if (curr.size() == 1) {
@@ -76,7 +83,9 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	public void learn(List<Integer> c) {
 		//return;
 		if (c.isEmpty()) return;
-		// System.out.println("learn " + c);
+		if (TwoWatchedLiteralFormula.debug) {
+			System.out.println("learn " + c);
+		}
 		if (c.size() == 1) {
 			this.permanantUnit.add(c.get(0));
 			return;
@@ -139,10 +148,27 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 						List<Integer> vc = new ArrayList<>();
 						vc.add(pair.first);
 						other.addAssignment(this, vc);
+						if (TwoWatchedLiteralFormula.depend && TwoWatchedLiteralFormula.debug) {
+							System.out.println("resolve num 1 = " + pair.first);
+						}
+						
+						/*if (TwoWatchedLiteralFormula.depend && reason.isUIP(this, pair.first)) {
+							learn(reason.allLiteral());
+						}*/
 						reason.resolve(other, pair.first, this);
+						
 					} else {
 						other.addLiteral(this, this.original.formula.get(pair.second.second));
-					    reason.resolve(other, pair.first, this);
+						if (TwoWatchedLiteralFormula.depend && TwoWatchedLiteralFormula.debug) {
+							System.out.println("resolve num 2 = " + pair.first);
+							System.out.println(this.assign.assignment);
+						}
+						/*
+						if (TwoWatchedLiteralFormula.depend && reason.isUIP(this, pair.first)) {
+							learn(reason.allLiteral());
+						}*/
+						
+						reason.resolve(other, pair.first, this);
 					}
 				}
 			}
@@ -165,6 +191,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 			if (learned) {
 				//System.out.println(this.assign.assignment);
 				//System.out.println(this.assign.unit);
+				// System.out.println("learn " + ret);
 				this.learn(ret);
 			}
 		}
@@ -185,10 +212,10 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 				this.original.unassign(pair.first);
 			}
 	    } else if (TwoWatchedLiteralFormula.solvertype == Method.BJ) {
-	    	if (reason == null) MyError.abort("null reason for backjumping solver");
+	    	if (reason == null) MyLog.log(lm, true, "null reason for backjumping solver");
 			undoBJ((ConflictBJ) reason);
 		} else if (TwoWatchedLiteralFormula.solvertype == Method.CDCLSBJ) {
-			if (reason == null) MyError.abort("null reason for cdclsbj solver");
+			if (reason == null) MyLog.log(lm, true, "null reason for cdclsbj solver");
 			undoCDCLSBJ((ConflictCDCLSBJ) reason);
 		}
 	}
@@ -208,6 +235,15 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 			if (evaluate() != -1) break;
 			if (this.assign.hasLiteral(v)) continue;
 			propagate(v, 'U', -1);
+		}
+		
+		
+		if (TwoWatchedLiteralFormula.depend) {
+			for (Pair<Integer, Integer> v : this.tempunit) {
+				if (evaluate() != -1) break;
+				if (this.assign.hasLiteral(v.first)) continue;
+				propagate(v.first, 'U', v.second);
+			}
 		}
 		
 		while ((!this.original.unit.isEmpty()) && evaluate() == -1) {
@@ -247,7 +283,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	
 	@Override
 	public Quantifier peek() {
-		if (!locked) MyError.abort("formula not normalized");
+		if (!locked) MyLog.log(lm, true, "formula not normalized");
 		return this.quantifier.peek();
 	}
 	

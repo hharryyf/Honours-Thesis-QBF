@@ -13,6 +13,7 @@ import utilstructure.Pair;
 
 
 public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
+	public String lm = new String("2_WL_CLAUSE_STACK");
 	public TwoWatchedLiteralClauseStack(int n, TwoWatchedLiteralFormula f) {
 		this.counter = new SatisfiedCounter();
 		this.formula = new ArrayList<>();
@@ -88,7 +89,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			this.watchedFormulaNeg.get(-v).remove(clauseid);
 		}
 		
-		if (literalid == -1) MyError.abort("watched invalid literal");
+		if (literalid == -1) MyLog.log(lm, true, "watched invalid literal");
 		
 		if (f.isMax(v)) {
 			this.formula.get(clauseid).watchedE.remove(literalid);
@@ -124,7 +125,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 	 * if v is negative, pos watched is passed in
 	 */
 	private void adjustTwoWatchUniversal(int v, Map<Integer, Integer> watched) {
-		if (f.isMax(v)) MyError.abort("invalid call to adjustTwoWatchUniversal, v is existential");
+		if (f.isMax(v)) MyLog.log(lm, true, "invalid call to adjustTwoWatchUniversal, v is existential");
 		Iterator<Map.Entry<Integer, Integer>> iter = watched.entrySet().iterator();
 		// entry key = clause id, entry value = watched literal id in the array (existential/universal)
 		while (iter.hasNext()) {
@@ -191,7 +192,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 	 * if v is negative, pos watched is passed in
 	 */
 	private void adjustTwoWatchExistential(int v, Map<Integer, Integer> watched) {
-		if (!f.isMax(v)) MyError.abort("invalid call to adjustTwoWatchExistential, v is universal");
+		if (!f.isMax(v)) MyLog.log(lm, true, "invalid call to adjustTwoWatchExistential, v is universal");
 		Iterator<Map.Entry<Integer, Integer>> iter = watched.entrySet().iterator();
 		while (iter.hasNext()) {
 			// again simple case, when the clause is satisfied, ignore it
@@ -261,7 +262,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 					break;
 				}
 				
-				if (wr.watchedU.isEmpty()) MyError.abort("invariant broken in assignE, no universal watched");
+				if (wr.watchedU.isEmpty()) MyLog.log(lm, true, "invariant broken in assignE, no universal watched");
 				int universeV = wr.universal.get(wr.watchedU.first());
 				// if existV is already outside universalV, just unwatch e and watch existV
 				if (f.depth(wr.existential.get(existV)) > f.depth(universeV)) {
@@ -322,6 +323,13 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			for (Integer id : this.varNegToid.get(-v)) {
 				this.counter.removesat(id);
 			}
+		}
+		
+		if (TwoWatchedLiteralFormula.depend) {
+			for (Pair<Integer, Integer> iter : f.dependgraph.get(-v + f.varsize)) {
+				f.tempunit.remove(iter);
+			}
+			f.dependgraph.get(-v + f.varsize).clear();
 		}
 	}
 	
@@ -396,7 +404,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 	
 	// v is the universal literal, 
 	private boolean canremove(int v, Map<Integer, Integer> ass) {
-		if (f.isMax(v)) MyError.abort("canremove: v is existential, invariant broken");
+		if (f.isMax(v)) MyLog.log(lm, true, "canremove: v is existential, invariant broken");
 		List<Integer> list = null;
 		if (v < 0) {
 			list = this.varNegToid.get(-v);
@@ -470,7 +478,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 	public void learn(List<Integer> c) {
 		TwoWatchedLiteralClause ret = new TwoWatchedLiteralClause();
 		ret.setFormula(f);
-		int mx = -1, l = -1;
+		int mx = -1, l = -1, unass = -1, tol = 0;
 		for (Integer v : c) {
 			if (v > 0) {
 				this.varPosToid.get(v).add(this.formula.size());
@@ -483,6 +491,21 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			if (f.isassigned(v) && mx < level) {
 				l = v;
 				mx = level;
+			}
+			
+			if (!f.isassigned(v)) {
+				tol++;
+				if (f.isMax(v)) {
+					unass = v;
+				}
+				
+				if (TwoWatchedLiteralFormula.vsids) {
+					f.quantifier.updateWeight(Math.abs(v), f.quantifier.score[Math.abs(v)] + 2.0);
+				}
+			} else {
+				if (TwoWatchedLiteralFormula.vsids) {
+					f.quantifier.score[Math.abs(v)] += 2.0;
+				}
 			}
 		}
 		
@@ -516,10 +539,20 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			
 		}
 		
+		
+		
+		if (TwoWatchedLiteralFormula.depend && tol == 1) {
+			f.dependgraph.get(l + f.varsize).add(new Pair<>(unass, i));
+			f.tempunit.add(new Pair<>(unass, i));
+			if (!f.isMax(unass)) {
+				MyLog.log(lm, true, "we have a problem not UIP");
+			}
+		}
+		
+		
+		
 		if (this.formula.get(i).watchedE.isEmpty()) {
-			System.out.println(this.formula.get(i));
-			System.out.println(f.assign.assignment);
-			MyError.abort("fail to watch 2 literals");
+			MyLog.log(lm, true, "fail to watch 2 literals");
 		}
 		//System.out.println("another literal " + l + " learn clause " + ret);
 	}

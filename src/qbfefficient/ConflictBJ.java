@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Set;
 
 public class ConflictBJ extends ConflictSolution {
+	protected String lm = new String("CONFLICT_SOLUTION_BJ");
 	private Set<Integer> literal;
 	public ConflictBJ(boolean sat) {
 		this.satisfied = sat;
@@ -30,8 +31,8 @@ public class ConflictBJ extends ConflictSolution {
 	
 	@Override
 	public void resolve(ConflictSolution other, int v, EfficientQBFFormula f) {
-		if (other.isSolution() != this.isSolution()) MyError.abort("resolve solution with conflict");
-		if (other.getClass() != ConflictBJ.class) MyError.abort("resolve with different conflict type");
+		if (other.isSolution() != this.isSolution()) MyLog.log(lm, true, "resolve solution with conflict");
+		if (other.getClass() != ConflictBJ.class) MyLog.log(lm, true, "resolve with different conflict type");
 		if (this.size() >= other.size()) {
 			for (Integer li : ((ConflictBJ) other).literal) {
 				this.literal.add(li);

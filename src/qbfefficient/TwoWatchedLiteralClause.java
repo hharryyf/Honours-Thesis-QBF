@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 public class TwoWatchedLiteralClause implements Comparable<TwoWatchedLiteralClause>{
+	protected String lm = new String("2_WL_CLAUSE");
 	protected List<Integer> universal;
 	protected List<Integer> existential;
 	protected TreeSet<Integer> watchedE, watchedU;
@@ -22,7 +23,7 @@ public class TwoWatchedLiteralClause implements Comparable<TwoWatchedLiteralClau
 	}
 	
 	public void setFormula(TwoWatchedLiteralFormula f) {
-		if (this.f != null) MyError.abort("invalid setFormula");
+		if (this.f != null) MyLog.log(lm, true, "invalid setFormula");
 		this.f = f;
 	}
 	
