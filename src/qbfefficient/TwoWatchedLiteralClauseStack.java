@@ -13,9 +13,12 @@ import utilstructure.Pair;
 
 
 public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
-	public String lm = new String("2_WL_CLAUSE_STACK");
-	public TwoWatchedLiteralClauseStack(int n, TwoWatchedLiteralFormula f) {
+	private String lm = new String("2_WL_CLAUSE_STACK");
+	private int n;
+	public TwoWatchedLiteralClauseStack(int n, TwoWatchedLiteralFormula f, int dim) {
+		this.n = n;
 		this.counter = new SatisfiedCounter();
+		this.counter.setDim(dim);
 		this.formula = new ArrayList<>();
 		this.unit = new TreeMap<>();
 		this.contradict = new TreeSet<>();
@@ -89,7 +92,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			this.watchedFormulaNeg.get(-v).remove(clauseid);
 		}
 		
-		if (literalid == -1) MyLog.log(lm, true, "watched invalid literal");
+		if (literalid == -1) MyLog.log(lm, 0, "watched invalid literal");
 		
 		if (f.isMax(v)) {
 			this.formula.get(clauseid).watchedE.remove(literalid);
@@ -125,7 +128,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 	 * if v is negative, pos watched is passed in
 	 */
 	private void adjustTwoWatchUniversal(int v, Map<Integer, Integer> watched) {
-		if (f.isMax(v)) MyLog.log(lm, true, "invalid call to adjustTwoWatchUniversal, v is existential");
+		if (f.isMax(v)) MyLog.log(lm, 0, "invalid call to adjustTwoWatchUniversal, v is existential");
 		Iterator<Map.Entry<Integer, Integer>> iter = watched.entrySet().iterator();
 		// entry key = clause id, entry value = watched literal id in the array (existential/universal)
 		while (iter.hasNext()) {
@@ -192,7 +195,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 	 * if v is negative, pos watched is passed in
 	 */
 	private void adjustTwoWatchExistential(int v, Map<Integer, Integer> watched) {
-		if (!f.isMax(v)) MyLog.log(lm, true, "invalid call to adjustTwoWatchExistential, v is universal");
+		if (!f.isMax(v)) MyLog.log(lm, 0, "invalid call to adjustTwoWatchExistential, v is universal");
 		Iterator<Map.Entry<Integer, Integer>> iter = watched.entrySet().iterator();
 		while (iter.hasNext()) {
 			// again simple case, when the clause is satisfied, ignore it
@@ -262,7 +265,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 					break;
 				}
 				
-				if (wr.watchedU.isEmpty()) MyLog.log(lm, true, "invariant broken in assignE, no universal watched");
+				if (wr.watchedU.isEmpty()) MyLog.log(lm, 0, "invariant broken in assignE, no universal watched");
 				int universeV = wr.universal.get(wr.watchedU.first());
 				// if existV is already outside universalV, just unwatch e and watch existV
 				if (f.depth(wr.existential.get(existV)) > f.depth(universeV)) {
@@ -317,10 +320,16 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 		// System.out.println("unset " + v);
 		if (v > 0) {
 			for (Integer id : this.varPosToid.get(v)) {
+				if (this.counter.getDim() == 1) {
+					MyLog.log(lm, 2, "Unassign " + v + " clause id " + id + " content: " + this.formula.get(id));
+				}
 				this.counter.removesat(id);
 			}
 		} else {
 			for (Integer id : this.varNegToid.get(-v)) {
+				if (this.counter.getDim() == 1) {
+					MyLog.log(lm, 2, "Unassign " + v + " clause id " + id + " content: " + this.formula.get(id));
+				}
 				this.counter.removesat(id);
 			}
 		}
@@ -383,13 +392,19 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			this.contradict.clear();
 			ret.addLiteral(this.f, C);
 			return ret;
-		} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
-			ConflictSolution ret = new ConflictCDCLSBJ(false);
+		} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL) {
+			ConflictSolution ret = null;
+			if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
+				ret = new ConflictCDCLSBJ(false);
+			} else {
+				ret = new ConflictSolutionQCDCL(false);
+			}
+			
 			if (!this.contradict.isEmpty()) {
 				TwoWatchedLiteralClause C = this.formula.get(contradict.first());
 				// and clear out the conflict
 				ret.addLiteral(this.f, C);
-			} else {
+			} else if (!this.conflictunit.isEmpty()) {
 				List<Integer> vc = new ArrayList<>();
 				vc.add(this.conflictunit.first());
 				ret.addAssignment(f, vc);
@@ -397,14 +412,14 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			this.contradict.clear();
 			this.conflictunit.clear();
 			return ret;
-		}
+		} 
 		
 		return null;
 	}
 	
 	// v is the universal literal, 
 	private boolean canremove(int v, Map<Integer, Integer> ass) {
-		if (f.isMax(v)) MyLog.log(lm, true, "canremove: v is existential, invariant broken");
+		if (f.isMax(v)) MyLog.log(lm, 2, "canremove: v is existential, invariant broken");
 		List<Integer> list = null;
 		if (v < 0) {
 			list = this.varNegToid.get(-v);
@@ -443,11 +458,17 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 		if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
 			// learning strategy is Backjumping
 			HashMap<Integer, Integer> ass = new HashMap<>(f.assign.literal);
+			int mx = -1;
 			LinkedList<Integer> ret = new LinkedList<>();
-			for (Pair<Integer, Pair<Character, Integer>> p : f.assign.assignment) {
+			for (Pair<Integer, AssignId> p : f.assign.assignment) {
 				if (!f.isMax(p.first)) {
 					ret.addFirst(p.first);
+					mx = Math.max(f.depth(p.first), mx);
 				}
+			}
+			
+			for (int i = 1; i <= n; ++i) {
+				if (f.isMax(i) && f.depth(i) > mx && !ass.containsKey(-i) && !ass.containsKey(i)) ass.put(i, 0);
 			}
 			
 			Iterator<Integer> iter = ret.iterator();
@@ -469,7 +490,50 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			}
 			c.addAssignment(f, ret);
 			return c;
-		}
+		} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL) {
+			HashMap<Integer, Integer> ass = new HashMap<>(f.assign.literal);
+			LinkedList<Integer> ret = new LinkedList<>();
+			LinkedList<Integer> other = new LinkedList<>();
+			int mx = -1;
+			for (Pair<Integer, AssignId> p : f.assign.assignment) {
+				if (!f.isMax(p.first)) {
+					ret.addFirst(p.first);
+					mx = Math.max(f.depth(p.first), mx);
+				} else {
+					other.add(p.first);
+				}
+			}
+			
+			Iterator<Integer> iter = ret.iterator();
+			
+			for (int i = 1; i <= n; ++i) {
+				if (f.isMax(i) && f.depth(i) > mx && !ass.containsKey(-i) && !ass.containsKey(i)) ass.put(i, 0);
+			}
+			
+			while (iter.hasNext()) {
+				int v = iter.next();
+				ass.remove(v);
+				if (canremove(v, ass)) {
+					iter.remove();
+				} else {
+					ass.put(v, 0);
+				}
+			}
+			
+			int mxlv = -1;
+			for (Integer v : ret) {
+				mxlv = Math.max(f.depth(v), mxlv);
+			}
+			
+			for (Integer v : other) {
+				if (f.depth(v) < mxlv) ret.add(v);
+			}
+			
+			ConflictSolution c = new ConflictSolutionQCDCL(true);
+			c.addAssignment(f, ret);
+			MyLog.log(lm, 2, "model generation ", ret);
+			return c;
+		} 
 		
 		return null;
 	}
@@ -511,6 +575,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 		
 		ret.setId(this.formula.size());
 		this.formula.add(ret);
+		MyLog.log(lm, 2, "learned ", ret);
 		int i = this.formula.size() - 1, j, cnt = 0;
 		for (j = 0 ; j < this.formula.get(i).existential.size() && cnt < 2; ++j) {
 			int v = this.formula.get(i).existential.get(j);
@@ -545,14 +610,14 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			f.dependgraph.get(l + f.varsize).add(new Pair<>(unass, i));
 			f.tempunit.add(new Pair<>(unass, i));
 			if (!f.isMax(unass)) {
-				MyLog.log(lm, true, "we have a problem not UIP");
+				MyLog.log(lm, 0, "we have a problem not UIP");
 			}
 		}
 		
 		
 		
 		if (this.formula.get(i).watchedE.isEmpty()) {
-			MyLog.log(lm, true, "fail to watch 2 literals");
+			MyLog.log(lm, 0, "fail to watch 2 literals: ", this.formula.get(i));
 		}
 		//System.out.println("another literal " + l + " learn clause " + ret);
 	}

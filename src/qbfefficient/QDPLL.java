@@ -9,6 +9,95 @@ import utilstructure.Pair;
 
 public class QDPLL {
 	protected static String lm = new String("QDPLL");
+	
+	public Pair<ConflictSolution, Boolean> qcdcl(TwoWatchedLiteralFormula f, int d) {
+		Result rr = ResultGenerator.getInstance();
+		rr.setIteration(1 + rr.getIteration());
+		if (f == null) return null;
+		int ret = f.evaluate();
+		Random rd = new Random();
+		int idx = rd.nextInt(2) == 1 ? 1 : -1;
+		if (!TwoWatchedLiteralFormula.rand) idx = 1;
+		if (ret == 0) {
+			return new Pair<>(f.getReason(), false);
+		}
+		if (ret == 1) return new Pair<>(f.getReason(), true);
+		Quantifier q = f.peek();
+		if (q.isMax()) {
+			f.set(q.getVal() * idx);
+			f.simplify();
+			Pair<ConflictSolution, Boolean> res = qcdcl(f, d + 1);
+			if (res.second) {
+				TwoWatchedLiteralFormula.truecount++;
+			} else {
+				TwoWatchedLiteralFormula.falsecount++;
+			}
+			f.undo(res.first);
+			if (res.second || !res.first.contains(-q.getVal() * idx)) {
+				if (!res.second && !res.first.contains(-q.getVal() * idx)) {
+			    	System.out.println("p-E " + q.getVal() * idx  + " d=" + d);
+			    }
+				return res;
+			}
+			f.set(-q.getVal() * idx);
+			f.simplify();
+			Pair<ConflictSolution, Boolean> other = qcdcl(f, d + 1);
+			f.undo(other.first);
+			if (!other.second && other.first.contains(q.getVal() * idx)) {
+			    other.first.resolve(res.first, q.getVal(), f);
+			    if (TwoWatchedLiteralFormula.depend && TwoWatchedLiteralFormula.debug) {
+			    	System.out.println("resolve E num= " + q.getVal());
+			    }
+			}
+			
+			if (other.second) {
+				TwoWatchedLiteralFormula.truecount++;
+			} else {
+				TwoWatchedLiteralFormula.falsecount++;
+			}
+			
+			return other;
+		}
+		
+		f.set(q.getVal() * idx);
+		f.simplify();
+		Pair<ConflictSolution, Boolean> res = qcdcl(f, d + 1);
+		
+		if (res.second) {
+			TwoWatchedLiteralFormula.truecount++;
+		} else {
+			TwoWatchedLiteralFormula.falsecount++;
+		}
+		
+		f.undo(res.first);
+		if (!res.second || !res.first.contains(q.getVal() * idx)) {
+		    if (res.second && !res.first.contains(q.getVal() * idx)) {
+		    	System.out.println("p-U " + q.getVal() * idx + " d=" + d);
+		    }
+		    
+		    MyLog.log(lm, 3, "reason: ", res, " branching variable: ", q.getVal() * idx, " type= ", res.first.isSolution());
+			return res;
+		}
+		f.set(-q.getVal() * idx);
+		f.simplify();
+		Pair<ConflictSolution, Boolean> other = qcdcl(f, d + 1);
+		f.undo(other.first);
+		if (other.second && other.first.contains(-q.getVal() * idx)) {
+			other.first.resolve(res.first, q.getVal() * idx, f);
+		    if (TwoWatchedLiteralFormula.depend && TwoWatchedLiteralFormula.debug) {
+		    	System.out.println("resolve U num= " + q.getVal() * idx);
+		    }
+		}
+		
+		MyLog.log(lm, 3, "reason: ", other, " branching variable: ", -q.getVal() * idx, " type= ", other.first.isSolution());
+		if (other.second) {
+			TwoWatchedLiteralFormula.truecount++;
+		} else {
+			TwoWatchedLiteralFormula.falsecount++;
+		}
+		return other;
+	}
+	
 	public Pair<ConflictSolution, Boolean> cdclsbj(TwoWatchedLiteralFormula f, int d) {
 		Result rr = ResultGenerator.getInstance();
 		rr.setIteration(1 + rr.getIteration());
@@ -26,6 +115,11 @@ public class QDPLL {
 			f.set(q.getVal() * idx);
 			f.simplify();
 			Pair<ConflictSolution, Boolean> res = cdclsbj(f, d + 1);
+			if (res.second) {
+				TwoWatchedLiteralFormula.truecount++;
+			} else {
+				TwoWatchedLiteralFormula.falsecount++;
+			}
 			f.undo(res.first);
 			if (res.second || !res.first.contains(-q.getVal() * idx)) {
 				if (!res.second && !res.first.contains(-q.getVal() * idx)) {
@@ -43,6 +137,12 @@ public class QDPLL {
 			    	System.out.println("resolve E num= " + q.getVal());
 			    }
 			}
+			
+			if (other.second) {
+				TwoWatchedLiteralFormula.truecount++;
+			} else {
+				TwoWatchedLiteralFormula.falsecount++;
+			}
 			return other;
 		}
 		
@@ -51,6 +151,11 @@ public class QDPLL {
 		f.simplify();
 		//System.out.println("exit simp " + q.getVal() + " " + d);
 		Pair<ConflictSolution, Boolean> res = cdclsbj(f, d + 1);
+		if (res.second) {
+			TwoWatchedLiteralFormula.truecount++;
+		} else {
+			TwoWatchedLiteralFormula.falsecount++;
+		}
 		f.undo(res.first);
 		if (!res.second || !res.first.contains(q.getVal() * idx)) {
 		    if (res.second && !res.first.contains(q.getVal() * idx)) {
@@ -67,6 +172,12 @@ public class QDPLL {
 		    if (TwoWatchedLiteralFormula.depend && TwoWatchedLiteralFormula.debug) {
 		    	System.out.println("resolve U num= " + q.getVal() * idx);
 		    }
+		}
+		
+		if (other.second) {
+			TwoWatchedLiteralFormula.truecount++;
+		} else {
+			TwoWatchedLiteralFormula.falsecount++;
 		}
 		return other;
 	}
@@ -165,9 +276,9 @@ public class QDPLL {
 	}
 	
 	public static void main(String args[]) throws FileNotFoundException {
-		final long start = System.currentTimeMillis();
 		TwoWatchedLiteralConstructor reader = new TwoWatchedLiteralConstructor();
 		TwoWatchedLiteralFormula ret = reader.construct();
+		final long start = System.currentTimeMillis();
 		QDPLL solver = new QDPLL();
 		boolean res = false;
 		if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BT) {
@@ -177,14 +288,18 @@ public class QDPLL {
 		} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
 			res = solver.cdclsbj(ret, 0).second;
 		} else {
-			
+			res = solver.qcdcl(ret, 0).second;
 		}
 		final long end = System.currentTimeMillis();
 		long cnt = TwoWatchedLiteralFormula.clause_iter, cnt2 = TwoWatchedLiteralFormula.setcount;
-		MyLog.log(lm, false, "#branching= " + ResultGenerator.getInstance().getIteration() + " #ass= " 
+		MyLog.log(lm, 1, "#branching= " + ResultGenerator.getInstance().getIteration() + " #ass= " 
 	              + cnt2 + " #clause iterate= " + cnt);
-		MyLog.log(lm, false, "nclause iterated per ass= " + (1.0 * cnt / (cnt2 + 1))); 
-	    MyLog.log(lm, false, "total time " + (1.0 * (end-start) / 1000));
+		MyLog.log(lm, 1, "nclause iterated per ass= " + (1.0 * cnt / (cnt2 + 1))); 
+	    MyLog.log(lm, 1, "total time " + (1.0 * (end-start) / 1000));
+	    if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
+	    	MyLog.log(lm, 1, "total SAT nodes: ", TwoWatchedLiteralFormula.truecount, " total UNSAT nodes: ", TwoWatchedLiteralFormula.falsecount);
+	    	MyLog.log(lm, 1, "#learned clause= ", ret.tolLearnClause(), " #learned cube= ", ret.tolLearnCube());
+	    }
 		System.out.println((res ? "SAT" : "UNSAT"));
 	}
 }

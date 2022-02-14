@@ -1,0 +1,402 @@
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [QDPLL] [INFO]: #branching= 3970091 #ass= 20969006 #clause iterate= 18376318 
+[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 0.8763561383712638 
+[QCDCL] [QDPLL] [INFO]: total time 182.14 
+[QCDCL] [QDPLL] [INFO]: total SAT nodes:  3969707  total UNSAT nodes:  383 
+[QCDCL] [QDPLL] [INFO]: #learned clause=  60  #learned cube=  48 
+[QCDCL] [QDPLL] [INFO]: #branching= 119 #ass= 1344 #clause iterate= 1639 
+[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.2185873605947954 
+[QCDCL] [QDPLL] [INFO]: total time 0.041 
+[QCDCL] [QDPLL] [INFO]: total SAT nodes:  99  total UNSAT nodes:  19 
+[QCDCL] [QDPLL] [INFO]: #learned clause=  6  #learned cube=  0 
+[QCDCL] [QDPLL] [INFO]: #branching= 521 #ass= 5972 #clause iterate= 8053 
+[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.3482337183994642 
+[QCDCL] [QDPLL] [INFO]: total time 0.129 
+[QCDCL] [QDPLL] [INFO]: total SAT nodes:  332  total UNSAT nodes:  188 
+[QCDCL] [QDPLL] [INFO]: #learned clause=  95  #learned cube=  1 
+[QCDCL] [QDPLL] [INFO]: #branching= 1034 #ass= 12504 #clause iterate= 13613 
+[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.0886045581767294 
+[QCDCL] [QDPLL] [INFO]: total time 0.169 
+[QCDCL] [QDPLL] [INFO]: total SAT nodes:  949  total UNSAT nodes:  84 
+[QCDCL] [QDPLL] [INFO]: #learned clause=  34  #learned cube=  10 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [QDPLL] [INFO]: #branching= 115366 #ass= 5024986 #clause iterate= 8183919 
+[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.6286448104243851 
+[QCDCL] [QDPLL] [INFO]: total time 49.907 
+[QCDCL] [QDPLL] [INFO]: total SAT nodes:  105379  total UNSAT nodes:  9986 
+[QCDCL] [QDPLL] [INFO]: #learned clause=  1368  #learned cube=  0 
+[QCDCL] [QDPLL] [INFO]: #branching= 176535 #ass= 6232015 #clause iterate= 12127598 
+[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.9460152220405083 
+[QCDCL] [QDPLL] [INFO]: total time 402.924 
+[QCDCL] [QDPLL] [INFO]: total SAT nodes:  0  total UNSAT nodes:  176534 
+[QCDCL] [QDPLL] [INFO]: #learned clause=  2500  #learned cube=  0 
+[QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  82 
+[QCDCL] [QDPLL] [INFO]: #branching= 713671 #ass= 3503043 #clause iterate= 3061740 
+[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 0.8740227071084462 
+[QCDCL] [QDPLL] [INFO]: total time 53.13 
+[QCDCL] [QDPLL] [INFO]: total SAT nodes:  713147  total UNSAT nodes:  523 
+[QCDCL] [QDPLL] [INFO]: #learned clause=  105  #learned cube=  56 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [QDPLL] [INFO]: #branching= 38743 #ass= 722394 #clause iterate= 720803 
+[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 0.9977962195197918 
+[QCDCL] [QDPLL] [INFO]: total time 7.104 
+[QCDCL] [QDPLL] [INFO]: total SAT nodes:  22634  total UNSAT nodes:  16108 
+[QCDCL] [QDPLL] [INFO]: #learned clause=  78  #learned cube=  0 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [QDPLL] [INFO]: #branching= 398188 #ass= 8624392 #clause iterate= 8462113 
+[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 0.9811836032982263 
+[QCDCL] [QDPLL] [INFO]: total time 56.051 
+[QCDCL] [QDPLL] [INFO]: total SAT nodes:  200693  total UNSAT nodes:  197494 
+[QCDCL] [QDPLL] [INFO]: #learned clause=  1  #learned cube=  0 
+[QCDCL] [QDPLL] [INFO]: #branching= 7 #ass= 56 #clause iterate= 98 
+[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.719298245614035 
+[QCDCL] [QDPLL] [INFO]: total time 0.005 
+[QCDCL] [QDPLL] [INFO]: total SAT nodes:  0  total UNSAT nodes:  6 
+[QCDCL] [QDPLL] [INFO]: #learned clause=  4  #learned cube=  0 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [QDPLL] [INFO]: #branching= 16767 #ass= 31397 #clause iterate= 33746 
+[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.0747818332377859 
+[QCDCL] [QDPLL] [INFO]: total time 1.368 
+[QCDCL] [QDPLL] [INFO]: total SAT nodes:  0  total UNSAT nodes:  16766 
+[QCDCL] [QDPLL] [INFO]: #learned clause=  888  #learned cube=  0 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [QDPLL] [INFO]: #branching= 2296511 #ass= 3624698 #clause iterate= 1637892 
+[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 0.45186979663690696 
+[QCDCL] [QDPLL] [INFO]: total time 65.217 
+[QCDCL] [QDPLL] [INFO]: total SAT nodes:  2216801  total UNSAT nodes:  79709 
+[QCDCL] [QDPLL] [INFO]: #learned clause=  1605  #learned cube=  0 
+[QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  83 
+[QCDCL] [QDPLL] [INFO]: #branching= 5314400 #ass= 96722186 #clause iterate= 93002256 
+[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 0.9615400445814981 
+[QCDCL] [QDPLL] [INFO]: total time 314.103 
+[QCDCL] [QDPLL] [INFO]: total SAT nodes:  5314399  total UNSAT nodes:  0 
+[QCDCL] [QDPLL] [INFO]: #learned clause=  0  #learned cube=  160 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[QCDCL] [QDPLL] [INFO]: #branching= 192 #ass= 1959 #clause iterate= 2597 
+[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.325 
+[QCDCL] [QDPLL] [INFO]: total time 0.092 
+[QCDCL] [QDPLL] [INFO]: total SAT nodes:  0  total UNSAT nodes:  191 
+[QCDCL] [QDPLL] [INFO]: #learned clause=  0  #learned cube=  0 

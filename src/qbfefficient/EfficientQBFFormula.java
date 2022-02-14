@@ -6,7 +6,7 @@ import qbfexpression.Quantifier;
 public interface EfficientQBFFormula {
 	// method related to clauses
 	public void addClause(List<Integer> c);
-	public void learn(List<Integer> c);
+	public void learn(List<Integer> c, boolean clause);
 	public ConflictSolution getReason();
 	// method related to set literal
 	public void set(int v);
@@ -22,4 +22,6 @@ public interface EfficientQBFFormula {
 	public boolean isMax(int v);
 	// normalized
 	public void normalize(int type);
+	public int tolLearnClause();
+	public int tolLearnCube();
 }

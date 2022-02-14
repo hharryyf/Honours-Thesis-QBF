@@ -8,11 +8,11 @@ import java.util.Map;
 import utilstructure.Pair;
 
 public class AssignmentStack {
-	protected String lm = new String("ASSIGNMENT_STACK");
-	protected LinkedList<Pair<Integer, Pair<Character, Integer>>> assignment;
+	private String lm = new String("ASSIGNMENT_STACK");
+	protected LinkedList<Pair<Integer, AssignId>> assignment;
 	protected Map<Integer, Integer> literal;
-	// literal, (type, id)
-	protected Map<Integer, Pair<Character, Integer>> unit;
+	// literal, (dimension, type, id)
+	private Map<Integer, AssignId> unit;
 	public AssignmentStack() {
 		this.literal = new HashMap<>();
 		this.assignment = new LinkedList<>();
@@ -42,19 +42,21 @@ public class AssignmentStack {
 	 * 'N' means branching variable
 	 * @param id :: integer, clause related to this assignment, if type = N,  id = -1
 	 */
-    public void assign(int v, char type, int id) {
-    	if (hasVar(v)) MyLog.log(lm, true, "reassign variable");
+	
+	
+    public void assign(int v, int dimension, char type, int id) {
+    	if (hasVar(v)) MyLog.log(lm, 0, "reassign variable");
     	this.literal.put(v, this.literal.size());
-    	this.assignment.add(new Pair<>(v, new Pair<>(type, id)));
+    	this.assignment.add(new Pair<>(v, new AssignId(dimension, type, id)));
     	if (type != 'N') {
-    		this.unit.put(v, new Pair<>(type, id));
+    		this.unit.put(v, new AssignId(dimension, type, id));
     	}
 	}
     /**
      * 
      * @return the last assignment :: pair<int, pair<char, int>>, (literal, (type, clause id))
      */
-    public Pair<Integer, Pair<Character, Integer>> peek() {
+    public Pair<Integer, AssignId> peek() {
     	return this.assignment.peekLast();
     }
     
@@ -62,16 +64,19 @@ public class AssignmentStack {
      * peek and remove
      * @return last assignment
      */
-    public Pair<Integer, Pair<Character, Integer>> unassign() {
-    	if (this.literal.isEmpty()) MyLog.log(lm, true, "unassign empty assignment");
+    public Pair<Integer, AssignId> unassign() {
+    	if (this.literal.isEmpty()) MyLog.log(lm, 0, "unassign empty assignment");
     	this.literal.remove(this.peek().first);
-    	if (this.peek().second.first != 'N') {
+    	if (this.peek().second.type != 'N') {
     		this.unit.remove(this.peek().first);
     	}
+    	
+    	MyLog.log(lm, 3, "unassign ", this.assignment.getLast().first);
+    	
     	return this.assignment.pollLast();
     }
     
-    public Pair<Character, Integer> getUnit(int l) {
+    public AssignId getUnit(int l) {
     	if (this.unit.containsKey(l)) {
     		return this.unit.get(l);
     	}

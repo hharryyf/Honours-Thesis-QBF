@@ -4,12 +4,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SatisfiedCounter {
-	protected String lm = new String("SATISFIED_COUNTER");
-	private int count = 0;
+	private String lm = new String("SATISFIED_COUNTER");
+	private int count = 0, dim = 0;
 	protected Map<Integer, Integer> sat;
 	public SatisfiedCounter() {
 		this.sat = new HashMap<>();
 		this.count = 0;
+	}
+	
+	public void setDim(int dim) {
+		this.dim = dim;
 	}
 	
 	/**
@@ -39,15 +43,20 @@ public class SatisfiedCounter {
 	 * 
 	 * @param decrement the sat counter of clause v
 	 */
+	
 	public void removesat(int v) {
 		int tol = sat.getOrDefault(v, 0);
-		if (tol == 0) MyLog.log(lm, true, "remove satisfied clause before adding in");
+		if (tol == 0) MyLog.log(lm, 0, "remove satisfied clause before adding in " + (this.dim == 1 ? "LEARNED_CLAUSE" : "ORIGINAL_CLAUSE") + " " + this.sat + " clauseid: " + v);
 		
 		if (tol == 1) {
 			this.count--;
 		}
 		
 		sat.put(v, tol - 1);
+	}
+	
+	public int getDim() {
+		return this.dim;
 	}
 	
 	/**

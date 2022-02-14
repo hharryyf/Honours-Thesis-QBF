@@ -9,12 +9,13 @@ import java.util.TreeSet;
 
 import utilstructure.Pair;
 
-public class ConflictCDCLSBJ extends ConflictSolution {
-	private String lm = new String("CONFLICT_LN_SOLUTION_BJ");
+public class ConflictSolutionQCDCL extends ConflictSolution {
+
+	private String lm = new String("QCDCL_LN");
 	private Set<Integer> literal;
 	private boolean opencount = false;
 	private TreeSet<Pair<Integer, Integer>> depth;
-	public ConflictCDCLSBJ(boolean sat) {
+	public ConflictSolutionQCDCL(boolean sat) {
 		this.satisfied = sat;
 		this.literal = new HashSet<>();
 		this.depth = new TreeSet<>();
@@ -62,8 +63,8 @@ public class ConflictCDCLSBJ extends ConflictSolution {
 	}
 	
 	
-	private ConflictCDCLSBJ qresolution(EfficientQBFFormula f, ConflictCDCLSBJ w1, ConflictCDCLSBJ w2, int v) {
-		ConflictCDCLSBJ ret = new ConflictCDCLSBJ(w1.satisfied);
+	private ConflictSolutionQCDCL qresolution(EfficientQBFFormula f, ConflictSolutionQCDCL w1, ConflictSolutionQCDCL w2, int v) {
+		ConflictSolutionQCDCL ret = new ConflictSolutionQCDCL(w1.satisfied);
 		for (Integer u : w1.literal) {
 			ret.literal.add(u);
 			ret.depth.add(new Pair<>(f.depth(u), u));
@@ -79,7 +80,6 @@ public class ConflictCDCLSBJ extends ConflictSolution {
 		ret.depth.remove(new Pair<>(f.depth(v), -v));
 		while (!ret.depth.isEmpty()) {
 			Pair<Integer, Integer> d = ret.depth.last();
-			// System.out.println("consider q-res " + d);
 			if (this.satisfied == f.isMax(d.second)) {
 				ret.literal.remove(d.second);
 				ret.depth.remove(d);
@@ -97,7 +97,7 @@ public class ConflictCDCLSBJ extends ConflictSolution {
 		return ret;
 	}
 	
-	private ConflictCDCLSBJ rec_c_resolve(EfficientQBFFormula f, ConflictCDCLSBJ w1, ConflictCDCLSBJ w2, int v) {
+	private ConflictSolutionQCDCL rec_c_resolve(EfficientQBFFormula f, ConflictSolutionQCDCL w1, ConflictSolutionQCDCL w2, int v) {
 		boolean ok = true;
 		for (Integer u : w2.literal) {
 			if (Math.abs(u) != Math.abs(v) && w1.contains(-u)) {
@@ -107,9 +107,8 @@ public class ConflictCDCLSBJ extends ConflictSolution {
 		}
 		
 		if (ok) return qresolution(f, w1, w2, v);
-		
 		Iterator<Pair<Integer, Integer>> iter = w1.depth.descendingIterator();
-		ConflictCDCLSBJ w = new ConflictCDCLSBJ(false);
+		ConflictSolutionQCDCL w = new ConflictSolutionQCDCL(w1.satisfied);
 		int l = 0;
 		boolean find = false;
 		while (iter.hasNext()) {
@@ -127,33 +126,21 @@ public class ConflictCDCLSBJ extends ConflictSolution {
 			MyLog.log(lm, 0, "cannot find the unit, something's wrong");
 		}
 		
-		// System.out.println("annoying case, resolve away " + l);
-		//System.out.println(w1 + " " + w);
 		w = qresolution(f, w1, w, l);
 		return rec_c_resolve(f, w, w2, v);
 	}
 	
 	@Override
 	public void resolve(ConflictSolution other, int v, EfficientQBFFormula f) {
-		if (other.getClass() != ConflictCDCLSBJ.class) MyLog.log(lm, 0, "resolve different clase");
+		if (other.getClass() != ConflictSolutionQCDCL.class) MyLog.log(lm, 0, "resolve different clase");
 		if (other.satisfied != this.satisfied) MyLog.log(lm, 0, "resolve different type");
-		if (!this.satisfied) {
-			//System.out.print("resolve " + this);
-			MyLog.log(lm, 2, "resolve: " + this + " and ");
-			ConflictCDCLSBJ ret = rec_c_resolve(f, this, (ConflictCDCLSBJ) other, v);
-			this.literal = ret.literal;
-			this.depth = ret.depth;
-			this.opencount = ret.opencount;
-			//System.out.println(" and " + other + " get " + this);
-			MyLog.log(lm, 2, other + " get " + this);
-		} else {
-			for (Integer u : ((ConflictCDCLSBJ) other).literal) {
-				this.literal.add(u);
-				this.depth.add(new Pair<>(f.depth(u), u));
-			}
-			this.drop(f, v);
-			this.drop(f, -v);
-		}
+		MyLog.log(lm, 2, "resolve: ",this, " ", this.satisfied, " and ");
+		ConflictSolutionQCDCL ret = rec_c_resolve(f, this, (ConflictSolutionQCDCL) other, v);
+		this.literal = ret.literal;
+		this.depth = ret.depth;
+		this.opencount = ret.opencount;
+		MyLog.log(lm, 2, other,  " get ", this, " ", other.satisfied);
+		
 	}
 
 	@Override
@@ -176,12 +163,13 @@ public class ConflictCDCLSBJ extends ConflictSolution {
 	// v is the current assigned left-right branch
 	public boolean isUIP(EfficientQBFFormula f, int v) {
 		if (this.opencount) return false;
-		if (this.satisfied) return false;
 		if (f.isMax(v) && this.literal.contains(-v) && !f.isassigned(-v)) return true;
+		if (!f.isMax(v) && this.literal.contains(v) && !f.isassigned(v)) return true;
 		return false;
 	}
 	
 	public String toString() {
 		return this.literal.toString();
 	}
+
 }
