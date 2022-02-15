@@ -26,6 +26,10 @@ public class TwoWatchedLiteralConstructor {
 		String[] s = first.split("\\s+");
 		int n = Integer.valueOf(s[2]);
 		int m = Integer.valueOf(s[3]);
+		if (m == 0) {
+			System.err.println("The formula trivially holds after preprocessing\nSAT\n");
+			System.exit(0);
+		}
 		TwoWatchedLiteralFormula ret = new TwoWatchedLiteralFormula(n);
 		int i;
 		while (m > 0) {

@@ -383,7 +383,8 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 	
 	@Override
 	public ConflictSolution getConflict() {
-		if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ) {
+		if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ
+				|| TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PBJ) {
 			// learning strategy is Backjumping
 			// get the clause corresponds to the conflict
 			TwoWatchedLiteralClause C = this.formula.get(contradict.first());
@@ -455,7 +456,8 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 	
 	@Override
 	public ConflictSolution getSolution() {
-		if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
+		if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ
+			|| TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PBJ) {
 			// learning strategy is Backjumping
 			HashMap<Integer, Integer> ass = new HashMap<>(f.assign.literal);
 			int mx = -1;
@@ -483,7 +485,8 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			}
 			
 			ConflictSolution c = null;
-			if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ) {
+			if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ
+				|| TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PBJ) {
 				c = new ConflictBJ(true);
 			} else {
 				c = new ConflictCDCLSBJ(true);

@@ -15,6 +15,8 @@ public class MyLog {
 			return "[CDCLSBJ] ";
 		} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL) {
 			return "[QCDCL] ";
+		} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PBJ) {
+			return "[PBJ] ";
 		}
 		
 		return "[UNKNOWN] ";
@@ -30,6 +32,15 @@ public class MyLog {
 	public static void log(String Module, int level, Object... msg) {
 		
 		if (level > TwoWatchedLiteralFormula.maxLevel) return;
+		
+		if (level < 0) {
+			for (Object obj : msg) {
+				System.out.print(obj);
+				System.out.print(" ");
+			}
+			System.out.println();
+			return;
+		}
 		
 		try {
 			fout = new FileWriter("log.txt", true);

@@ -24,14 +24,15 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	protected Set<Pair<Integer, Integer>> tempunit;
 	private boolean locked = false;
 	public static enum Method {
-		BT, BJ, CDCLSBJ, QCDCL
+		BT, BJ, CDCLSBJ, QCDCL, PBJ
 	}
 	// static command-line-argument region
 	public static int maxLevel = 1;
 	public static int maxclause = 2500, maxcube = 500;
 	public static long setcount = 0, clause_iter = 0, truecount = 0, falsecount = 0;
 	public static boolean timer = true, depend = false, debug = false, rand = false, vsids = false;
-	public static Method solvertype = Method.QCDCL;
+	public static long prunE = 0, prunU = 0;
+	public static Method solvertype = Method.PBJ;
 	public TwoWatchedLiteralFormula(int n) {
 		this.varsize = n;
 		this.tempunit = new TreeSet<>();
@@ -78,7 +79,8 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		}
 	    
 		if (curr.isEmpty()) {
-			MyLog.log(lm, 0, "try to insert empty clause!\nUNSAT\n");
+			System.err.println("try to insert empty clause!\nUNSAT\n");
+			System.exit(0);
 		}
 		
 		if (curr.size() == 1) {
@@ -149,6 +151,34 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 					    reason.resolve(other, pair.first, this);
 					}
 				}
+			}
+			this.quantifier.insert(pair.first);
+			this.formula.get(0).unassign(pair.first);
+		}
+		
+		if (!this.assign.literal.isEmpty()) {
+			Pair<Integer, AssignId> pair = this.assign.unassign();
+			this.quantifier.insert(pair.first);
+			this.formula.get(0).unassign(pair.first);
+		}
+	}
+	
+	private void undoPBJ(ConflictBJ reason) {
+		while (!this.assign.literal.isEmpty() && this.assign.peek().second.type != 'N') {
+			Pair<Integer, AssignId> pair = this.assign.unassign();
+			if (reason != null && !reason.isSolution()) {
+				MyLog.log(lm, 2, "Before resolution: ", reason);
+				if (reason.contains(pair.first)) {
+					ConflictSolution other = new ConflictBJ(false);
+					if (pair.second.id == -1) {
+						reason.drop(null, pair.first);
+					} else {
+						other.addLiteral(this, this.formula.get(0).formula.get(pair.second.id));
+					    MyLog.log(lm, 2, "resolve with: ", other, " on: ", pair.first);
+						reason.resolve(other, pair.first, this);
+					}
+				}
+				MyLog.log(lm, 2, "After resolution: ", reason);
 			}
 			this.quantifier.insert(pair.first);
 			this.formula.get(0).unassign(pair.first);
@@ -232,7 +262,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 					ConflictSolution other = new ConflictSolutionQCDCL(true);
 					if (pair.second.id == -1) {
 						List<Integer> vc = new ArrayList<>();
-						vc.add(pair.first);
+						vc.add(-pair.first);
 						other.addAssignment(this, vc);
 						reason.resolve(other, pair.first, this);
 						
@@ -297,6 +327,8 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		} else if (TwoWatchedLiteralFormula.solvertype == Method.QCDCL) {
 			if (reason == null) MyLog.log(lm, 0, "null reason for qcdcl solver");
 			undoQCDCL((ConflictSolutionQCDCL) reason);
+		} else if (TwoWatchedLiteralFormula.solvertype == Method.PBJ) {
+			undoPBJ((ConflictBJ) reason);
 		}
 	}
 	

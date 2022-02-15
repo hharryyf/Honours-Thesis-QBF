@@ -1,6 +1,12 @@
 package qbfefficient;
 import java.io.FileNotFoundException;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import qbfexpression.Quantifier;
 import qbfsolver.Result;
@@ -9,7 +15,7 @@ import utilstructure.Pair;
 
 public class QDPLL {
 	protected static String lm = new String("QDPLL");
-	
+	protected int pruneLevel = -1;
 	public Pair<ConflictSolution, Boolean> qcdcl(TwoWatchedLiteralFormula f, int d) {
 		Result rr = ResultGenerator.getInstance();
 		rr.setIteration(1 + rr.getIteration());
@@ -35,7 +41,8 @@ public class QDPLL {
 			f.undo(res.first);
 			if (res.second || !res.first.contains(-q.getVal() * idx)) {
 				if (!res.second && !res.first.contains(-q.getVal() * idx)) {
-			    	System.out.println("p-E " + q.getVal() * idx  + " d=" + d);
+					TwoWatchedLiteralFormula.prunE++;
+			    	MyLog.log(lm, pruneLevel, "p-E ", q.getVal() * idx, " d=", d);
 			    }
 				return res;
 			}
@@ -45,9 +52,6 @@ public class QDPLL {
 			f.undo(other.first);
 			if (!other.second && other.first.contains(q.getVal() * idx)) {
 			    other.first.resolve(res.first, q.getVal(), f);
-			    if (TwoWatchedLiteralFormula.depend && TwoWatchedLiteralFormula.debug) {
-			    	System.out.println("resolve E num= " + q.getVal());
-			    }
 			}
 			
 			if (other.second) {
@@ -72,7 +76,8 @@ public class QDPLL {
 		f.undo(res.first);
 		if (!res.second || !res.first.contains(q.getVal() * idx)) {
 		    if (res.second && !res.first.contains(q.getVal() * idx)) {
-		    	System.out.println("p-U " + q.getVal() * idx + " d=" + d);
+		    	TwoWatchedLiteralFormula.prunU++;
+		    	MyLog.log(lm, pruneLevel, "p-U ", q.getVal() * idx, " d=", d);
 		    }
 		    
 		    MyLog.log(lm, 3, "reason: ", res, " branching variable: ", q.getVal() * idx, " type= ", res.first.isSolution());
@@ -84,9 +89,6 @@ public class QDPLL {
 		f.undo(other.first);
 		if (other.second && other.first.contains(-q.getVal() * idx)) {
 			other.first.resolve(res.first, q.getVal() * idx, f);
-		    if (TwoWatchedLiteralFormula.depend && TwoWatchedLiteralFormula.debug) {
-		    	System.out.println("resolve U num= " + q.getVal() * idx);
-		    }
 		}
 		
 		MyLog.log(lm, 3, "reason: ", other, " branching variable: ", -q.getVal() * idx, " type= ", other.first.isSolution());
@@ -123,8 +125,9 @@ public class QDPLL {
 			f.undo(res.first);
 			if (res.second || !res.first.contains(-q.getVal() * idx)) {
 				if (!res.second && !res.first.contains(-q.getVal() * idx)) {
-			    	System.out.println("p-E " + q.getVal() * idx  + " d=" + d);
-			    }
+					TwoWatchedLiteralFormula.prunE++;
+			    	MyLog.log(lm, pruneLevel, "p-E ", q.getVal() * idx, " d=", d);
+				}
 				return res;
 			}
 			f.set(-q.getVal() * idx);
@@ -133,9 +136,6 @@ public class QDPLL {
 			f.undo(other.first);
 			if (!other.second && other.first.contains(q.getVal() * idx)) {
 			    other.first.resolve(res.first, q.getVal(), f);
-			    if (TwoWatchedLiteralFormula.depend && TwoWatchedLiteralFormula.debug) {
-			    	System.out.println("resolve E num= " + q.getVal());
-			    }
 			}
 			
 			if (other.second) {
@@ -147,9 +147,7 @@ public class QDPLL {
 		}
 		
 		f.set(q.getVal() * idx);
-		//System.out.println("enter simp " + q.getVal() + " " + d);
 		f.simplify();
-		//System.out.println("exit simp " + q.getVal() + " " + d);
 		Pair<ConflictSolution, Boolean> res = cdclsbj(f, d + 1);
 		if (res.second) {
 			TwoWatchedLiteralFormula.truecount++;
@@ -159,7 +157,8 @@ public class QDPLL {
 		f.undo(res.first);
 		if (!res.second || !res.first.contains(q.getVal() * idx)) {
 		    if (res.second && !res.first.contains(q.getVal() * idx)) {
-		    	System.out.println("p-U " + q.getVal() * idx + " d=" + d);
+		    	TwoWatchedLiteralFormula.prunU++;
+		    	MyLog.log(lm, pruneLevel, "p-U ", q.getVal() * idx, " d=", d);
 		    }
 			return res;
 		}
@@ -169,9 +168,6 @@ public class QDPLL {
 		f.undo(other.first);
 		if (other.second && other.first.contains(-q.getVal() * idx)) {
 		    other.first.resolve(res.first, q.getVal() * idx, f);
-		    if (TwoWatchedLiteralFormula.depend && TwoWatchedLiteralFormula.debug) {
-		    	System.out.println("resolve U num= " + q.getVal() * idx);
-		    }
 		}
 		
 		if (other.second) {
@@ -199,8 +195,9 @@ public class QDPLL {
 			f.undo(res.first);
 			if (res.second || !res.first.contains(q.getVal())) {
 				if (!res.second && !res.first.contains(q.getVal())) {
-			    	System.out.println("p-E " + q.getVal()  + " d=" + d);
-			    }
+					TwoWatchedLiteralFormula.prunE++;
+					MyLog.log(lm, pruneLevel, "p-E ", q.getVal(), " d=", d);
+				}
 				res.first.drop(null, q.getVal());
 				return res;
 			}
@@ -220,7 +217,8 @@ public class QDPLL {
 		f.undo(res.first);
 		if (!res.second || !res.first.contains(q.getVal())) {
 		    if (res.second && !res.first.contains(q.getVal())) {
-		    	System.out.println("p-U " + q.getVal() + " d=" + d);
+		    	TwoWatchedLiteralFormula.prunU++;
+		    	MyLog.log(lm, pruneLevel, "p-U ", q.getVal(), " d=", d);
 		    }
 			res.first.drop(null, q.getVal());
 			return res;
@@ -275,31 +273,66 @@ public class QDPLL {
 		return res;
 	}
 	
-	public static void main(String args[]) throws FileNotFoundException {
+	public static void main(String args[]) throws FileNotFoundException, InterruptedException, ExecutionException {
+		
 		TwoWatchedLiteralConstructor reader = new TwoWatchedLiteralConstructor();
 		TwoWatchedLiteralFormula ret = reader.construct();
+		MyLog.log(lm, 1, "#################### Timer Start ##################");
 		final long start = System.currentTimeMillis();
-		QDPLL solver = new QDPLL();
-		boolean res = false;
-		if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BT) {
-			res = solver.baseline(ret);
-		} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ) {
-			res = solver.backjumping(ret, 0).second;
-		} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
-			res = solver.cdclsbj(ret, 0).second;
-		} else {
-			res = solver.qcdcl(ret, 0).second;
-		}
-		final long end = System.currentTimeMillis();
-		long cnt = TwoWatchedLiteralFormula.clause_iter, cnt2 = TwoWatchedLiteralFormula.setcount;
-		MyLog.log(lm, 1, "#branching= " + ResultGenerator.getInstance().getIteration() + " #ass= " 
-	              + cnt2 + " #clause iterate= " + cnt);
-		MyLog.log(lm, 1, "nclause iterated per ass= " + (1.0 * cnt / (cnt2 + 1))); 
-	    MyLog.log(lm, 1, "total time " + (1.0 * (end-start) / 1000));
-	    if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
-	    	MyLog.log(lm, 1, "total SAT nodes: ", TwoWatchedLiteralFormula.truecount, " total UNSAT nodes: ", TwoWatchedLiteralFormula.falsecount);
-	    	MyLog.log(lm, 1, "#learned clause= ", ret.tolLearnClause(), " #learned cube= ", ret.tolLearnCube());
-	    }
-		System.out.println((res ? "SAT" : "UNSAT"));
+		final ExecutorService service = Executors.newSingleThreadExecutor();
+		try {
+			QDPLL solver = new QDPLL();
+			
+			final Future<Boolean> f = service.submit(()->{
+				boolean res = false;
+				if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BT) {
+					res = solver.baseline(ret);
+				} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ) {
+					res = solver.backjumping(ret, 0).second;
+				} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
+					res = solver.cdclsbj(ret, 0).second;
+				} else {
+					res = solver.qcdcl(ret, 0).second;
+				}
+				return res;
+			});
+			
+			
+			
+			boolean res = f.get(900, TimeUnit.SECONDS);
+			final long end = System.currentTimeMillis();
+			long cnt = TwoWatchedLiteralFormula.clause_iter, cnt2 = TwoWatchedLiteralFormula.setcount;
+			MyLog.log(lm, 1, "#branching= " + ResultGenerator.getInstance().getIteration() + " #ass= " 
+		              + cnt2 + " #clause iterate= " + cnt);
+			MyLog.log(lm, 1, "nclause iterated per ass= " + (1.0 * cnt / (cnt2 + 1))); 
+		    MyLog.log(lm, 1, "total time " + (1.0 * (end-start) / 1000));
+		    if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
+		    	MyLog.log(lm, 1, "total SAT nodes: ", TwoWatchedLiteralFormula.truecount, " total UNSAT nodes: ", TwoWatchedLiteralFormula.falsecount);
+		    	MyLog.log(lm, 1, "Existential Pruning= ", TwoWatchedLiteralFormula.prunE, " Universal Pruning: ", TwoWatchedLiteralFormula.prunU);
+		    	MyLog.log(lm, 1, "#learned clause= ", ret.tolLearnClause(), " #learned cube= ", ret.tolLearnCube());
+		    }
+		    MyLog.log(lm, 1, "#################### EXIT SUCCESS ##################");
+		    System.out.println((res ? "SAT" : "UNSAT"));
+		}  catch (final TimeoutException e) {
+			final long end = System.currentTimeMillis();
+			long cnt = TwoWatchedLiteralFormula.clause_iter, cnt2 = TwoWatchedLiteralFormula.setcount;
+			MyLog.log(lm, 1, "#branching= " + ResultGenerator.getInstance().getIteration() + " #ass= " 
+		              + cnt2 + " #clause iterate= " + cnt);
+			MyLog.log(lm, 1, "nclause iterated per ass= " + (1.0 * cnt / (cnt2 + 1))); 
+		    MyLog.log(lm, 1, "total time " + (1.0 * (end-start) / 1000));
+		    if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
+		    	MyLog.log(lm, 1, "total SAT nodes: ", TwoWatchedLiteralFormula.truecount, " total UNSAT nodes: ", TwoWatchedLiteralFormula.falsecount);
+		    	MyLog.log(lm, 1, "Existential Pruning= ", TwoWatchedLiteralFormula.prunE, " Universal Pruning: ", TwoWatchedLiteralFormula.prunU);
+		    	MyLog.log(lm, 1, "#learned clause= ", ret.tolLearnClause(), " #learned cube= ", ret.tolLearnCube());
+		    }
+			MyLog.log(lm, 1, "#################### TIME OUT ##################");
+			System.out.println("UNSOLVED");
+			System.exit(0);
+		} catch (final Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+        	service.shutdown();
+        }
+		
 	}
 }

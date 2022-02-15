@@ -30,5 +30,7 @@ It seems like it is necessary to decide how to compute a more accurate set of re
 
 11. 18/10/2021: 2-watched-literal + cdcl solver implemented, the solver can equalize Quaffle and QUBE on some families
 
+12. 15/2/2022: 2-watched-literal + qcdcl solver implemented, 2-watched-literal + backjumping + deeppns solver implemented, insignificant improvement
+
 
 
