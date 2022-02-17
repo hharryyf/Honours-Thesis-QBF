@@ -3,6 +3,7 @@ package qbfefficient;
 import java.io.FileNotFoundException;
 import java.util.Stack;
 
+import qbfsolver.Result;
 import qbfsolver.ResultGenerator;
 
 public class QDeepPNS {
@@ -56,6 +57,8 @@ public class QDeepPNS {
 			}
 					
 			i++;
+			Result rr = ResultGenerator.getInstance();
+			rr.setIteration(1 + rr.getIteration());
 		}
 		MyLog.log(lm, 1, "Iteration " + i + " pn = " + root.getPn() + " dn= " + root.getDn());
 		MyLog.log(lm, 1, "Tolvisited = " + tolvisited);

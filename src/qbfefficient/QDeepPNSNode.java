@@ -22,6 +22,8 @@ public class QDeepPNSNode {
 		this.deep = 1.0 / depth;
 		this.depth = depth;
 		this.left = this.right = this.parent = null;
+		Result rr = ResultGenerator.getInstance();
+		rr.setNode();
 		int val = f.evaluate();
 		if (val == 1) {
 			this.pn = 0;
@@ -118,8 +120,6 @@ public class QDeepPNSNode {
 		if (f.evaluate() != -1) {
 			MyLog.log(lm, 0, "bad!, invalid expansion");
 		}
-		Result rr = ResultGenerator.getInstance();
-		rr.setIteration(1 + rr.getIteration());
 		// left split
 		f.set(this.splitnode.getVal());
 		f.simplify();
