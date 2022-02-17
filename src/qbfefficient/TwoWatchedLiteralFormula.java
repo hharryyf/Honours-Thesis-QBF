@@ -29,8 +29,8 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	// static command-line-argument region
 	public static int maxLevel = 1;
 	public static int maxclause = 2500, maxcube = 500;
-	public static long setcount = 0, clause_iter = 0, truecount = 0, falsecount = 0;
-	public static boolean timer = true, depend = false, debug = false, rand = false, vsids = false;
+	public static long setcount = 0, clause_iter = 0, truecount = 0, falsecount = 0, bcpcount = 0, plecount = 0;
+	public static boolean timer = true, depend = false, debug = false, rand = false, vsids = false, PLErule = true;
 	public static long prunE = 0, prunU = 0;
 	public static Method solvertype = Method.PBJ;
 	public TwoWatchedLiteralFormula(int n) {
@@ -39,13 +39,18 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		this.assign = new AssignmentStack();
 		this.quantifier = new QuantifierPrefixVSIDS(n);
 		this.formula = new ArrayList<>();
-		this.formula.add(new TwoWatchedLiteralClauseStack(n, this, 0));
-		this.formula.add(new TwoWatchedLiteralClauseStack(n, this, 1));
+		this.formula.add(new TwoWatchedLiteralClauseStack(n, this, 0, canPLE()));
+		this.formula.add(new TwoWatchedLiteralClauseStack(n, this, 1, false));
 		this.formula.add(new TwoWatchedLiteralCubeStack(n, this, 2));
 		this.permanantUnit = new TreeSet<>();
 		this.qlist = new ArrayList<>();
 		this.dependgraph = new ArrayList<>();
 		for (int i = 0 ; i <= 2 * n; ++i) this.dependgraph.add(new ArrayList<>());
+	}
+	
+	
+	private boolean canPLE() {
+		return PLErule && (solvertype == Method.PBJ || solvertype == Method.BJ || solvertype == Method.BT);
 	}
 	
 	@Override
@@ -141,7 +146,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	private void undoBJ(ConflictBJ reason) {
 		while (!this.assign.literal.isEmpty() && this.assign.peek().second.type != 'N') {
 			Pair<Integer, AssignId> pair = this.assign.unassign();
-			if (!reason.isSolution()) {
+			if (!reason.isSolution() && pair.second.type != 'P') {
 				if (reason.contains(pair.first)) {
 					ConflictSolution other = new ConflictBJ(false);
 					if (pair.second.id == -1) {
@@ -166,7 +171,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	private void undoPBJ(ConflictBJ reason) {
 		while (!this.assign.literal.isEmpty() && this.assign.peek().second.type != 'N') {
 			Pair<Integer, AssignId> pair = this.assign.unassign();
-			if (reason != null && !reason.isSolution()) {
+			if (reason != null && !reason.isSolution() && pair.second.type != 'P') {
 				MyLog.log(lm, 2, "Before resolution: ", reason);
 				if (reason.contains(pair.first)) {
 					ConflictSolution other = new ConflictBJ(false);
@@ -353,9 +358,9 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 			if (evaluate() != -1) break;
 			if (this.assign.hasLiteral(v)) continue;
 			if (isMax(v)) {
-				propagate(v, 0, 'U', -1);
+				bcp(v, 0, 'U', -1);
 			} else {
-				propagate(v, 2, 'U', -1);
+				bcp(v, 2, 'U', -1);
 			}
 		}
 		
@@ -364,37 +369,47 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 			for (Pair<Integer, Integer> v : this.tempunit) {
 				if (evaluate() != -1) break;
 				if (this.assign.hasLiteral(v.first)) continue;
-				propagate(v.first, 0, 'U', v.second);
+				bcp(v.first, 0, 'U', v.second);
 			}
 		}
 		
-		while ((!this.formula.get(0).unit.isEmpty() || (!this.formula.get(1).unit.isEmpty()) || (!this.formula.get(2).unit.isEmpty())) && evaluate() == -1) {
+		while (evaluate() == -1 && (!this.formula.get(0).unit.isEmpty() || (!this.formula.get(1).unit.isEmpty()) || (!this.formula.get(2).unit.isEmpty())
+				|| (canPLE() && !((TwoWatchedLiteralClauseStack) this.formula.get(0)).pure.isEmpty()))) {
 			Map.Entry<Integer, Integer> entry = null;
 			while (evaluate() == -1 && !this.formula.get(0).unit.isEmpty()) {
 				entry = this.formula.get(0).unit.firstEntry();
-				propagate(entry.getKey(), 0, 'U', entry.getValue());
+				bcp(entry.getKey(), 0, 'U', entry.getValue());
 				this.formula.get(0).unit.remove(entry.getKey());
 			}
 			
 			while (evaluate() == -1 && !this.formula.get(1).unit.isEmpty()) {
 				entry = this.formula.get(1).unit.firstEntry();
-				propagate(entry.getKey(), 1, 'U', entry.getValue());
+				bcp(entry.getKey(), 1, 'U', entry.getValue());
 				this.formula.get(1).unit.remove(entry.getKey());
 			}
 			
 			while (evaluate() == -1 && !this.formula.get(2).unit.isEmpty()) {
 				entry = this.formula.get(2).unit.firstEntry();
-				propagate(entry.getKey(), 2, 'U', entry.getValue());
+				bcp(entry.getKey(), 2, 'U', entry.getValue());
 				this.formula.get(2).unit.remove(entry.getKey());
+			}
+			
+			while (evaluate() == -1 && canPLE() && !((TwoWatchedLiteralClauseStack) this.formula.get(0)).pure.isEmpty()) {
+				int l = ((TwoWatchedLiteralClauseStack) this.formula.get(0)).pure.first();
+				ple(l);
+				((TwoWatchedLiteralClauseStack) this.formula.get(0)).pure.remove(l);
 			}
 		}
 		
 		this.formula.get(0).unit.clear();
 		this.formula.get(1).unit.clear();
 		this.formula.get(2).unit.clear();
+		if (canPLE()) {
+			((TwoWatchedLiteralClauseStack) this.formula.get(0)).pure.clear();
+		}
 	}
 	
-	private void propagate(int v, int d, char type, int id) {
+	private void bcp(int v, int d, char type, int id) {
 		if (this.assign.hasLiteral(v)) {
 			return;
 		}
@@ -411,7 +426,10 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 			}
 			return;
 		}
-		if (TwoWatchedLiteralFormula.timer) TwoWatchedLiteralFormula.setcount += 1;
+		if (TwoWatchedLiteralFormula.timer) {
+			TwoWatchedLiteralFormula.setcount += 1;
+			TwoWatchedLiteralFormula.bcpcount += 1;
+		}
 		this.assign.assign(v, d, type, id);
 		this.quantifier.remove(v);
 		this.formula.get(0).set(v);
@@ -424,6 +442,18 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		if (evaluate() == -1 && !isMax(v) && this.permanantUnit.contains(v)) {
 			this.formula.get(2).conflictunit.add(v);
 		}
+	}
+	
+	private void ple(int l) {
+		if (this.isassigned(l)) return;
+		if (!isMax(l)) l = -l;
+		if (TwoWatchedLiteralFormula.timer) {
+			TwoWatchedLiteralFormula.setcount += 1;
+			TwoWatchedLiteralFormula.plecount += 1;
+		}
+		this.assign.assign(l, 0, 'P', -1);
+		this.quantifier.remove(l);
+		this.formula.get(0).set(l);
 	}
 	
 	@Override

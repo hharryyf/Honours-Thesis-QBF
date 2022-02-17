@@ -2,6 +2,7 @@ package qbfefficient;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -15,7 +16,10 @@ import utilstructure.Pair;
 public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 	private String lm = new String("2_WL_CLAUSE_STACK");
 	private int n;
-	public TwoWatchedLiteralClauseStack(int n, TwoWatchedLiteralFormula f, int dim) {
+	private boolean PLE = false;
+	private List<HashSet<Integer>> watcher;
+	protected TreeSet<Integer> pure;
+	public TwoWatchedLiteralClauseStack(int n, TwoWatchedLiteralFormula f, int dim, boolean PLE) {
 		this.n = n;
 		this.counter = new SatisfiedCounter();
 		this.counter.setDim(dim);
@@ -34,6 +38,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			this.watchedFormulaNeg.add(new TreeMap<>());
 		}
 		this.f = f;
+		this.PLE = PLE;
 	}
 	
 	@Override
@@ -55,18 +60,110 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 	
 	@Override
 	public void set(int v) {
+		List<Integer> list = new ArrayList<>();
 		if (v > 0) {
 			for (Integer w : this.varPosToid.get(v)) {
-				this.counter.addsat(w);
+				if (this.counter.addsat(w) && this.PLE) list.add(w); 
 			}	
 		} else {
 			for (Integer w : this.varNegToid.get(-v)) {
-				this.counter.addsat(w);
+				if (this.counter.addsat(w) && this.PLE) list.add(w);
 			}
 		}
 		// System.out.println("set " + v);
+		if (this.counter.getDim() == 0) MyLog.log(lm, 3, "Assign", v);
 		twowatchedassign(v);
+		if (this.PLE && evaluate() == -1) {
+			twoclauseadjust(list);
+		}
 	}
+	
+	
+	private void twoclauseadjust(List<Integer> candidate) {
+		for (Integer clauseid : candidate) {
+			Iterator<Integer> iter = this.watcher.get(clauseid).iterator();
+			while (iter.hasNext()) {
+				// these are the literals that are watching the current clause
+				int literal = iter.next();
+				boolean found = false;
+				if (f.isassigned(literal) || this.pure.contains(literal) || this.pure.contains(-literal)) continue;
+				if (literal > 0) {
+					for (Integer id : this.varPosToid.get(literal)) {
+						if (!this.counter.issat(id)) {
+							iter.remove();
+							this.watcher.get(id).add(literal);
+							found = true;
+							break;
+						}
+					}
+				} else {
+					for (Integer id : this.varNegToid.get(-literal)) {
+						if (!this.counter.issat(id)) {
+							iter.remove();
+							this.watcher.get(id).add(literal);
+							found = true;
+							break;
+						}
+					}
+				}
+				
+				if (!found) addPure(-literal);
+			}
+		}
+	}
+	
+	private void addPure(int literal) {
+		MyLog.log(lm, 3, "Find PL", literal);
+		this.pure.add(literal);
+	}
+	
+	
+	@Override
+	public void init() {
+		int i, j;
+		
+		if (this.PLE) {
+			this.pure = new TreeSet<>();
+			this.watcher = new ArrayList<>();
+		}
+		
+		for (i = 0 ; i < this.formula.size(); ++i) {
+			int cnt = 0;
+			for (j = 0 ; j < this.formula.get(i).existential.size() && cnt < 2; ++j, ++cnt) {
+				int v = this.formula.get(i).existential.get(j);
+				if (v > 0) {
+					this.watchedFormulaPos.get(v).put(i, j);
+				} else {
+					this.watchedFormulaNeg.get(-v).put(i, j);
+				}
+				this.formula.get(i).watchedE.add(j);
+			}
+			
+			for (j = 0 ; j < this.formula.get(i).universal.size() && cnt < 2; ++j, ++cnt) {
+				int v = this.formula.get(i).universal.get(j);
+				if (v > 0) {
+					this.watchedFormulaPos.get(v).put(i, j);
+				} else {
+					this.watchedFormulaNeg.get(-v).put(i, j);
+				}
+				this.formula.get(i).watchedU.add(j);
+			}
+			
+			if (this.PLE) {
+				this.watcher.add(new HashSet<>());
+			}
+		}
+		
+		if (this.PLE) {
+			for (i = 1 ; i <= n; ++i) {
+				int posid = this.varPosToid.get(i).get(0);
+				int negid = this.varNegToid.get(i).get(0);
+				this.watcher.get(posid).add(i);
+				this.watcher.get(negid).add(-i);
+			}
+		}
+	}
+	
 	
 	private void watch(int v, int clauseid, int literalid) {
 		if (v > 0) {
@@ -318,6 +415,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 	@Override
 	public void unassign(int v) {
 		// System.out.println("unset " + v);
+		if (this.counter.getDim() == 0) MyLog.log(lm, 3, "Unassign", v);
 		if (v > 0) {
 			for (Integer id : this.varPosToid.get(v)) {
 				if (this.counter.getDim() == 1) {
@@ -354,36 +452,12 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 	}
 	
 	@Override
-	public void init() {
-		int i, j;
-		for (i = 0 ; i < this.formula.size(); ++i) {
-			int cnt = 0;
-			for (j = 0 ; j < this.formula.get(i).existential.size() && cnt < 2; ++j, ++cnt) {
-				int v = this.formula.get(i).existential.get(j);
-				if (v > 0) {
-					this.watchedFormulaPos.get(v).put(i, j);
-				} else {
-					this.watchedFormulaNeg.get(-v).put(i, j);
-				}
-				this.formula.get(i).watchedE.add(j);
-			}
-			
-			for (j = 0 ; j < this.formula.get(i).universal.size() && cnt < 2; ++j, ++cnt) {
-				int v = this.formula.get(i).universal.get(j);
-				if (v > 0) {
-					this.watchedFormulaPos.get(v).put(i, j);
-				} else {
-					this.watchedFormulaNeg.get(-v).put(i, j);
-				}
-				this.formula.get(i).watchedU.add(j);
-			}
-			
-		}
-	}
-	
-	@Override
 	public ConflictSolution getConflict() {
-		if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ
+		if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BT) {
+			ConflictSolution ret = new ConflictBJ(false);
+			this.contradict.clear();
+			return ret;
+		} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ
 				|| TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PBJ) {
 			// learning strategy is Backjumping
 			// get the clause corresponds to the conflict
@@ -456,7 +530,11 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 	
 	@Override
 	public ConflictSolution getSolution() {
-		if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ
+		
+		if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BT) {
+			ConflictSolution c = new ConflictBJ(true);
+			return c;
+		} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ
 			|| TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PBJ) {
 			// learning strategy is Backjumping
 			HashMap<Integer, Integer> ass = new HashMap<>(f.assign.literal);

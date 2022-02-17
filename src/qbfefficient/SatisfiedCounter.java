@@ -21,13 +21,15 @@ public class SatisfiedCounter {
 	 * @param v add the sat counter for clause v
 	 */
 	
-	public void addsat(int v) {
+	public boolean addsat(int v) {
 		if (sat.getOrDefault(v, 0) == 0) {
 			this.count++;
 			sat.put(v, 1);
-		} else {
-			sat.put(v, sat.get(v) + 1);
-		}
+			return true;
+		} 
+		
+		sat.put(v, sat.get(v) + 1);
+		return false;
 	}
 	
 	/**

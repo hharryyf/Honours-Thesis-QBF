@@ -32,5 +32,5 @@ It seems like it is necessary to decide how to compute a more accurate set of re
 
 12. 15/2/2022: 2-watched-literal + qcdcl solver implemented, 2-watched-literal + backjumping + deeppns solver implemented, insignificant improvement
 
-
+13. 17/2/2022: pure-literal-elimination for deeppns/dfs based backjumping solver added, significantly improved the deeppns + backjumping solver
 

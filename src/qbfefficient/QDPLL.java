@@ -304,11 +304,12 @@ public class QDPLL {
 			long cnt = TwoWatchedLiteralFormula.clause_iter, cnt2 = TwoWatchedLiteralFormula.setcount;
 			MyLog.log(lm, 1, "#branching= " + ResultGenerator.getInstance().getIteration() + " #ass= " 
 		              + cnt2 + " #clause iterate= " + cnt);
+			MyLog.log(lm, 1, "#bcp= ", TwoWatchedLiteralFormula.bcpcount, "#ple= ", TwoWatchedLiteralFormula.plecount);
 			MyLog.log(lm, 1, "nclause iterated per ass= " + (1.0 * cnt / (cnt2 + 1))); 
-		    MyLog.log(lm, 1, "total time " + (1.0 * (end-start) / 1000));
+			MyLog.log(lm, 1, "Existential Pruning= ", TwoWatchedLiteralFormula.prunE, " Universal Pruning: ", TwoWatchedLiteralFormula.prunU);
+			MyLog.log(lm, 1, "total time " + (1.0 * (end-start) / 1000));
 		    if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
 		    	MyLog.log(lm, 1, "total SAT nodes: ", TwoWatchedLiteralFormula.truecount, " total UNSAT nodes: ", TwoWatchedLiteralFormula.falsecount);
-		    	MyLog.log(lm, 1, "Existential Pruning= ", TwoWatchedLiteralFormula.prunE, " Universal Pruning: ", TwoWatchedLiteralFormula.prunU);
 		    	MyLog.log(lm, 1, "#learned clause= ", ret.tolLearnClause(), " #learned cube= ", ret.tolLearnCube());
 		    }
 		    MyLog.log(lm, 1, "#################### EXIT SUCCESS ##################");
@@ -318,11 +319,12 @@ public class QDPLL {
 			long cnt = TwoWatchedLiteralFormula.clause_iter, cnt2 = TwoWatchedLiteralFormula.setcount;
 			MyLog.log(lm, 1, "#branching= " + ResultGenerator.getInstance().getIteration() + " #ass= " 
 		              + cnt2 + " #clause iterate= " + cnt);
+			MyLog.log(lm, 1, "#bcp= ", TwoWatchedLiteralFormula.bcpcount, "#ple= ", TwoWatchedLiteralFormula.plecount);
 			MyLog.log(lm, 1, "nclause iterated per ass= " + (1.0 * cnt / (cnt2 + 1))); 
-		    MyLog.log(lm, 1, "total time " + (1.0 * (end-start) / 1000));
+			MyLog.log(lm, 1, "Existential Pruning= ", TwoWatchedLiteralFormula.prunE, " Universal Pruning: ", TwoWatchedLiteralFormula.prunU);
+			MyLog.log(lm, 1, "total time " + (1.0 * (end-start) / 1000));
 		    if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
 		    	MyLog.log(lm, 1, "total SAT nodes: ", TwoWatchedLiteralFormula.truecount, " total UNSAT nodes: ", TwoWatchedLiteralFormula.falsecount);
-		    	MyLog.log(lm, 1, "Existential Pruning= ", TwoWatchedLiteralFormula.prunE, " Universal Pruning: ", TwoWatchedLiteralFormula.prunU);
 		    	MyLog.log(lm, 1, "#learned clause= ", ret.tolLearnClause(), " #learned cube= ", ret.tolLearnCube());
 		    }
 			MyLog.log(lm, 1, "#################### TIME OUT ##################");

@@ -9,6 +9,7 @@ import qbfsolver.ResultGenerator;
 public class QDeepPNS {
 	protected static String lm = "Q_DEEP_PNS_SOLVE";
 	private int maxT = 2000000;
+	private int pndnlevel = -1;
 	boolean deeppnsbj(TwoWatchedLiteralFormula f) {
 		QDeepPNSNode root = new QDeepPNSNode(f, 1), curr = root;
 		int i = 0;
@@ -16,7 +17,7 @@ public class QDeepPNS {
 		Stack<TwoWatchedLiteralFormula> stk = new Stack<TwoWatchedLiteralFormula>();
 		while (i <= this.maxT && !root.isSolved()) {
 			if (i % 1000 == 0) {
-				MyLog.log(lm, 1, "Iteration #" + i + " pn = " + root.getPn() + " dn= " + root.getDn());
+				MyLog.log(lm, pndnlevel, "Iteration #" + i + " pn = " + root.getPn() + " dn= " + root.getDn());
 			}
 					
 			if (stk.empty()) {
@@ -60,8 +61,8 @@ public class QDeepPNS {
 			Result rr = ResultGenerator.getInstance();
 			rr.setIteration(1 + rr.getIteration());
 		}
-		MyLog.log(lm, 1, "Iteration " + i + " pn = " + root.getPn() + " dn= " + root.getDn());
-		MyLog.log(lm, 1, "Tolvisited = " + tolvisited);
+		MyLog.log(lm, pndnlevel, "#Iteration " + i + " pn = " + root.getPn() + " dn= " + root.getDn());
+		MyLog.log(lm, 1, "#Visited: " + tolvisited);
 		if (root.isWin()) {
 			System.out.println("SAT");
 			return true;
@@ -85,6 +86,7 @@ public class QDeepPNS {
 			long cnt = TwoWatchedLiteralFormula.clause_iter, cnt2 = TwoWatchedLiteralFormula.setcount;
 			MyLog.log(lm, 1, "#branching= " + ResultGenerator.getInstance().getIteration() + " #ass= " 
 		              + cnt2 + " #clause iterate= " + cnt);
+			MyLog.log(lm, 1, "#bcp= ", TwoWatchedLiteralFormula.bcpcount, "#ple= ", TwoWatchedLiteralFormula.plecount);
 			MyLog.log(lm, 1, "nclause iterated per ass= " + (1.0 * cnt / (cnt2 + 1))); 
 			MyLog.log(lm, 1, "total time " + (1.0 * (end-start) / 1000));
 			if (res) {
