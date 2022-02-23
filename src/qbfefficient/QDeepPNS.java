@@ -8,18 +8,23 @@ import qbfsolver.ResultGenerator;
 
 public class QDeepPNS {
 	protected static String lm = "Q_DEEP_PNS_SOLVE";
-	private int maxT = 2000000;
 	private int pndnlevel = -1;
-	boolean deeppnsbj(TwoWatchedLiteralFormula f) {
+	int deeppnsbj(TwoWatchedLiteralFormula f) {
 		QDeepPNSNode root = new QDeepPNSNode(f, 1), curr = root;
 		int i = 0;
 		long tolvisited = 0;
 		Stack<TwoWatchedLiteralFormula> stk = new Stack<TwoWatchedLiteralFormula>();
-		while (i <= this.maxT && !root.isSolved()) {
+		final long start = System.currentTimeMillis();
+		boolean timeout = false;
+		while (ResultGenerator.getInstance().getLiveNode() <= TwoWatchedLiteralFormula.max_node_in_memory * 2 
+				&& i <= 4 * TwoWatchedLiteralFormula.max_node_in_memory 
+				&& !root.isSolved()) {
 			if (i % 1000 == 0) {
 				MyLog.log(lm, pndnlevel, "Iteration #" + i + " pn = " + root.getPn() + " dn= " + root.getDn());
 			}
-					
+			
+			if (i % 5000 == 0) ResultGenerator.getCommandLine().setR();
+			
 			if (stk.empty()) {
 				stk.push(f);
 			}
@@ -60,18 +65,25 @@ public class QDeepPNS {
 			i++;
 			Result rr = ResultGenerator.getInstance();
 			rr.setIteration(1 + rr.getIteration());
+			if (System.currentTimeMillis() - start > TwoWatchedLiteralFormula.time_limit * 1000) {
+				timeout = true;
+				break;
+			}
 		}
 		MyLog.log(lm, pndnlevel, "#Iteration " + i + " pn = " + root.getPn() + " dn= " + root.getDn());
 		MyLog.log(lm, 1, "#Visited: " + tolvisited);
 		if (root.isWin()) {
 			System.out.println("SAT");
-			return true;
+			return 0;
 		} else if (root.isLost()) {
 			System.out.println("UNSAT");
-			return true;
+			return 0;
 		} 
 		System.out.println("UNSOLVED");
-		return false;
+		
+		if (timeout) return -1;
+		
+		return 1;
 	}
 	
 	public static void main(String args[]) throws FileNotFoundException {
@@ -81,19 +93,26 @@ public class QDeepPNS {
 		final long start = System.currentTimeMillis();
 		QDeepPNS solver = new QDeepPNS();
 		if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PBJ) {
-			boolean res = solver.deeppnsbj(ret);
+			int res = solver.deeppnsbj(ret);
 			final long end = System.currentTimeMillis();
 			long cnt = TwoWatchedLiteralFormula.clause_iter, cnt2 = TwoWatchedLiteralFormula.setcount;
 			MyLog.log(lm, 1, "#branching= " + ResultGenerator.getInstance().getIteration() + " #ass= " 
 		              + cnt2 + " #clause iterate= " + cnt);
 			MyLog.log(lm, 1, "#bcp= ", TwoWatchedLiteralFormula.bcpcount, "#ple= ", TwoWatchedLiteralFormula.plecount);
 			MyLog.log(lm, 1, "nclause iterated per ass= " + (1.0 * cnt / (cnt2 + 1))); 
+			MyLog.log(lm, 1, "Existential Pruning= ", TwoWatchedLiteralFormula.prunE, " Universal Pruning: ", TwoWatchedLiteralFormula.prunU, "number of resolutions", TwoWatchedLiteralFormula.rescount);
+			MyLog.log(lm, 1, "total nodes", ResultGenerator.getInstance().getNode(), "total SAT nodes: ", TwoWatchedLiteralFormula.truecount, " total UNSAT nodes: ", 
+					TwoWatchedLiteralFormula.falsecount, "total SAT terminal nodes: ", TwoWatchedLiteralFormula.trueterminal, "total UNSAT terminal nodes: ", TwoWatchedLiteralFormula.falseterminal);
 			MyLog.log(lm, 1, "total time " + (1.0 * (end-start) / 1000));
-			if (res) {
+			if (res == 0) {
 				MyLog.log(lm, 1, "#################### EXIT SUCCESS ##################");
-			} else {
+			} else if (res == 1) {
 				MyLog.log(lm, 1, "#################### OUT OF MEMORY ##################");
+			} else {
+				MyLog.log(lm, 1, "#################### TIME OUT ##################");
 			}
+		} else {
+			MyLog.log(lm, 0, "Please select the correct solver");
 		}
 	}
 }

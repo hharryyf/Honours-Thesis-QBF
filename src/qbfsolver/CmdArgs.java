@@ -1,10 +1,13 @@
 package qbfsolver;
 
+import qbfefficient.TwoWatchedLiteralFormula;
+
 public class CmdArgs {
 	private int type = 0;
 	private int bfU = 3;
 	private int bfE = 3;
 	private boolean debug = false;
+	private double R = 0.0;
 	public CmdArgs() {
 		
 	}
@@ -18,11 +21,16 @@ public class CmdArgs {
 	}
 	
 	public double getR() {
+		return this.R;
+	}
+	
+	public void setR() {
 		int iter = ResultGenerator.getInstance().getNode();
-		double ret = 0.0;
-		if (((iter / 10000) & 1) == 1) ret = 0.5;
-		//if (iter % 100000 > 99990) ret = 1.0;
-		return ret;
+		this.R = 0.0;
+		if (ResultGenerator.getInstance().getLiveNode() >= TwoWatchedLiteralFormula.max_node_in_memory) {
+			return;
+		}
+		if (((iter / 10000) & 1) == 1) this.R= 0.5;
 	}
 
 	

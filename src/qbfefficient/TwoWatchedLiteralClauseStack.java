@@ -86,7 +86,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 				// these are the literals that are watching the current clause
 				int literal = iter.next();
 				boolean found = false;
-				if (f.isassigned(literal) || this.pure.contains(literal) || this.pure.contains(-literal)) continue;
+				if (f.isassigned(literal) || this.pure.contains(-literal) || (literal > 0 && this.pure.contains(literal))) continue;
 				if (literal > 0) {
 					for (Integer id : this.varPosToid.get(literal)) {
 						if (!this.counter.issat(id)) {

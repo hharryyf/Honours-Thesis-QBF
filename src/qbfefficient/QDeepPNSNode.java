@@ -13,7 +13,7 @@ public class QDeepPNSNode {
 	QDeepPNSNode left = null, right = null, parent = null;
 	// reason exists if and only if the node has been proved/disproved
 	ConflictSolution reason = null;
-	int pn, dn, depth;
+	int pn, dn, depth, size;
 	double deep;
 	boolean valid = false;
 	public static int inf = 120000000;
@@ -30,11 +30,13 @@ public class QDeepPNSNode {
 			this.dn = QDeepPNSNode.inf;
 			this.reason = f.getReason();
 			this.valid = true;
+			TwoWatchedLiteralFormula.truecount++;
 		} else if (val == 0) {
 			this.pn = QDeepPNSNode.inf;
 			this.dn = 0;
 			this.reason = f.getReason();
 			this.valid = true;
+			TwoWatchedLiteralFormula.falsecount++;
 		} else {
 			this.pn = 1;
 			this.dn = 1;
@@ -45,6 +47,8 @@ public class QDeepPNSNode {
 				this.pn = 2;
 			}
 		}
+		
+		this.size = 1;
 	}
 	
 	public ConflictSolution getReason() {
@@ -113,7 +117,6 @@ public class QDeepPNSNode {
 		} else {
 			setFalse();
 		}
-		this.left = this.right = null;
 	}
 	
 	public void expansion(TwoWatchedLiteralFormula f) {
@@ -144,6 +147,8 @@ public class QDeepPNSNode {
 			ret = this.left;
 			idx = 1;
 		}
+		
+		// if (this.splitnode.getVal() != f.peek().getVal()) MyLog.log(lm, 0, "some pure literals are not eliminated");
 		
 		
 		if ((ret == null && !this.right.isSolved()) 
@@ -205,6 +210,13 @@ public class QDeepPNSNode {
 					if (this.isSolved() || !this.left.reason.contains(this.splitnode.getVal())) {
 						this.reason = this.left.reason;
 						this.valid = true;
+						if (!this.isSolved()) {
+							if (f.isMax(this.splitnode.getVal())) {
+								TwoWatchedLiteralFormula.prunE++;
+							} else {
+								TwoWatchedLiteralFormula.prunU++;
+							}
+						}
 						this.prun();
 					}
 				} else {
@@ -213,15 +225,21 @@ public class QDeepPNSNode {
 					if (this.isWin() == this.right.isWin() && this.isWin() == this.left.isWin()) {
 						// here's when the resolution happens
 						this.left.reason.resolve(this.right.reason, this.splitnode.getVal(), f);
+						// we increment the number of resolution count by 1
+						TwoWatchedLiteralFormula.rescount++;
 						this.reason = this.left.reason;
 					} else if (this.isWin() == this.right.isWin()) {
 						if (this.right.reason.contains(-this.splitnode.getVal())) {
 							this.right.reason.resolve(this.left.reason, this.splitnode.getVal(), f);
+							// we increment the number of resolution count by 1
+							TwoWatchedLiteralFormula.rescount++;
 						}
 						this.reason = this.right.reason;
 					} else if (this.isWin() == this.left.isWin()) {
 						if (this.left.reason.contains(this.splitnode.getVal())) {
 							this.left.reason.resolve(this.right.reason, this.splitnode.getVal(), f);
+							// we increment the number of resolution count by 1
+							TwoWatchedLiteralFormula.rescount++;
 						}
 						this.reason = this.left.reason;
 					} else {
@@ -233,15 +251,31 @@ public class QDeepPNSNode {
 				if (this.isSolved() || !this.right.reason.contains(-this.splitnode.getVal())) {
 					this.reason = this.right.reason;
 					this.valid = true;
+					if (!this.isSolved()) {
+						if (f.isMax(this.splitnode.getVal())) {
+							TwoWatchedLiteralFormula.prunE++;
+						} else {
+							TwoWatchedLiteralFormula.prunU++;
+						}
+					}
 					this.prun();
 				}
 			}
 		}
 		
+		this.size = this.left.size + this.right.size + 1;
+		
 		if (this.isSolved()) {
+			ResultGenerator.getInstance().cutNode(this.left.size + this.right.size);
+			this.size = 1;
 			this.left = this.right = null;
 			this.pn = Math.min(this.pn, QDeepPNSNode.inf);
 			this.dn = Math.min(this.dn, QDeepPNSNode.inf);
+			if (this.isWin()) {
+				TwoWatchedLiteralFormula.truecount++;
+			} else {
+				TwoWatchedLiteralFormula.falsecount++;
+			}
 		}
 		
 		return changed != this.valid;

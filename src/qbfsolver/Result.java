@@ -4,6 +4,7 @@ public class Result {
 	private String truth;
 	private long iterations;
 	private int nodecount;
+	private int currentnode = 0;
 	public Result() {
 		this.truth = new String("UNSOLVED");
 		this.iterations = 0;
@@ -28,6 +29,15 @@ public class Result {
 	
 	public void setNode() {
 		this.nodecount++;
+		this.currentnode++;
+	}
+	
+	public void cutNode(int v) {
+		this.currentnode -= 2;
+	}
+	
+	public int getLiveNode() {
+		return this.currentnode;
 	}
 	
 	public int getNode() {

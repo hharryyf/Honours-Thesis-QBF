@@ -52,6 +52,7 @@ public class QDPLL {
 			f.undo(other.first);
 			if (!other.second && other.first.contains(q.getVal() * idx)) {
 			    other.first.resolve(res.first, q.getVal(), f);
+			    TwoWatchedLiteralFormula.rescount++;
 			}
 			
 			if (other.second) {
@@ -88,7 +89,10 @@ public class QDPLL {
 		Pair<ConflictSolution, Boolean> other = qcdcl(f, d + 1);
 		f.undo(other.first);
 		if (other.second && other.first.contains(-q.getVal() * idx)) {
+			MyLog.log(lm,TwoWatchedLiteralFormula.res_level, "resolve", other, "and", res);
 			other.first.resolve(res.first, q.getVal() * idx, f);
+			MyLog.log(lm, TwoWatchedLiteralFormula.res_level, "get", other);
+			TwoWatchedLiteralFormula.rescount++;
 		}
 		
 		MyLog.log(lm, 3, "reason: ", other, " branching variable: ", -q.getVal() * idx, " type= ", other.first.isSolution());
@@ -136,6 +140,7 @@ public class QDPLL {
 			f.undo(other.first);
 			if (!other.second && other.first.contains(q.getVal() * idx)) {
 			    other.first.resolve(res.first, q.getVal(), f);
+			    TwoWatchedLiteralFormula.rescount++;
 			}
 			
 			if (other.second) {
@@ -168,6 +173,7 @@ public class QDPLL {
 		f.undo(other.first);
 		if (other.second && other.first.contains(-q.getVal() * idx)) {
 		    other.first.resolve(res.first, q.getVal() * idx, f);
+		    TwoWatchedLiteralFormula.rescount++;
 		}
 		
 		if (other.second) {
@@ -207,6 +213,7 @@ public class QDPLL {
 			f.undo(other.first);
 			if (!other.second && other.first.contains(-q.getVal())) {
 			    other.first.resolve(res.first, q.getVal(), f);
+			    TwoWatchedLiteralFormula.rescount++;
 			}
 			return other;
 		}
@@ -229,6 +236,7 @@ public class QDPLL {
 		f.undo(other.first);
 		if (other.second && other.first.contains(-q.getVal())) {
 		    other.first.resolve(res.first, q.getVal(), f);
+		    TwoWatchedLiteralFormula.rescount++;
 		}
 		return other;
 	}
@@ -291,27 +299,30 @@ public class QDPLL {
 					res = solver.backjumping(ret, 0).second;
 				} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
 					res = solver.cdclsbj(ret, 0).second;
-				} else {
+				} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL) {
+					MyLog.log(lm, 1, "clause_len_limit= ", TwoWatchedLiteralFormula.max_clause_length, "cube_len_limit= ", TwoWatchedLiteralFormula.max_cube_length);
 					res = solver.qcdcl(ret, 0).second;
+				} else {
+					MyLog.log(lm, 0, "Please select the correct solver");
 				}
 				return res;
 			});
 			
 			
 			
-			boolean res = f.get(900, TimeUnit.SECONDS);
+			boolean res = f.get(TwoWatchedLiteralFormula.time_limit, TimeUnit.SECONDS);
 			final long end = System.currentTimeMillis();
 			long cnt = TwoWatchedLiteralFormula.clause_iter, cnt2 = TwoWatchedLiteralFormula.setcount;
 			MyLog.log(lm, 1, "#branching= " + ResultGenerator.getInstance().getIteration() + " #ass= " 
 		              + cnt2 + " #clause iterate= " + cnt);
 			MyLog.log(lm, 1, "#bcp= ", TwoWatchedLiteralFormula.bcpcount, "#ple= ", TwoWatchedLiteralFormula.plecount);
 			MyLog.log(lm, 1, "nclause iterated per ass= " + (1.0 * cnt / (cnt2 + 1))); 
-			MyLog.log(lm, 1, "Existential Pruning= ", TwoWatchedLiteralFormula.prunE, " Universal Pruning: ", TwoWatchedLiteralFormula.prunU);
+			MyLog.log(lm, 1, "Existential Pruning= ", TwoWatchedLiteralFormula.prunE, " Universal Pruning: ", TwoWatchedLiteralFormula.prunU, "number of resolutions", TwoWatchedLiteralFormula.rescount, "total SAT terminal nodes: ", TwoWatchedLiteralFormula.trueterminal, "total UNSAT terminal nodes: ", TwoWatchedLiteralFormula.falseterminal);
 			MyLog.log(lm, 1, "total time " + (1.0 * (end-start) / 1000));
 		    if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
 		    	MyLog.log(lm, 1, "total SAT nodes: ", TwoWatchedLiteralFormula.truecount, " total UNSAT nodes: ", TwoWatchedLiteralFormula.falsecount);
 		    	MyLog.log(lm, 1, "#learned clause= ", ret.tolLearnClause(), " #learned cube= ", ret.tolLearnCube());
-		    }
+		    } 
 		    MyLog.log(lm, 1, "#################### EXIT SUCCESS ##################");
 		    System.out.println((res ? "SAT" : "UNSAT"));
 		}  catch (final TimeoutException e) {
@@ -321,7 +332,7 @@ public class QDPLL {
 		              + cnt2 + " #clause iterate= " + cnt);
 			MyLog.log(lm, 1, "#bcp= ", TwoWatchedLiteralFormula.bcpcount, "#ple= ", TwoWatchedLiteralFormula.plecount);
 			MyLog.log(lm, 1, "nclause iterated per ass= " + (1.0 * cnt / (cnt2 + 1))); 
-			MyLog.log(lm, 1, "Existential Pruning= ", TwoWatchedLiteralFormula.prunE, " Universal Pruning: ", TwoWatchedLiteralFormula.prunU);
+			MyLog.log(lm, 1, "Existential Pruning= ", TwoWatchedLiteralFormula.prunE, " Universal Pruning: ", TwoWatchedLiteralFormula.prunU, "number of resolutions", TwoWatchedLiteralFormula.rescount, "total SAT terminal nodes: ", TwoWatchedLiteralFormula.trueterminal, "total UNSAT terminal nodes: ", TwoWatchedLiteralFormula.falseterminal);
 			MyLog.log(lm, 1, "total time " + (1.0 * (end-start) / 1000));
 		    if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
 		    	MyLog.log(lm, 1, "total SAT nodes: ", TwoWatchedLiteralFormula.truecount, " total UNSAT nodes: ", TwoWatchedLiteralFormula.falsecount);

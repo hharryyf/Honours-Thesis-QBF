@@ -29,10 +29,13 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	// static command-line-argument region
 	public static int maxLevel = 1;
 	public static int maxclause = 2500, maxcube = 500;
-	public static long setcount = 0, clause_iter = 0, truecount = 0, falsecount = 0, bcpcount = 0, plecount = 0;
-	public static boolean timer = true, depend = false, debug = false, rand = false, vsids = false, PLErule = true;
+	public static long setcount = 0, clause_iter = 0, truecount = 0, falsecount = 0, bcpcount = 0, plecount = 0, rescount = 0, trueterminal = 0, falseterminal = 0;
+	public static boolean timer = true, depend = false, debug = false, rand = false, vsids = false, PLErule = false;
+	public static int max_clause_length = 50, max_cube_length = 50;
+	public static int max_node_in_memory = 3000000, time_limit = 900;
 	public static long prunE = 0, prunU = 0;
-	public static Method solvertype = Method.PBJ;
+	public static int res_level = 3;
+	public static Method solvertype = Method.QCDCL;
 	public TwoWatchedLiteralFormula(int n) {
 		this.varsize = n;
 		this.tempunit = new TreeSet<>();
@@ -109,7 +112,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 				this.permanantUnit.add(c.get(0));
 				return;
 			}
-			if (TwoWatchedLiteralFormula.maxclause == this.formula.get(1).formula.size()  || c.size() > 50) return;
+			if (TwoWatchedLiteralFormula.maxclause == this.formula.get(1).formula.size()  || c.size() > max_clause_length) return;
 			this.formula.get(1).learn(c);
 		} else {
 			if (c.size() == 1) {
@@ -117,7 +120,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 				MyLog.log(lm, 1, "learned unit universal ", c.get(0));
 				return;
 			}
-			if (TwoWatchedLiteralFormula.maxcube == this.formula.get(2).formula.size() || c.size() > 50) return;
+			if (TwoWatchedLiteralFormula.maxcube == this.formula.get(2).formula.size() || c.size() > max_cube_length) return;
 			this.formula.get(2).learn(c);
 		}
 	}
@@ -269,11 +272,14 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 						List<Integer> vc = new ArrayList<>();
 						vc.add(-pair.first);
 						other.addAssignment(this, vc);
+						MyLog.log(lm, res_level, "resolve: ", reason, "and", other);
 						reason.resolve(other, pair.first, this);
-						
+						MyLog.log(lm, res_level, "get: ", reason);
 					} else {
 						other.addLiteral(this, this.formula.get(pair.second.dimension).formula.get(pair.second.id));
+						MyLog.log(lm, res_level, "resolve: ", reason, "and", other);
 						reason.resolve(other, pair.first, this);
+						MyLog.log(lm, res_level, "get: ", reason);
 					}
 				}
 			}
@@ -360,7 +366,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 			if (isMax(v)) {
 				bcp(v, 0, 'U', -1);
 			} else {
-				bcp(v, 2, 'U', -1);
+				bcp(-v, 2, 'U', -1);
 			}
 		}
 		
@@ -487,15 +493,22 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 			// init the watched literal data structure and quantifier blocks
 			// no void quantifier, unit literal exists at this point
 			for (int i = 0 ; i < this.quantifier.quantifier.length; ++i) this.quantifier.score[i] = 0.0;
+			max_clause_length = 0;
 			for (int i = 0 ; i < this.formula.get(0).formula.size(); ++i) {
 				for (Integer v : this.formula.get(0).formula.get(i).existential) {
 					this.quantifier.score[Math.abs(v)] += 1.0;
+					max_clause_length++;
 				}
                 
 				for (Integer v : this.formula.get(0).formula.get(i).universal) {
 					this.quantifier.score[Math.abs(v)] += 1.0;
+					max_clause_length++;
 				}
 			}
+			
+			max_clause_length /= (this.formula.get(0).formula.size() + 1);
+			max_clause_length *= 2;
+			max_clause_length = Math.max(20, max_clause_length);
 			this.quantifier.normalized();
 			this.formula.get(0).init();
 			this.formula.get(1).init();
@@ -511,6 +524,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		ConflictSolution ret = null;
 		if (evaluate() == 1) {
 			MyLog.log(lm, 3, "reach a solution node");
+			trueterminal++;
 			if (this.formula.get(2).evaluate() == -1) {
 				return this.formula.get(0).getSolution();
 			}
@@ -528,6 +542,8 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 					this.formula.get(1).getConflict();
 				}
 			}
+			
+			falseterminal++;
 		}
 		
 		if (ret == null) MyLog.log(lm, 0, "Wrong time to call getReason, no conflict found evaluate= ", evaluate());

@@ -26,7 +26,7 @@ public class ConflictBJ extends ConflictSolution {
 	
 	@Override
 	public boolean contains(int v) {
-		return this.literal.contains(v);
+		return this.literal.contains(v) || this.literal.contains(-v);
 	}
 	
 	@Override
