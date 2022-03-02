@@ -260,9 +260,11 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 						vc.add(pair.first);
 						other.addAssignment(this, vc);
 						reason.resolve(other, pair.first, this);
+						if (reason.size() == 1) learn(reason.allLiteral(), true);
 					} else {
 						other.addLiteral(this, this.formula.get(pair.second.dimension).formula.get(pair.second.id));
 						reason.resolve(other, pair.first, this);
+						if (reason.size() == 1) learn(reason.allLiteral(), true);
 					}
 				}
 			} else {
@@ -275,10 +277,12 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 						MyLog.log(lm, res_level, "resolve: ", reason, "and", other);
 						reason.resolve(other, pair.first, this);
 						MyLog.log(lm, res_level, "get: ", reason);
+						if (reason.size() == 1) learn(reason.allLiteral(), false);
 					} else {
 						other.addLiteral(this, this.formula.get(pair.second.dimension).formula.get(pair.second.id));
 						MyLog.log(lm, res_level, "resolve: ", reason, "and", other);
 						reason.resolve(other, pair.first, this);
+						if (reason.size() == 1) learn(reason.allLiteral(), false);
 						MyLog.log(lm, res_level, "get: ", reason);
 					}
 				}

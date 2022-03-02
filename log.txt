@@ -1,111 +1,34 @@
 [QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
 [QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
-[QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  2 
-[QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
-[QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
-[QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  4 
-[QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  3 
-[QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
-[QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  14 
-[QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  4 
-[QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  3 
-[QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
-[QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
-[QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  4 
-[QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  3 
-[QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
-[QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
-[QCDCL] [QDPLL] [INFO]: #branching= 8199 #ass= 122591 #clause iterate= 134651 
-[QCDCL] [QDPLL] [INFO]: #bcp=  114297 #ple=  0 
-[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.0983669407465413 
-[QCDCL] [QDPLL] [INFO]: Existential Pruning=  7660  Universal Pruning:  0 number of resolutions 36 total SAT terminal nodes:  45 total UNSAT terminal nodes:  192 
-[QCDCL] [QDPLL] [INFO]: total time 4.101 
-[QCDCL] [QDPLL] [INFO]: total SAT nodes:  45  total UNSAT nodes:  8153 
-[QCDCL] [QDPLL] [INFO]: #learned clause=  211  #learned cube=  0 
+[QCDCL] [QDPLL] [INFO]: #branching= 228 #ass= 1980 #clause iterate= 3979 
+[QCDCL] [QDPLL] [INFO]: #bcp=  1687 #ple=  0 
+[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 2.0085815244825844 
+[QCDCL] [QDPLL] [INFO]: Existential Pruning=  103  Universal Pruning:  6 number of resolutions 26 total SAT terminal nodes:  6 total UNSAT terminal nodes:  42 
+[QCDCL] [QDPLL] [INFO]: total time 0.152 
+[QCDCL] [QDPLL] [INFO]: total SAT nodes:  28  total UNSAT nodes:  199 
+[QCDCL] [QDPLL] [INFO]: #learned clause=  61  #learned cube=  6 
 [QCDCL] [QDPLL] [INFO]: #################### EXIT SUCCESS ################## 
 [QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
 [QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
 [QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  4 
 [QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  3 
-[QCDCL] [QDPLL] [INFO]: #branching= 46492130 #ass= 83321935 #clause iterate= 63743813 
-[QCDCL] [QDPLL] [INFO]: #bcp=  36829755 #ple=  0 
-[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 0.7650303876760617 
-[QCDCL] [QDPLL] [INFO]: Existential Pruning=  0  Universal Pruning:  1556 number of resolutions 35385 total SAT terminal nodes:  49390 total UNSAT terminal nodes:  7646 
-[QCDCL] [QDPLL] [INFO]: total time 900.012 
-[QCDCL] [QDPLL] [INFO]: total SAT nodes:  46483465  total UNSAT nodes:  8639 
-[QCDCL] [QDPLL] [INFO]: #learned clause=  2  #learned cube=  500 
-[QCDCL] [QDPLL] [INFO]: #################### TIME OUT ################## 
 [QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
 [QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [QDPLL] [INFO]: #branching= 1048613 #ass= 23594623 #clause iterate= 24131403 
-[QCDCL] [QDPLL] [INFO]: #bcp=  22544340 #ple=  0 
-[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.022750055266827 
-[QCDCL] [QDPLL] [INFO]: Existential Pruning=  0  Universal Pruning:  0 number of resolutions 524287 total SAT terminal nodes:  524288 total UNSAT terminal nodes:  0 
-[QCDCL] [QDPLL] [INFO]: total time 88.63 
-[QCDCL] [QDPLL] [INFO]: total SAT nodes:  1048612  total UNSAT nodes:  0 
-[QCDCL] [QDPLL] [INFO]: #learned clause=  0  #learned cube=  500 
-[QCDCL] [QDPLL] [INFO]: #################### EXIT SUCCESS ################## 
 [QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
 [QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
-[QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  83 
-[QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  -83 
-[QCDCL] [QDPLL] [INFO]: #branching= 10628801 #ass= 193444367 #clause iterate= 186004351 
-[QCDCL] [QDPLL] [INFO]: #bcp=  182815564 #ple=  0 
-[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 0.9615392421246401 
-[QCDCL] [QDPLL] [INFO]: Existential Pruning=  0  Universal Pruning:  531440 number of resolutions 2125763 total SAT terminal nodes:  2125764 total UNSAT terminal nodes:  0 
-[QCDCL] [QDPLL] [INFO]: total time 776.271 
-[QCDCL] [QDPLL] [INFO]: total SAT nodes:  10628800  total UNSAT nodes:  0 
-[QCDCL] [QDPLL] [INFO]: #learned clause=  0  #learned cube=  320 
-[QCDCL] [QDPLL] [INFO]: #################### EXIT SUCCESS ################## 
 [QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
 [QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
-[QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  92 
-[QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  -92 
-[QCDCL] [QDPLL] [INFO]: #branching= 229616 #ass= 1184319 #clause iterate= 1054500 
-[QCDCL] [QDPLL] [INFO]: #bcp=  954701 #ple=  0 
-[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 0.8903843555795731 
-[QCDCL] [QDPLL] [INFO]: Existential Pruning=  125  Universal Pruning:  4537 number of resolutions 27229 total SAT terminal nodes:  27243 total UNSAT terminal nodes:  33 
-[QCDCL] [QDPLL] [INFO]: total time 10.855 
-[QCDCL] [QDPLL] [INFO]: total SAT nodes:  229367  total UNSAT nodes:  248 
-[QCDCL] [QDPLL] [INFO]: #learned clause=  33  #learned cube=  149 
+[QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
+[QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
+[QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
+[QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
+[QCDCL] [QDPLL] [INFO]: #branching= 195628 #ass= 8515661 #clause iterate= 10771215 
+[QCDCL] [QDPLL] [INFO]: #bcp=  8320034 #ple=  0 
+[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.2648711280461813 
+[QCDCL] [QDPLL] [INFO]: Existential Pruning=  20459  Universal Pruning:  0 number of resolutions 85332 total SAT terminal nodes:  1 total UNSAT terminal nodes:  87563 
+[QCDCL] [QDPLL] [INFO]: total time 233.08 
+[QCDCL] [QDPLL] [INFO]: total SAT nodes:  45  total UNSAT nodes:  195582 
+[QCDCL] [QDPLL] [INFO]: #learned clause=  2500  #learned cube=  1 
 [QCDCL] [QDPLL] [INFO]: #################### EXIT SUCCESS ################## 
 [QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
 [QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
@@ -117,20 +40,67 @@
 [QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
 [QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
 [QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [QDPLL] [INFO]: #branching= 115437 #ass= 5024986 #clause iterate= 8182991 
-[QCDCL] [QDPLL] [INFO]: #bcp=  4909538 #ple=  0 
-[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.6284601333296982 
-[QCDCL] [QDPLL] [INFO]: Existential Pruning=  5316  Universal Pruning:  0 number of resolutions 45168 total SAT terminal nodes:  46634 total UNSAT terminal nodes:  1081 
-[QCDCL] [QDPLL] [INFO]: total time 51.455 
-[QCDCL] [QDPLL] [INFO]: total SAT nodes:  105422  total UNSAT nodes:  10014 
-[QCDCL] [QDPLL] [INFO]: #learned clause=  1355  #learned cube=  0 
+[QCDCL] [QDPLL] [INFO]: #branching= 5199 #ass= 103231 #clause iterate= 152964 
+[QCDCL] [QDPLL] [INFO]: #bcp=  98025 #ple=  0 
+[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.4817498450092994 
+[QCDCL] [QDPLL] [INFO]: Existential Pruning=  1105  Universal Pruning:  0 number of resolutions 1263 total SAT terminal nodes:  1479 total UNSAT terminal nodes:  234 
+[QCDCL] [QDPLL] [INFO]: total time 1.021 
+[QCDCL] [QDPLL] [INFO]: total SAT nodes:  3215  total UNSAT nodes:  1983 
+[QCDCL] [QDPLL] [INFO]: #learned clause=  266  #learned cube=  14 
+[QCDCL] [QDPLL] [INFO]: #################### EXIT SUCCESS ################## 
+[QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
+[QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
+[QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  736 
+[QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  -736 
+[QCDCL] [QDPLL] [INFO]: #branching= 2150827 #ass= 6137095 #clause iterate= 4828696 
+[QCDCL] [QDPLL] [INFO]: #bcp=  3986266 #ple=  0 
+[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 0.7868047037230638 
+[QCDCL] [QDPLL] [INFO]: Existential Pruning=  560060  Universal Pruning:  42 number of resolutions 86358 total SAT terminal nodes:  3359 total UNSAT terminal nodes:  702419 
+[QCDCL] [QDPLL] [INFO]: total time 57.103 
+[QCDCL] [QDPLL] [INFO]: total SAT nodes:  185340  total UNSAT nodes:  1965486 
+[QCDCL] [QDPLL] [INFO]: #learned clause=  74  #learned cube=  0 
 [QCDCL] [QDPLL] [INFO]: #################### EXIT SUCCESS ################## 
 [QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
 [QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
 [QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
 [QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[QCDCL] [QDPLL] [INFO]: #branching= 20051 #ass= 241437 #clause iterate= 413558 
+[QCDCL] [QDPLL] [INFO]: #bcp=  221321 #ple=  0 
+[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.7128952360440362 
+[QCDCL] [QDPLL] [INFO]: Existential Pruning=  8058  Universal Pruning:  685 number of resolutions 1524 total SAT terminal nodes:  1829 total UNSAT terminal nodes:  1652 
+[QCDCL] [QDPLL] [INFO]: total time 9.818 
+[QCDCL] [QDPLL] [INFO]: total SAT nodes:  6294  total UNSAT nodes:  13756 
+[QCDCL] [QDPLL] [INFO]: #learned clause=  1209  #learned cube=  0 
+[QCDCL] [QDPLL] [INFO]: #################### EXIT SUCCESS ################## 
