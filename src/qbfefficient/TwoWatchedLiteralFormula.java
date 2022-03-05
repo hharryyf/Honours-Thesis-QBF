@@ -24,7 +24,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	protected Set<Pair<Integer, Integer>> tempunit;
 	private boolean locked = false;
 	public static enum Method {
-		BT, BJ, CDCLSBJ, QCDCL, PBJ
+		BT, BJ, CDCLSBJ, QCDCL, PBJ, PL
 	}
 	// static command-line-argument region
 	public static int maxLevel = 1;
@@ -35,7 +35,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	public static int max_node_in_memory = 3000000, time_limit = 900;
 	public static long prunE = 0, prunU = 0;
 	public static int res_level = 3;
-	public static Method solvertype = Method.QCDCL;
+	public static Method solvertype = Method.PBJ;
 	public TwoWatchedLiteralFormula(int n) {
 		this.varsize = n;
 		this.tempunit = new TreeSet<>();
@@ -109,6 +109,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		MyLog.log(lm, 2, "learn ", c);
 		if (clause) {
 			if (c.size() == 1) {
+				MyLog.log(lm, 1, "learned unit existential ", c.get(0));
 				this.permanantUnit.add(c.get(0));
 				return;
 			}
@@ -319,6 +320,85 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		}
 	}
 	
+	private void undoPL(PNSLearnReason reason) {
+		while (!this.assign.literal.isEmpty() && this.assign.peek().second.type != 'N') {
+			Pair<Integer, AssignId> pair = this.assign.unassign();
+			MyLog.log(lm, 2, "propagate reason: ", reason, " split literal: ", pair.first, " reason type: ", reason.isSolution());
+			if (reason.status != PNSLearnReason.Status.pending || reason.status != PNSLearnReason.Status.pendingL) {
+				if (!reason.isSolution()) {
+					if (reason.contains(-pair.first) && isMax(pair.first)) {
+						ConflictSolution other = new PNSLearnReason(false);
+						if (pair.second.id == -1) {
+							List<Integer> vc = new ArrayList<>();
+							vc.add(pair.first);
+							other.addAssignment(this, vc);
+							reason.resolve(other, pair.first, this);
+							reason.status = PNSLearnReason.Status.pendingL;
+							if (reason.size() == 1) learn(reason.allLiteral(), true);
+						} else {
+							other.addLiteral(this, this.formula.get(pair.second.dimension).formula.get(pair.second.id));
+							reason.resolve(other, pair.first, this);
+							reason.status = PNSLearnReason.Status.pendingL;
+							if (reason.size() == 1) learn(reason.allLiteral(), true);
+						}
+					}
+				} else {
+					if (reason.contains(pair.first) && !isMax(pair.first)) {
+						ConflictSolution other = new PNSLearnReason(true);
+						if (pair.second.id == -1) {
+							List<Integer> vc = new ArrayList<>();
+							vc.add(-pair.first);
+							other.addAssignment(this, vc);
+							MyLog.log(lm, res_level, "resolve: ", reason, "and", other);
+							reason.resolve(other, pair.first, this);
+							reason.status = PNSLearnReason.Status.pendingL;
+							MyLog.log(lm, res_level, "get: ", reason);
+							if (reason.size() == 1) learn(reason.allLiteral(), false);
+						} else {
+							other.addLiteral(this, this.formula.get(pair.second.dimension).formula.get(pair.second.id));
+							MyLog.log(lm, res_level, "resolve: ", reason, "and", other);
+							reason.resolve(other, pair.first, this);
+							reason.status = PNSLearnReason.Status.pendingL;
+							if (reason.size() == 1) learn(reason.allLiteral(), false);
+							MyLog.log(lm, res_level, "get: ", reason);
+						}
+					}
+				}
+			}
+			this.quantifier.insert(pair.first);
+			this.formula.get(0).unassign(pair.first);
+			this.formula.get(1).unassign(pair.first);
+			this.formula.get(2).unassign(pair.first);
+		}
+		
+		if (!this.assign.literal.isEmpty()) {
+			Pair<Integer, AssignId> pair = this.assign.unassign();
+			MyLog.log(lm, 2, "branching variable: ", pair.first);
+			boolean learned = (reason.status == PNSLearnReason.Status.pendingL) && reason.isUIP(this, pair.first)  && (reason.satisfied != isMax(pair.first));
+			List<Integer> ret = null;
+			if (learned) {
+				ret = reason.allLiteral();
+			}
+			this.quantifier.insert(pair.first);
+			this.formula.get(0).unassign(pair.first);
+			this.formula.get(1).unassign(pair.first);
+			this.formula.get(2).unassign(pair.first);
+			if (learned && !reason.satisfied) {
+				this.learn(ret, true);
+				reason.status = PNSLearnReason.Status.lock;
+			} else if (learned && reason.isSolution()) {
+				this.learn(ret, false);
+				reason.status = PNSLearnReason.Status.lock;
+			}
+		}
+		
+		if ((reason.status == PNSLearnReason.Status.pending || reason.status == PNSLearnReason.Status.pendingL) && reason.size() == 0 && !reason.satisfied) {
+			MyLog.log(lm, 1, "empty clause learned");
+		} else if ((reason.status == PNSLearnReason.Status.pending || reason.status == PNSLearnReason.Status.pendingL) && reason.size() == 0 && reason.satisfied) {
+			MyLog.log(lm, 1, "empty term learned");
+		}
+	}
+	
 	@Override
 	public void undo(ConflictSolution reason) {
 	    if (TwoWatchedLiteralFormula.solvertype == Method.BT) {
@@ -344,6 +424,8 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 			undoQCDCL((ConflictSolutionQCDCL) reason);
 		} else if (TwoWatchedLiteralFormula.solvertype == Method.PBJ) {
 			undoPBJ((ConflictBJ) reason);
+		} else if (TwoWatchedLiteralFormula.solvertype == Method.PL) {
+			undoPL((PNSLearnReason) reason);
 		}
 	}
 	
@@ -579,6 +661,16 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 			}
 			return c;
 		} 
+		return null;
+	}
+
+
+	@Override
+	public boolean assignlit(int l) {
+		return this.assign.hasLiteral(l);
+	}
+	
+	public String toString() {
 		return null;
 	}
 }

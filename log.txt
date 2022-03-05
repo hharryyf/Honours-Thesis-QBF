@@ -1,106 +1,111 @@
-[QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
-[QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
-[QCDCL] [QDPLL] [INFO]: #branching= 228 #ass= 1980 #clause iterate= 3979 
-[QCDCL] [QDPLL] [INFO]: #bcp=  1687 #ple=  0 
-[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 2.0085815244825844 
-[QCDCL] [QDPLL] [INFO]: Existential Pruning=  103  Universal Pruning:  6 number of resolutions 26 total SAT terminal nodes:  6 total UNSAT terminal nodes:  42 
-[QCDCL] [QDPLL] [INFO]: total time 0.152 
-[QCDCL] [QDPLL] [INFO]: total SAT nodes:  28  total UNSAT nodes:  199 
-[QCDCL] [QDPLL] [INFO]: #learned clause=  61  #learned cube=  6 
-[QCDCL] [QDPLL] [INFO]: #################### EXIT SUCCESS ################## 
-[QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
-[QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
-[QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  4 
-[QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  3 
-[QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
-[QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
-[QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
-[QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
-[QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
-[QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
-[QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
-[QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
-[QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
-[QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
-[QCDCL] [QDPLL] [INFO]: #branching= 195628 #ass= 8515661 #clause iterate= 10771215 
-[QCDCL] [QDPLL] [INFO]: #bcp=  8320034 #ple=  0 
-[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.2648711280461813 
-[QCDCL] [QDPLL] [INFO]: Existential Pruning=  20459  Universal Pruning:  0 number of resolutions 85332 total SAT terminal nodes:  1 total UNSAT terminal nodes:  87563 
-[QCDCL] [QDPLL] [INFO]: total time 233.08 
-[QCDCL] [QDPLL] [INFO]: total SAT nodes:  45  total UNSAT nodes:  195582 
-[QCDCL] [QDPLL] [INFO]: #learned clause=  2500  #learned cube=  1 
-[QCDCL] [QDPLL] [INFO]: #################### EXIT SUCCESS ################## 
-[QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
-[QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [QDPLL] [INFO]: #branching= 5199 #ass= 103231 #clause iterate= 152964 
-[QCDCL] [QDPLL] [INFO]: #bcp=  98025 #ple=  0 
-[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.4817498450092994 
-[QCDCL] [QDPLL] [INFO]: Existential Pruning=  1105  Universal Pruning:  0 number of resolutions 1263 total SAT terminal nodes:  1479 total UNSAT terminal nodes:  234 
-[QCDCL] [QDPLL] [INFO]: total time 1.021 
-[QCDCL] [QDPLL] [INFO]: total SAT nodes:  3215  total UNSAT nodes:  1983 
-[QCDCL] [QDPLL] [INFO]: #learned clause=  266  #learned cube=  14 
-[QCDCL] [QDPLL] [INFO]: #################### EXIT SUCCESS ################## 
-[QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
-[QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
-[QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  736 
-[QCDCL] [2_WL_FORMULA] [INFO]: learned unit universal  -736 
-[QCDCL] [QDPLL] [INFO]: #branching= 2150827 #ass= 6137095 #clause iterate= 4828696 
-[QCDCL] [QDPLL] [INFO]: #bcp=  3986266 #ple=  0 
-[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 0.7868047037230638 
-[QCDCL] [QDPLL] [INFO]: Existential Pruning=  560060  Universal Pruning:  42 number of resolutions 86358 total SAT terminal nodes:  3359 total UNSAT terminal nodes:  702419 
-[QCDCL] [QDPLL] [INFO]: total time 57.103 
-[QCDCL] [QDPLL] [INFO]: total SAT nodes:  185340  total UNSAT nodes:  1965486 
-[QCDCL] [QDPLL] [INFO]: #learned clause=  74  #learned cube=  0 
-[QCDCL] [QDPLL] [INFO]: #################### EXIT SUCCESS ################## 
-[QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
-[QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
-[QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
-[QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
-[QCDCL] [QDPLL] [INFO]: #branching= 20051 #ass= 241437 #clause iterate= 413558 
-[QCDCL] [QDPLL] [INFO]: #bcp=  221321 #ple=  0 
-[QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.7128952360440362 
-[QCDCL] [QDPLL] [INFO]: Existential Pruning=  8058  Universal Pruning:  685 number of resolutions 1524 total SAT terminal nodes:  1829 total UNSAT terminal nodes:  1652 
-[QCDCL] [QDPLL] [INFO]: total time 9.818 
-[QCDCL] [QDPLL] [INFO]: total SAT nodes:  6294  total UNSAT nodes:  13756 
-[QCDCL] [QDPLL] [INFO]: #learned clause=  1209  #learned cube=  0 
-[QCDCL] [QDPLL] [INFO]: #################### EXIT SUCCESS ################## 
+[17:36:14.997] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[17:51:15] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 135366950 
+[17:51:15.001] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 2146144 #ass= 426572778 #clause iterate= 358589711 
+[17:51:15.002] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  354596997 #ple=  0 
+[17:51:15.009] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.8406296150462991 
+[17:51:15.010] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  718913  Universal Pruning:  94857 number of resolutions 246985 
+[17:51:15.010] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 4292289 total SAT nodes:  445914  total UNSAT nodes:  1442867 total SAT terminal nodes:  264271 total UNSAT terminal nodes:  160300 
+[17:51:15.010] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 900.003 
+[17:51:15.010] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### TIME OUT ################## 
+[17:52:41.035] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[18:04:04.925] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 109837550 
+[18:04:04.926] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 12000001 #ass= 369610806 #clause iterate= 310540848 
+[18:04:04.927] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  290691997 #ple=  0 
+[18:04:04.930] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.8401833553530268 
+[18:04:04.931] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  757971  Universal Pruning:  365830 number of resolutions 3148351 
+[18:04:04.931] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 24000003 total SAT nodes:  6951334  total UNSAT nodes:  8069024 total SAT terminal nodes:  2023496 total UNSAT terminal nodes:  2497064 
+[18:04:04.931] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 683.89 
+[18:04:04.931] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### OUT OF MEMORY ################## 
+[19:08:13.619] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[19:14:32.766] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 72180882 
+[19:14:32.768] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 7642896 #ass= 230433061 #clause iterate= 190861211 
+[19:14:32.768] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  179056825 #ple=  0 
+[19:14:32.774] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.8282718171752628 
+[19:14:32.774] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  423574  Universal Pruning:  228621 number of resolutions 1849138 
+[19:14:32.774] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 15285793 total SAT nodes:  4270484  total UNSAT nodes:  4627768 total SAT terminal nodes:  1283222 total UNSAT terminal nodes:  1474811 
+[19:14:32.775] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 379.147 
+[19:14:32.775] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[19:15:14.146] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[19:26:17.803] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 77065912 
+[19:26:17.804] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 7569129 #ass= 253849090 #clause iterate= 208921619 
+[19:26:17.804] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  196289086 #ple=  3888787 
+[19:26:17.811] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.8230150369141956 
+[19:26:17.812] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  383367  Universal Pruning:  0 number of resolutions 1955305 
+[19:26:17.813] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 15138259 total SAT nodes:  4082991  total UNSAT nodes:  4769417 total SAT terminal nodes:  1227596 total UNSAT terminal nodes:  1557633 
+[19:26:17.813] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 663.657 
+[19:26:17.813] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[19:27:30.470] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[19:36:13.449] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 71400468 
+[19:36:13.449] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 6511189 #ass= 208956717 #clause iterate= 164095847 
+[19:36:13.449] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  155933883 #ple=  4300219 
+[19:36:13.453] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.7853102239096232 
+[19:36:13.453] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  369192  Universal Pruning:  5741 number of resolutions 1297102 
+[19:36:13.453] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 13022379 total SAT nodes:  4345176  total UNSAT nodes:  3167327 total SAT terminal nodes:  1359872 total UNSAT terminal nodes:  1143441 
+[19:36:13.454] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 522.979 
+[19:36:13.454] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[19:49:02.236] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[19:54:04.741] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 51275966 
+[19:54:04.742] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 5897632 #ass= 155008264 #clause iterate= 124867963 
+[19:54:04.742] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  117575014 #ple=  0 
+[19:54:04.746] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.8055568069225212 
+[19:54:04.746] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  371719  Universal Pruning:  155979 number of resolutions 650663 
+[19:54:04.746] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 11795265 total SAT nodes:  3290006  total UNSAT nodes:  2803242 total SAT terminal nodes:  706676 total UNSAT terminal nodes:  990874 
+[19:54:04.747] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 302.505 
+[19:54:04.747] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[19:57:03.733] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[20:06:03.498] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[20:10:38.725] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 45965598 
+[20:10:38.726] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 4604481 #ass= 138020656 #clause iterate= 112563883 
+[20:10:38.726] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  105828892 #ple=  0 
+[20:10:38.733] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.8155582319826227 
+[20:10:38.733] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  337852  Universal Pruning:  203529 number of resolutions 768044 
+[20:10:38.733] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 9208963 total SAT nodes:  2715642  total UNSAT nodes:  2055782 total SAT terminal nodes:  836034 total UNSAT terminal nodes:  633820 
+[20:10:38.734] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 275.227 
+[20:10:38.734] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[20:11:47.431] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[20:14:59.661] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 25304044 
+[20:14:59.662] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 2274029 #ass= 78722417 #clause iterate= 63814355 
+[20:14:59.662] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  60371136 #ple=  1151198 
+[20:14:59.665] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.8106249353265547 
+[20:14:59.666] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  187075  Universal Pruning:  1 number of resolutions 461916 
+[20:14:59.666] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 4548059 total SAT nodes:  1322917  total UNSAT nodes:  1096584 total SAT terminal nodes:  501843 total UNSAT terminal nodes:  328200 
+[20:14:59.666] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 192.23 
+[20:14:59.666] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[20:49:47.815] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[21:04:47.818] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 120124654 
+[21:04:47.819] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 4412749 #ass= 354768393 #clause iterate= 283600745 
+[21:04:47.819] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  276268371 #ple=  9612157 
+[21:04:47.823] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.7993968735557655 
+[21:04:47.823] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  129588  Universal Pruning:  0 number of resolutions 798109 
+[21:04:47.823] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 8825499 total SAT nodes:  3295586  total UNSAT nodes:  458847 total SAT terminal nodes:  765294 total UNSAT terminal nodes:  78327 
+[21:04:47.823] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 900.003 
+[21:04:47.823] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### TIME OUT ################## 
+[21:11:50.491] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[21:23:05.794] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[21:38:34.515] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[21:53:34.520] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 197795592 
+[21:53:34.521] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 4535090 #ass= 309840379 #clause iterate= 290507856 
+[21:53:34.521] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  201872306 #ple=  0 
+[21:53:34.528] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.9376048919124099 
+[21:53:34.528] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  382140  Universal Pruning:  103117 number of resolutions 1702740 
+[21:53:34.529] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 9070181 total SAT nodes:  779346  total UNSAT nodes:  4423354 total SAT terminal nodes:  144413 total UNSAT terminal nodes:  2025176 
+[21:53:34.529] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 900.003 
+[21:53:34.529] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### TIME OUT ################## 
+[21:53:40.819] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[22:08:40.825] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 352578451 
+[22:08:40.828] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 3633408 #ass= 321077411 #clause iterate= 170345088 
+[22:08:40.828] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  137521264 #ple=  0 
+[22:08:40.833] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.5305421111342458 
+[22:08:40.834] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  916746  Universal Pruning:  73624 number of resolutions 417811 
+[22:08:40.834] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 7266817 total SAT nodes:  710038  total UNSAT nodes:  2292244 total SAT terminal nodes:  162935 total UNSAT terminal nodes:  707205 
+[22:08:40.834] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 900.008 
+[22:08:40.834] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### TIME OUT ################## 
+[22:12:10.849] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[22:22:32.696] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 198521574 
+[22:22:32.697] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 12000001 #ass= 387555963 #clause iterate= 348372152 
+[22:22:32.697] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  264295145 #ple=  0 
+[22:22:32.703] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.8988950870589622 
+[22:22:32.704] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  5867537  Universal Pruning:  0 number of resolutions 4482088 
+[22:22:32.704] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 24000003 total SAT nodes:  99595  total UNSAT nodes:  14976467 total SAT terminal nodes:  82160 total UNSAT terminal nodes:  4494080 
+[22:22:32.704] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 621.847 
+[22:22:32.705] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### OUT OF MEMORY ################## 

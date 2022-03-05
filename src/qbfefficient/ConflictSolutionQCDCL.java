@@ -11,10 +11,10 @@ import utilstructure.Pair;
 
 public class ConflictSolutionQCDCL extends ConflictSolution {
 
-	private String lm = new String("QCDCL_LN");
-	private Set<Integer> literal;
-	private boolean opencount = false;
-	private TreeSet<Pair<Integer, Integer>> depth;
+	private static String lm = new String("QCDCL_LN");
+	Set<Integer> literal;
+	protected boolean opencount = false;
+	protected TreeSet<Pair<Integer, Integer>> depth;
 	public ConflictSolutionQCDCL(boolean sat) {
 		this.satisfied = sat;
 		this.literal = new HashSet<>();

@@ -6,18 +6,18 @@ import qbfexpression.Quantifier;
 import qbfsolver.Result;
 import qbfsolver.ResultGenerator;
 
-public class QDeepPNSNode {
+public class QDeepPNSBJNode {
 	protected static String lm = new String("QDeepPNSNode");
 	Quantifier splitnode;
 	int visited = 0;
-	QDeepPNSNode left = null, right = null, parent = null;
+	QDeepPNSBJNode left = null, right = null, parent = null;
 	// reason exists if and only if the node has been proved/disproved
 	ConflictSolution reason = null;
 	int pn, dn, depth, size;
 	double deep;
 	boolean valid = false;
 	public static int inf = 120000000;
-	public QDeepPNSNode(TwoWatchedLiteralFormula f, int depth) {
+	public QDeepPNSBJNode(TwoWatchedLiteralFormula f, int depth) {
 		this.visited = 1;
 		this.deep = 1.0 / depth;
 		this.depth = depth;
@@ -27,12 +27,12 @@ public class QDeepPNSNode {
 		int val = f.evaluate();
 		if (val == 1) {
 			this.pn = 0;
-			this.dn = QDeepPNSNode.inf;
+			this.dn = QDeepPNSBJNode.inf;
 			this.reason = f.getReason();
 			this.valid = true;
 			TwoWatchedLiteralFormula.truecount++;
 		} else if (val == 0) {
-			this.pn = QDeepPNSNode.inf;
+			this.pn = QDeepPNSBJNode.inf;
 			this.dn = 0;
 			this.reason = f.getReason();
 			this.valid = true;
@@ -55,7 +55,7 @@ public class QDeepPNSNode {
 		return this.reason;
 	}
 	
-	public QDeepPNSNode getParent() {
+	public QDeepPNSBJNode getParent() {
 		return this.parent;
 	}
 	
@@ -64,15 +64,15 @@ public class QDeepPNSNode {
 	}
 	
 	public boolean isSolved() {
-		return this.pn >= QDeepPNSNode.inf || this.dn >= QDeepPNSNode.inf;
+		return this.pn >= QDeepPNSBJNode.inf || this.dn >= QDeepPNSBJNode.inf;
 	}
 	
 	public boolean isLost() {
-		return this.pn >= QDeepPNSNode.inf;
+		return this.pn >= QDeepPNSBJNode.inf;
 	}
 	
 	public boolean isWin() {
-		return this.dn >= QDeepPNSNode.inf;
+		return this.dn >= QDeepPNSBJNode.inf;
 	}
 	
 	public int getPn() {
@@ -102,12 +102,12 @@ public class QDeepPNSNode {
 	
 	protected void setTrue() {
 		this.pn = 0;
-		this.dn = QDeepPNSNode.inf;
+		this.dn = QDeepPNSBJNode.inf;
 	}
 	
 	protected void setFalse() {
 		this.dn = 0;
-		this.pn = QDeepPNSNode.inf;
+		this.pn = QDeepPNSBJNode.inf;
 	}
 	
 	public void prun() {
@@ -126,22 +126,22 @@ public class QDeepPNSNode {
 		// left split
 		f.set(this.splitnode.getVal());
 		f.simplify();
-		QDeepPNSNode L = new QDeepPNSNode(f, this.depth + 1);
+		QDeepPNSBJNode L = new QDeepPNSBJNode(f, this.depth + 1);
 		L.parent = this;
 		this.left = L;
 		f.undo(this.left.reason);
 		// right split
 		f.set(-this.splitnode.getVal());
 		f.simplify();
-		QDeepPNSNode R = new QDeepPNSNode(f, this.depth + 1);
+		QDeepPNSBJNode R = new QDeepPNSBJNode(f, this.depth + 1);
 		R.parent = this;
 		this.right = R;
 		f.undo(this.right.reason);		
 	}
 	
-	public QDeepPNSNode MPN(TwoWatchedLiteralFormula f) {
+	public QDeepPNSBJNode MPN(TwoWatchedLiteralFormula f) {
 		if (this.isTerminal()) return null;
-		QDeepPNSNode ret = null;
+		QDeepPNSBJNode ret = null;
 		int idx = 0;
 		if (ret == null && !this.left.isSolved()) {
 			ret = this.left;
@@ -171,14 +171,14 @@ public class QDeepPNSNode {
 	 */
 	public boolean backpropagation(TwoWatchedLiteralFormula f) {
 		if (this.isTerminal() || this.isSolved()) return false;
-		List<QDeepPNSNode> child = new ArrayList<>();
+		List<QDeepPNSBJNode> child = new ArrayList<>();
 		child.add(this.left);
 		child.add(this.right);
-		QDeepPNSNode curr = null;
+		QDeepPNSBJNode curr = null;
 		if (this.splitnode.isMax()) {
 			this.pn = child.get(0).pn;
 			this.dn = 0;
-			for (QDeepPNSNode c : child) {
+			for (QDeepPNSBJNode c : child) {
 				this.pn = Math.min(this.pn, c.getPn());
 				this.dn += c.getDn();
 				if ((curr == null && !c.isSolved()) || (curr != null && !c.isSolved() && c.dpn() <= curr.dpn()))  {
@@ -188,7 +188,7 @@ public class QDeepPNSNode {
 		} else {
 			this.pn = 0;
 			this.dn = child.get(0).dn;
-			for (QDeepPNSNode c : child) {
+			for (QDeepPNSBJNode c : child) {
 				this.pn += c.getPn();
 				this.dn = Math.min(this.dn, c.getDn());
 				if ((curr == null && !c.isSolved()) || (curr != null && !c.isSolved() && c.dpn() <= curr.dpn())) {
@@ -269,8 +269,8 @@ public class QDeepPNSNode {
 			ResultGenerator.getInstance().cutNode(this.left.size + this.right.size);
 			this.size = 1;
 			this.left = this.right = null;
-			this.pn = Math.min(this.pn, QDeepPNSNode.inf);
-			this.dn = Math.min(this.dn, QDeepPNSNode.inf);
+			this.pn = Math.min(this.pn, QDeepPNSBJNode.inf);
+			this.dn = Math.min(this.dn, QDeepPNSBJNode.inf);
 			if (this.isWin()) {
 				TwoWatchedLiteralFormula.truecount++;
 			} else {

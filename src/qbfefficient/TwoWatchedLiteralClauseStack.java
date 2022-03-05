@@ -467,12 +467,17 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			this.contradict.clear();
 			ret.addLiteral(this.f, C);
 			return ret;
-		} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL) {
+		} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ 
+				|| TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL
+				|| TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PL) {
 			ConflictSolution ret = null;
 			if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
 				ret = new ConflictCDCLSBJ(false);
-			} else {
+			} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL) {
 				ret = new ConflictSolutionQCDCL(false);
+			} else {
+				ret = new PNSLearnReason(false);
+				((PNSLearnReason) ret).status = PNSLearnReason.Status.pending;
 			}
 			
 			if (!this.contradict.isEmpty()) {
@@ -611,6 +616,50 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			}
 			
 			ConflictSolution c = new ConflictSolutionQCDCL(true);
+			c.addAssignment(f, ret);
+			MyLog.log(lm, 2, "model generation ", ret);
+			return c;
+		} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PL) {
+			HashMap<Integer, Integer> ass = new HashMap<>(f.assign.literal);
+			LinkedList<Integer> ret = new LinkedList<>();
+			LinkedList<Integer> other = new LinkedList<>();
+			int mx = -1;
+			for (Pair<Integer, AssignId> p : f.assign.assignment) {
+				if (!f.isMax(p.first)) {
+					ret.addFirst(p.first);
+					mx = Math.max(f.depth(p.first), mx);
+				} else {
+					other.add(p.first);
+				}
+			}
+			
+			Iterator<Integer> iter = ret.iterator();
+			
+			for (int i = 1; i <= n; ++i) {
+				if (f.isMax(i) && f.depth(i) > mx && !ass.containsKey(-i) && !ass.containsKey(i)) ass.put(i, 0);
+			}
+			
+			while (iter.hasNext()) {
+				int v = iter.next();
+				ass.remove(v);
+				if (canremove(v, ass)) {
+					iter.remove();
+				} else {
+					ass.put(v, 0);
+				}
+			}
+			
+			int mxlv = -1;
+			for (Integer v : ret) {
+				mxlv = Math.max(f.depth(v), mxlv);
+			}
+			
+			for (Integer v : other) {
+				if (f.depth(v) < mxlv) ret.add(v);
+			}
+			
+			ConflictSolution c = new PNSLearnReason(true);
+			((PNSLearnReason) c).status = PNSLearnReason.Status.pending;
 			c.addAssignment(f, ret);
 			MyLog.log(lm, 2, "model generation ", ret);
 			return c;

@@ -389,6 +389,21 @@ public class TwoWatchedLiteralCubeStack extends TwoWatchedLiteralStack {
 			this.contradict.clear();
 			this.conflictunit.clear();
 			return ret;
+		} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PL) {
+			ConflictSolution ret = new PNSLearnReason(true);
+			((PNSLearnReason) ret).status = PNSLearnReason.Status.pending;
+			if (!this.contradict.isEmpty()) {
+				TwoWatchedLiteralClause C = this.formula.get(contradict.first());
+				// and clear out the conflict
+				ret.addLiteral(this.f, C);
+			} else if (!this.conflictunit.isEmpty()) {
+				List<Integer> vc = new ArrayList<>();
+				vc.add(this.conflictunit.first());
+				ret.addAssignment(f, vc);
+			}
+			this.contradict.clear();
+			this.conflictunit.clear();
+			return ret;
 		}
 		
 		return null;

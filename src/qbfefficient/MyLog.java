@@ -2,6 +2,7 @@ package qbfefficient;
 
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalTime;
 
 public class MyLog {
 	public static FileWriter fout;
@@ -50,7 +51,8 @@ public class MyLog {
 		}
 		
 		try {
-			fout.write(GetSolver() + "[" + Module + "] " + GetLevel(level));
+			LocalTime myObj = LocalTime.now();
+		    fout.write("[" + myObj + "] " +  GetSolver() + "[" + Module + "] " + GetLevel(level));
 			for (Object obj : msg) {
 				fout.write(obj + " ");
 			}

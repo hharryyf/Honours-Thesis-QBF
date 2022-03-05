@@ -17,6 +17,7 @@ public interface EfficientQBFFormula {
 	public Quantifier peek();
 	public void addQuantifier(Quantifier q);
 	public boolean isassigned(int v);
+	public boolean assignlit(int l);
 	public TwoWatchedLiteralClause unitId(int v);
 	public int depth(int v);
 	public boolean isMax(int v);
