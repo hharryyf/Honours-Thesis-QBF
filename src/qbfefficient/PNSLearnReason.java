@@ -50,6 +50,7 @@ public class PNSLearnReason extends ConflictSolutionQCDCL {
 	}
 	
 	private PNSLearnReason rec_c_resolve(EfficientQBFFormula f, PNSLearnReason w1, PNSLearnReason w2, int v) {
+		MyLog.log(lm, 2, "resolve_c_resolve", w1, w2);
 		boolean ok = true;
 		for (Integer u : w2.literal) {
 			if (Math.abs(u) != Math.abs(v) && w1.contains(-u)) {
@@ -69,6 +70,7 @@ public class PNSLearnReason extends ConflictSolutionQCDCL {
 			l = p.second;
 			if (c != null) {
 				w.addLiteral(f, c);
+				MyLog.log(lm, 2, "find unit in long distance resolution with depth", p.first, "unit literal", -p.second);
 				find = true;
 				break;
 			}

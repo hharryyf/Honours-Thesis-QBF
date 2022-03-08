@@ -102,16 +102,38 @@ public class QDeepPNSLearnNode {
 	
 	
 	public void expansion(TwoWatchedLiteralFormula f) {
-		if (this.isSolved() || f.evaluate() != -1) {
+		int val = f.evaluate();
+		if (this.isSolved() || val != -1) {
+			if (this.isSolved()) MyLog.log(lm, 2, "reach a solved node");
+			if (val != -1) {
+				if (val == 1) {
+					this.pn = 0;
+					this.dn = QDeepPNSBJNode.inf;
+					TwoWatchedLiteralFormula.truecount++;
+					GlobalReason.setReason((PNSLearnReason) f.getReason());
+				} else if (val == 0) {
+					this.pn = QDeepPNSBJNode.inf;
+					this.dn = 0;
+					TwoWatchedLiteralFormula.falsecount++;
+					GlobalReason.setReason((PNSLearnReason) f.getReason());
+				}
+				MyLog.log(lm, 2, "reach a SAT/UNSAT node");
+			}
 			return;
 		}
 		
+		if (!this.isTerminal()) MyLog.log(lm, 0, "Tree structure is wrong, try to expand non-leaf node");
+		MyLog.log(lm, 2, "branching variable", this.splitnode.getVal());
 		// peek a new quantifier
-		if (f.isassigned(this.splitnode.getVal())) this.splitnode = f.peek();
+		if (f.isassigned(this.splitnode.getVal())) {
+			this.splitnode = f.peek();
+			MyLog.log(lm, 2, "change branching variable to", this.splitnode);
+		}
 		// left split
 		f.set(this.splitnode.getVal());
 		f.simplify();
 		QDeepPNSLearnNode L = new QDeepPNSLearnNode(f, this.depth + 1);
+		MyLog.log(lm, 2, "create new node", L);
 		L.parent = this;
 		this.left = L;
 		ConflictSolution lreason = new PNSLearnReason(false), rreason = new PNSLearnReason(false);
@@ -124,6 +146,7 @@ public class QDeepPNSLearnNode {
 		f.simplify();
 		QDeepPNSLearnNode R = new QDeepPNSLearnNode(f, this.depth + 1);
 		R.parent = this;
+		MyLog.log(lm, 2, "create new node", R);
 		this.right = R;
 		if (this.right.isSolved()) {
 			rreason = f.getReason();
@@ -136,11 +159,13 @@ public class QDeepPNSLearnNode {
 			GlobalReason.setReason((PNSLearnReason) rreason);
 		} else if (((PNSLearnReason) lreason).status != PNSLearnReason.Status.unknown && ((PNSLearnReason) rreason).status != PNSLearnReason.Status.unknown) {
 			if (((PNSLearnReason) lreason).satisfied && ((PNSLearnReason) rreason).satisfied) {
+				MyLog.log(lm, 2, "resolve at end point-case 1");
 				lreason.resolve(rreason, this.splitnode.getVal(), f);
 				GlobalReason.setReason((PNSLearnReason) lreason);
 				ConflictSolution r = GlobalReason.GetReason();
 				((PNSLearnReason) r).status = PNSLearnReason.Status.pendingL;
 			} else if (!((PNSLearnReason) lreason).satisfied && !((PNSLearnReason) rreason).satisfied) {
+				MyLog.log(lm, 2, "resolve at end point-case 2");
 				lreason.resolve(rreason, this.splitnode.getVal(), f);
 				GlobalReason.setReason((PNSLearnReason) lreason);
 				ConflictSolution r = GlobalReason.GetReason();
@@ -162,9 +187,15 @@ public class QDeepPNSLearnNode {
 	}
 	
 	public QDeepPNSLearnNode MPN(TwoWatchedLiteralFormula f) {
-		if (this.isTerminal() || this.isSolved()) return null;
+		if (this.isTerminal() || this.isSolved()) {
+			if (this.isTerminal()) MyLog.log(lm, 2, "reach a terminal node");
+			if (this.isSolved()) MyLog.log(lm, 2, "reach a solved node");
+			return null;
+		}
+		
 		int val = f.evaluate();
 		if (val != -1) {
+			MyLog.log(lm, 2, "MPN is a solved node", f.assign.assignment);
 			if (val == 1) {
 				this.pn = 0;
 				this.dn = QDeepPNSBJNode.inf;
@@ -179,24 +210,27 @@ public class QDeepPNSLearnNode {
 			this.left = this.right = null;
 			return null;
 		}
-		
+		MyLog.log(lm, 2, "select MPN", this.splitnode.getVal(), "address", this);
 		int v = this.splitnode.getVal();
 		boolean Lass = f.assignlit(v), Rass = f.assignlit(-v);
 		if (Lass || Rass) {
+			MyLog.log(lm, 1, "Scholter method", Lass ? "left assign" : "right assign");
 			if (Lass) {
-				this.left = this.left.left;
-				this.right = this.left.right;
 				this.pn = this.left.pn;
 				this.dn = this.left.dn;
+				this.splitnode = this.left.splitnode;
 				this.deep = this.left.deep;
 				this.size = this.left.size;
+				this.right = this.left.right;
+				this.left = this.left.left;
 			} else {
-				this.left = this.right.left;
-				this.right = this.right.right;
 				this.pn = this.right.pn;
 				this.dn = this.right.dn;
+				this.splitnode = this.right.splitnode;
 				this.deep = this.right.deep;
 				this.size = this.right.size;
+				this.left = this.right.left;
+				this.right = this.right.right;
 			}
 			
 			if (!this.isTerminal()) {
@@ -224,8 +258,11 @@ public class QDeepPNSLearnNode {
 			MyLog.log(lm, 0, "no MPN!");
 		}
 		
+		if (ret.isSolved()) MyLog.log(lm, 0, "MPN is a solved node");
 		f.set(idx * this.splitnode.getVal());
 		f.simplify();
+		
+		MyLog.log(lm, 2, "get mpn address", ret);
 		return ret;
 	}
 	
@@ -252,6 +289,7 @@ public class QDeepPNSLearnNode {
 	public boolean backpropagation(TwoWatchedLiteralFormula f) {
 		if (this.isTerminal() || this.isSolved()) return false;
 		List<QDeepPNSLearnNode> child = new ArrayList<>();
+		MyLog.log(lm, 2, "back propagation", this.splitnode.getVal());
 		child.add(this.left);
 		child.add(this.right);
 		QDeepPNSLearnNode curr = null;
@@ -281,7 +319,6 @@ public class QDeepPNSLearnNode {
 			this.deep = curr.deep;
 		}
 		
-		// TODO add code here for pruning
 		if (!this.isSolved()) {
 			prun(f);
 		}
@@ -300,6 +337,7 @@ public class QDeepPNSLearnNode {
 				TwoWatchedLiteralFormula.falsecount++;
 			}
 		}
+		MyLog.log(lm, 2, this.pn, ", ", this.dn);
 		
 		return true;
 	}

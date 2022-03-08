@@ -659,7 +659,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			}
 			
 			ConflictSolution c = new PNSLearnReason(true);
-			((PNSLearnReason) c).status = PNSLearnReason.Status.pending;
+			((PNSLearnReason) c).status = PNSLearnReason.Status.pendingL;
 			c.addAssignment(f, ret);
 			MyLog.log(lm, 2, "model generation ", ret);
 			return c;
@@ -705,7 +705,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 		
 		ret.setId(this.formula.size());
 		this.formula.add(ret);
-		MyLog.log(lm, 2, "learned ", ret);
+		
 		int i = this.formula.size() - 1, j, cnt = 0;
 		for (j = 0 ; j < this.formula.get(i).existential.size() && cnt < 2; ++j) {
 			int v = this.formula.get(i).existential.get(j);
@@ -749,6 +749,8 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 		if (this.formula.get(i).watchedE.isEmpty()) {
 			MyLog.log(lm, 0, "fail to watch 2 literals: ", this.formula.get(i));
 		}
+		
+		MyLog.log(lm, 2, "learned ", ret);
 		//System.out.println("another literal " + l + " learn clause " + ret);
 	}
 }

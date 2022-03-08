@@ -20,7 +20,7 @@ public class MyLog {
 			return "[PBJ] ";
 		}
 		
-		return "[UNKNOWN] ";
+		return "[PL] ";
 	}
 	
 	public static String GetLevel(int level) {

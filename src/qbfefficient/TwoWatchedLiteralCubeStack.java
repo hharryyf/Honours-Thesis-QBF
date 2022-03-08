@@ -446,7 +446,7 @@ public class TwoWatchedLiteralCubeStack extends TwoWatchedLiteralStack {
 		
 		ret.setId(this.formula.size());
 		this.formula.add(ret);
-		MyLog.log(lm, 2, "learned cube: ", ret);
+		
 		int i = this.formula.size() - 1, j, cnt = 0;
 		for (j = 0 ; j < this.formula.get(i).universal.size() && cnt < 2; ++j) {
 			int v = this.formula.get(i).universal.get(j);
@@ -484,7 +484,7 @@ public class TwoWatchedLiteralCubeStack extends TwoWatchedLiteralStack {
 			}
 		}
 		
-		
+		MyLog.log(lm, 2, "learned cube: ", ret);
 		
 		if (this.formula.get(i).watchedU.isEmpty()) {
 			MyLog.log(lm, 0, "fail to watch 2 literals");

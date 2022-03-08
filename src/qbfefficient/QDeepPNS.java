@@ -91,6 +91,7 @@ public class QDeepPNS {
 		QDeepPNSLearnNode root = new QDeepPNSLearnNode(f, 1), curr = root;
 		int i = 0;
 		long tolvisited = 0;
+		// TwoWatchedLiteralFormula.max_node_in_memory = 10000;
 		Stack<TwoWatchedLiteralFormula> stk = new Stack<TwoWatchedLiteralFormula>();
 		final long start = System.currentTimeMillis();
 		boolean timeout = false;
@@ -125,6 +126,12 @@ public class QDeepPNS {
 			while (curr != null) {
 				int pn = curr.getPn(), dn = curr.getDn();
 				curr.backpropagation(fp);
+				MyLog.log(lm, 2, curr, root);
+				if (curr != root && curr.getParent() == null) {
+					MyLog.log(lm, 0, "Tree is disconnected");
+				} else {
+					MyLog.log(lm, 2, curr.getParent());
+				}
 				if (((PNSLearnReason)GlobalReason.GetReason()).status == PNSLearnReason.Status.unknown && pn == curr.getPn() && dn == curr.getDn()) break;
 				if (curr == root) {
 					((PNSLearnReason)GlobalReason.GetReason()).status = PNSLearnReason.Status.unknown;
