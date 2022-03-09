@@ -421,7 +421,8 @@ public class TwoWatchedLiteralCubeStack extends TwoWatchedLiteralStack {
 				this.varNegToid.get(-v).add(this.formula.size());
 			}
 			ret.addLiteral(v);
-			int level = f.decisionLevel(v);
+			int level = f.decisionLevel(v, false);
+			//MyLog.log(lm, 1, v, level, f.isassigned(v));
 			// System.out.println(v + " level= " + level);
 			if (f.isassigned(v) && mx < level) {
 				l = v;
@@ -446,6 +447,7 @@ public class TwoWatchedLiteralCubeStack extends TwoWatchedLiteralStack {
 		
 		ret.setId(this.formula.size());
 		this.formula.add(ret);
+		// MyLog.log(lm, 1, "find assigned level", mx, "literal", l);
 		
 		int i = this.formula.size() - 1, j, cnt = 0;
 		for (j = 0 ; j < this.formula.get(i).universal.size() && cnt < 2; ++j) {

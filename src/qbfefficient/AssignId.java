@@ -18,4 +18,8 @@ public class AssignId implements Comparable<AssignId> {
 		return (new Integer(id)).compareTo(new Integer(arg0.id));
 	}
 	
+	public String toString() {
+		return "(" + dimension + ", " + type + ", " + id + ")";
+	}
+	
 }

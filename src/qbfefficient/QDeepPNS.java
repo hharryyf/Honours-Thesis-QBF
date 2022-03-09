@@ -98,6 +98,14 @@ public class QDeepPNS {
 		while (ResultGenerator.getInstance().getLiveNode() <= TwoWatchedLiteralFormula.max_node_in_memory * 2 
 				&& i <= 4 * TwoWatchedLiteralFormula.max_node_in_memory 
 				&& !root.isSolved()) {
+			/*
+			if (i > 22000) TwoWatchedLiteralFormula.maxLevel = 2;
+			else {
+				TwoWatchedLiteralFormula.maxLevel = 0;
+			}
+			
+			if (i > 22050) return -1;
+			*/
 			if (i % 1000 == 0) {
 				MyLog.log(lm, pndnlevel, "Iteration #" + i + " pn = " + root.getPn() + " dn= " + root.getDn());
 			}
@@ -132,7 +140,7 @@ public class QDeepPNS {
 				} else {
 					MyLog.log(lm, 2, curr.getParent());
 				}
-				if (((PNSLearnReason)GlobalReason.GetReason()).status == PNSLearnReason.Status.unknown && pn == curr.getPn() && dn == curr.getDn()) break;
+				if (((PNSLearnReason)GlobalReason.GetReason()).status == PNSLearnReason.Status.unknown && pn == curr.getPn() && dn == curr.getDn() && !curr.isSolved()) break;
 				if (curr == root) {
 					((PNSLearnReason)GlobalReason.GetReason()).status = PNSLearnReason.Status.unknown;
 					break;
@@ -146,7 +154,8 @@ public class QDeepPNS {
 				stk.pop();
 				tolvisited++;
 			}
-					
+			
+			if (curr == root) f.simplify();
 			i++;
 			Result rr = ResultGenerator.getInstance();
 			rr.setIteration(1 + rr.getIteration());

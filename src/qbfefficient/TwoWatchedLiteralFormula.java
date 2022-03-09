@@ -27,7 +27,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		BT, BJ, CDCLSBJ, QCDCL, PBJ, PL
 	}
 	// static command-line-argument region
-	public static int maxLevel = 2;
+	public static int maxLevel = 1;
 	public static int maxclause = 2500, maxcube = 500;
 	public static long setcount = 0, clause_iter = 0, truecount = 0, falsecount = 0, bcpcount = 0, plecount = 0, rescount = 0, trueterminal = 0, falseterminal = 0;
 	public static boolean timer = true, depend = false, debug = false, rand = false, vsids = false, PLErule = true;
@@ -35,7 +35,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	public static int max_node_in_memory = 3000000, time_limit = 900;
 	public static long prunE = 0, prunU = 0;
 	public static int res_level = 3;
-	public static Method solvertype = Method.QCDCL;
+	public static Method solvertype = Method.PL;
 	public TwoWatchedLiteralFormula(int n) {
 		this.varsize = n;
 		this.tempunit = new TreeSet<>();
@@ -143,8 +143,10 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		return this.quantifier.depth[v];
 	}
 	
-	protected int decisionLevel(int v) {
-		return this.assign.literal.getOrDefault(-v, -1);
+	protected int decisionLevel(int v, boolean clause) {
+		if (clause)
+			return this.assign.literal.getOrDefault(-v, -1);
+		return this.assign.literal.getOrDefault(v, -1);
 	}
 	
 	private void undoBJ(ConflictBJ reason) {
@@ -653,6 +655,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		AssignId cid = this.assign.getUnit(v);
 		if (cid == null) return null;
 		if (cid.type == 'U' && cid.id != -1) {
+			MyLog.log(lm, 2, "current assignment", this.assign.assignment);
 			MyLog.log(lm, 2, "long distance resolution with ", this.formula.get(cid.dimension).formula.get(cid.id) , " unit: ", v, " id= ", cid.id);
 			return this.formula.get(cid.dimension).formula.get(cid.id);
 		}

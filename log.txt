@@ -1,0 +1,36 @@
+[12:42:51.926] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[12:42:53.469] [PL] [2_WL_FORMULA] [INFO]: learned unit existential  -126 
+[12:42:53.735] [PL] [2_WL_FORMULA] [INFO]: learned unit existential  -40 
+[12:49:11.892] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[12:49:40.688] [PL] [2_WL_FORMULA] [INFO]: learned unit existential  -419 
+[12:49:40.744] [PL] [2_WL_FORMULA] [INFO]: learned unit existential  -123 
+[13:02:41.815] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[13:02:41.841] [PL] [2_WL_FORMULA] [INFO]: learned unit existential  1 
+[13:02:41.841] [PL] [2_WL_FORMULA] [INFO]: learned unit existential  1 
+[13:02:42.060] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 1959 
+[13:02:42.060] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 170 #ass= 36283 #clause iterate= 41241 
+[13:02:42.061] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  34942 #ple=  0 
+[13:02:42.065] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 1.1366166905523096 
+[13:02:42.065] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  0  Universal Pruning:  0 number of resolutions 0 
+[13:02:42.065] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 341 total SAT nodes:  154  total UNSAT nodes:  48 total SAT terminal nodes:  20 total UNSAT terminal nodes:  33 
+[13:02:42.066] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: #learned clause=  27  #learned cube=  11 
+[13:02:42.066] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: total time 0.244 
+[13:02:42.066] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[13:02:52.294] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[13:02:52.313] [PL] [2_WL_FORMULA] [INFO]: learned unit existential  1 
+[13:02:52.314] [PL] [2_WL_FORMULA] [INFO]: learned unit existential  1 
+[13:11:33.075] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[13:11:33.109] [PL] [2_WL_FORMULA] [INFO]: learned unit existential  1 
+[13:11:33.109] [PL] [2_WL_FORMULA] [INFO]: learned unit existential  1 
+[13:11:42.429] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 288355 
+[13:11:42.430] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 11731 #ass= 1081929 #clause iterate= 987239 
+[13:11:42.430] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  914395 #ple=  0 
+[13:11:42.433] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.9124795504330224 
+[13:11:42.434] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  180  Universal Pruning:  445 number of resolutions 0 
+[13:11:42.434] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 23441 total SAT nodes:  10008  total UNSAT nodes:  4048 total SAT terminal nodes:  1925 total UNSAT terminal nodes:  2041 
+[13:11:42.434] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: #learned clause=  280  #learned cube=  0 
+[13:11:42.434] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: total time 9.354 
+[13:11:42.434] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[13:12:18.603] [PL] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[13:12:18.638] [PL] [2_WL_FORMULA] [INFO]: learned unit existential  1 
+[13:12:18.639] [PL] [2_WL_FORMULA] [INFO]: learned unit existential  1 

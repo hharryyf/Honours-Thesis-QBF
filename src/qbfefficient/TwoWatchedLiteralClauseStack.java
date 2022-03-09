@@ -680,7 +680,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 				this.varNegToid.get(-v).add(this.formula.size());
 			}
 			ret.addLiteral(v);
-			int level = f.decisionLevel(v);
+			int level = f.decisionLevel(v, true);
 			// System.out.println(v + " level= " + level);
 			if (f.isassigned(v) && mx < level) {
 				l = v;
