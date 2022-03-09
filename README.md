@@ -34,3 +34,4 @@ It seems like it is necessary to decide how to compute a more accurate set of re
 
 13. 17/2/2022: pure-literal-elimination for deeppns/dfs based backjumping solver added, significantly improved the deeppns + backjumping solver
 
+14. 9/3/2022: deeppns + qcdcl solver implemented, it's correct, but not competitive with current state of art, might be competitive with 2004 solvers.
