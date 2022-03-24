@@ -18,9 +18,13 @@ public class MyLog {
 			return "[QCDCL] ";
 		} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PBJ) {
 			return "[PBJ] ";
+		}  else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PL) {
+			return "[PL] ";
+		} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.P_CDCLSBJ) {
+			return "[PCDCLSBJ] ";
 		}
 		
-		return "[PL] ";
+		return "[Preprocess] ";
 	}
 	
 	public static String GetLevel(int level) {

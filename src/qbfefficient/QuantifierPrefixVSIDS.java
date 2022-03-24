@@ -98,6 +98,11 @@ public class QuantifierPrefixVSIDS {
 		return this.quantifier[ret.second];
 	}
 	
+	public int peek_depth_remaining(Quantifier q) {
+		int d = this.depth[q.getVal()];
+		return this.heuristic.get(d).size();
+	}
+	
 	/**
 	 * 
 	 * @param q

@@ -16,7 +16,7 @@ public class QDeepPNSBJNode {
 	int pn, dn, depth, size;
 	double deep;
 	boolean valid = false;
-	public static int inf = 120000000;
+	public static int inf = 800000000;
 	public QDeepPNSBJNode(TwoWatchedLiteralFormula f, int depth) {
 		this.visited = 1;
 		this.deep = 1.0 / depth;
@@ -41,10 +41,12 @@ public class QDeepPNSBJNode {
 			this.pn = 1;
 			this.dn = 1;
 			this.splitnode = f.peek();
+			int d = 2;
+			if (TwoWatchedLiteralFormula.power) d = f.heuristic(this.splitnode);
 			if (this.splitnode.isMax()) {
-				this.dn = 2;
+				this.dn = d;
 			} else {
-				this.pn = 2;
+				this.pn = d;
 			}
 		}
 		

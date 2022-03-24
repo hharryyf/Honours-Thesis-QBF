@@ -469,12 +469,15 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			return ret;
 		} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ 
 				|| TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL
-				|| TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PL) {
+				|| TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PL
+				|| TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.P_CDCLSBJ) {
 			ConflictSolution ret = null;
 			if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
 				ret = new ConflictCDCLSBJ(false);
 			} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL) {
 				ret = new ConflictSolutionQCDCL(false);
+			} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.P_CDCLSBJ) {
+				ret = new ConflictSolutionCDCLSBJPNS(false);
 			} else {
 				ret = new PNSLearnReason(false);
 				((PNSLearnReason) ret).status = PNSLearnReason.Status.pending;
@@ -482,6 +485,8 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			
 			if (!this.contradict.isEmpty()) {
 				TwoWatchedLiteralClause C = this.formula.get(contradict.first());
+				//System.out.println(f.assign.assignment);
+				//System.out.println(C);
 				// and clear out the conflict
 				ret.addLiteral(this.f, C);
 			} else if (!this.conflictunit.isEmpty()) {
@@ -540,7 +545,7 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			ConflictSolution c = new ConflictBJ(true);
 			return c;
 		} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ
-			|| TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PBJ) {
+			|| TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PBJ || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.P_CDCLSBJ) {
 			// learning strategy is Backjumping
 			HashMap<Integer, Integer> ass = new HashMap<>(f.assign.literal);
 			int mx = -1;
@@ -571,10 +576,13 @@ public class TwoWatchedLiteralClauseStack extends TwoWatchedLiteralStack {
 			if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ
 				|| TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PBJ) {
 				c = new ConflictBJ(true);
-			} else {
+			} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
 				c = new ConflictCDCLSBJ(true);
+			} else {
+				c = new ConflictSolutionCDCLSBJPNS(true);
 			}
 			c.addAssignment(f, ret);
+			MyLog.log(lm, 2, "initialize reason for sat ", c, "partial assignment", f.assign.assignment);
 			return c;
 		} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL) {
 			HashMap<Integer, Integer> ass = new HashMap<>(f.assign.literal);

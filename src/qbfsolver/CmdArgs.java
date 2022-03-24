@@ -24,13 +24,22 @@ public class CmdArgs {
 		return this.R;
 	}
 	
-	public void setR() {
-		int iter = ResultGenerator.getInstance().getNode();
-		this.R = 0.0;
-		if (ResultGenerator.getInstance().getLiveNode() >= TwoWatchedLiteralFormula.max_node_in_memory) {
-			return;
+	public void setR(boolean ok) {
+		if (ok) {
+			int iter = ResultGenerator.getInstance().getNode();
+			this.R = 0.0;
+			if (ResultGenerator.getInstance().getLiveNode() >= TwoWatchedLiteralFormula.max_node_in_memory) {
+				return;
+			}
+			if (((iter / 10000) & 1) == 1) this.R= 0.5;
+		} else {
+			int iter = ResultGenerator.getInstance().getNode();
+			this.R = 0.0;
+			if (ResultGenerator.getInstance().getLiveNode() >= TwoWatchedLiteralFormula.max_node_in_memory) {
+				return;
+			}
+			if (((iter / 10000) & 1) == 1) this.R= 1.0;
 		}
-		if (((iter / 10000) & 1) == 1) this.R= 0.5;
 	}
 
 	

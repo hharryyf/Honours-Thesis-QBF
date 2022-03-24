@@ -8,15 +8,16 @@ import qbfexpression.Quantifier;
 import qbfsolver.Result;
 import qbfsolver.ResultGenerator;
 
-public class QDeepPNSLearnNode {
-	protected static String lm = new String("QDeepPNSLearnNode");
+public class QDeepPNSCDCLSBJNode {
+	protected static String lm = new String("QDeepPNSCDCLSBJNode");
 	Quantifier splitnode;
 	int visited = 0;
-	QDeepPNSLearnNode left = null, right = null, parent = null;
+	ConflictSolution reason;
+	QDeepPNSCDCLSBJNode left = null, right = null, parent = null;
 	int pn, dn, depth, size;
 	double deep;
 	public static int inf = 120000000;
-	public QDeepPNSLearnNode(TwoWatchedLiteralFormula f, int depth) {
+	public QDeepPNSCDCLSBJNode(TwoWatchedLiteralFormula f, int depth) {
 		this.visited = 1;
 		this.deep = 1.0 / depth;
 		this.depth = depth;
@@ -46,7 +47,7 @@ public class QDeepPNSLearnNode {
 		this.size = 1;
 	}
 	
-	public QDeepPNSLearnNode getParent() {
+	public QDeepPNSCDCLSBJNode getParent() {
 		return this.parent;
 	}
 	
@@ -111,12 +112,15 @@ public class QDeepPNSLearnNode {
 					this.pn = 0;
 					this.dn = QDeepPNSBJNode.inf;
 					TwoWatchedLiteralFormula.truecount++;
-					GlobalReason.setReason((PNSLearnReason) f.getReason());
+					//GlobalReason.setReason((PNSLearnReason) f.getReason());
+					this.reason = f.getReason();
+				
 				} else if (val == 0) {
 					this.pn = QDeepPNSBJNode.inf;
 					this.dn = 0;
 					TwoWatchedLiteralFormula.falsecount++;
-					GlobalReason.setReason((PNSLearnReason) f.getReason());
+					// GlobalReason.setReason((PNSLearnReason) f.getReason());
+					this.reason = f.getReason();
 				}
 				MyLog.log(lm, 2, "reach a SAT/UNSAT node");
 			}
@@ -133,61 +137,28 @@ public class QDeepPNSLearnNode {
 		// left split
 		f.set(this.splitnode.getVal());
 		f.simplify();
-		QDeepPNSLearnNode L = new QDeepPNSLearnNode(f, this.depth + 1);
+		QDeepPNSCDCLSBJNode L = new QDeepPNSCDCLSBJNode(f, this.depth + 1);
 		MyLog.log(lm, 2, "create new node", L);
 		L.parent = this;
 		this.left = L;
-		ConflictSolution lreason = new PNSLearnReason(false), rreason = new PNSLearnReason(false);
 		if (this.left.isSolved()) {
-			lreason = f.getReason();
+			this.left.reason = f.getReason();
 		}
-		f.undo(lreason);
+		f.undo(null);
 		// right split
 		f.set(-this.splitnode.getVal());
 		f.simplify();
-		QDeepPNSLearnNode R = new QDeepPNSLearnNode(f, this.depth + 1);
+		QDeepPNSCDCLSBJNode R = new QDeepPNSCDCLSBJNode(f, this.depth + 1);
 		R.parent = this;
 		MyLog.log(lm, 2, "create new node", R);
 		this.right = R;
 		if (this.right.isSolved()) {
-			rreason = f.getReason();
+			this.right.reason = f.getReason();
 		}
-		f.undo(rreason);
-		// TODO, calculate the reason for the root
-		if (((PNSLearnReason) lreason).status == PNSLearnReason.Status.pending || ((PNSLearnReason) lreason).status == PNSLearnReason.Status.pendingL) {
-			GlobalReason.setReason((PNSLearnReason) lreason);
-		} else if (((PNSLearnReason) rreason).status == PNSLearnReason.Status.pending || ((PNSLearnReason) rreason).status == PNSLearnReason.Status.pendingL) {
-			GlobalReason.setReason((PNSLearnReason) rreason);
-		} else if (((PNSLearnReason) lreason).status != PNSLearnReason.Status.unknown && ((PNSLearnReason) rreason).status != PNSLearnReason.Status.unknown) {
-			if (((PNSLearnReason) lreason).satisfied && ((PNSLearnReason) rreason).satisfied) {
-				MyLog.log(lm, 3, "resolve at end point-case 1");
-				lreason.resolve(rreason, this.splitnode.getVal(), f);
-				GlobalReason.setReason((PNSLearnReason) lreason);
-				ConflictSolution r = GlobalReason.GetReason();
-				((PNSLearnReason) r).status = PNSLearnReason.Status.pendingL;
-			} else if (!((PNSLearnReason) lreason).satisfied && !((PNSLearnReason) rreason).satisfied) {
-				MyLog.log(lm, 3, "resolve at end point-case 2");
-				lreason.resolve(rreason, this.splitnode.getVal(), f);
-				GlobalReason.setReason((PNSLearnReason) lreason);
-				ConflictSolution r = GlobalReason.GetReason();
-				((PNSLearnReason) r).status = PNSLearnReason.Status.pendingL;
-			} else if (((PNSLearnReason) lreason).satisfied && !((PNSLearnReason) rreason).satisfied) {
-				if (f.isMax(this.splitnode.getVal())) {
-					GlobalReason.setReason((PNSLearnReason) lreason);
-				} else {
-					GlobalReason.setReason((PNSLearnReason) rreason);
-				}
-			} else {
-				if (f.isMax(this.splitnode.getVal())) {
-					GlobalReason.setReason((PNSLearnReason) rreason);
-				} else {
-					GlobalReason.setReason((PNSLearnReason) lreason);
-				}
-			}
-		}
+		f.undo(null);
 	}
 	
-	public QDeepPNSLearnNode MPN(TwoWatchedLiteralFormula f) {
+	public QDeepPNSCDCLSBJNode MPN(TwoWatchedLiteralFormula f) {
 		if (this.isTerminal() || this.isSolved()) {
 			if (this.isTerminal()) MyLog.log(lm, 2, "MPN reach a terminal node", this);
 			if (this.isSolved()) MyLog.log(lm, 2, "MPN reach a solved node", this);
@@ -201,12 +172,12 @@ public class QDeepPNSLearnNode {
 				this.pn = 0;
 				this.dn = QDeepPNSBJNode.inf;
 				TwoWatchedLiteralFormula.truecount++;
-				GlobalReason.setReason((PNSLearnReason) f.getReason());
+				this.reason = f.getReason();
 			} else if (val == 0) {
 				this.pn = QDeepPNSBJNode.inf;
 				this.dn = 0;
 				TwoWatchedLiteralFormula.falsecount++;
-				GlobalReason.setReason((PNSLearnReason) f.getReason());
+				this.reason = f.getReason();
 			}
 			this.left = this.right = null;
 			return null;
@@ -219,6 +190,7 @@ public class QDeepPNSLearnNode {
 			if (Lass) {
 				this.pn = this.left.pn;
 				this.dn = this.left.dn;
+				this.reason = this.left.reason;
 				this.splitnode = this.left.splitnode;
 				this.deep = this.left.deep;
 				this.size = this.left.size;
@@ -227,6 +199,7 @@ public class QDeepPNSLearnNode {
 			} else {
 				this.pn = this.right.pn;
 				this.dn = this.right.dn;
+				this.reason = this.right.reason;
 				this.splitnode = this.right.splitnode;
 				this.deep = this.right.deep;
 				this.size = this.right.size;
@@ -242,7 +215,7 @@ public class QDeepPNSLearnNode {
 			return this;
 		}
 		
-		QDeepPNSLearnNode ret = null;
+		QDeepPNSCDCLSBJNode ret = null;
 		int idx = 0;
 		if (ret == null && !this.left.isSolved()) {
 			ret = this.left;
@@ -277,19 +250,84 @@ public class QDeepPNSLearnNode {
 	}
 	
 	
-	private void prun(TwoWatchedLiteralFormula f) {
-		PNSLearnReason reason = (PNSLearnReason)GlobalReason.GetReason();
-		if (reason.status != PNSLearnReason.Status.unknown && reason.status != PNSLearnReason.Status.lock) {
-			if (reason.satisfied) {
-				this.pn = 0;
-				this.dn = QDeepPNSBJNode.inf;
-				if (!f.isMax(this.splitnode.getVal())) TwoWatchedLiteralFormula.prunU++;
+	private void prun(TwoWatchedLiteralFormula f, ConflictSolution L, ConflictSolution R) {
+		ConflictSolutionCDCLSBJPNS lreason = cast(L), rreason = cast(R);
+		MyLog.log(lm, 2, "resolve ", lreason, rreason, lreason != null ? lreason.satisfied : "Unknown", rreason != null ? rreason.satisfied : "Unknown");
+		if (lreason == null && rreason == null) return;
+		if (lreason != null && rreason == null) {
+			// check if the lreason can produce pruning
+			if (lreason.satisfied) {
+				if (this.splitnode.isMax() || (!this.splitnode.isMax() && !lreason.contains(this.splitnode.getVal()))) {
+					this.reason = lreason;
+					this.setTrue();
+				}
 			} else {
-				this.dn = 0;
-				this.pn = QDeepPNSBJNode.inf;
-				if (f.isMax(this.splitnode.getVal())) TwoWatchedLiteralFormula.prunE++;
+				if (!this.splitnode.isMax() || (this.splitnode.isMax() && !lreason.contains(-this.splitnode.getVal()))) {
+					this.reason = lreason;
+					this.setFalse();
+				}
+			}
+		} else if (lreason == null && rreason != null) {
+			if (rreason.satisfied) {
+				if (this.splitnode.isMax() || (!this.splitnode.isMax() && !rreason.contains(-this.splitnode.getVal()))) {
+					this.reason = rreason;
+					this.setTrue();
+				}
+			} else {
+				if (!this.splitnode.isMax() || (this.splitnode.isMax() && !rreason.contains(this.splitnode.getVal()))) {
+					this.reason = rreason;
+					this.setFalse();
+				}
+			}
+		} else {
+			if (lreason.satisfied && !rreason.satisfied) {
+				if (this.splitnode.isMax()) {
+					this.reason = lreason;
+				} else {
+					this.reason = rreason;
+				}
+			} else if (!lreason.satisfied && rreason.satisfied) {
+				if (this.splitnode.isMax()) {
+					this.reason = rreason;
+				} else {
+					this.reason = lreason;
+				}
+			} else if (lreason.satisfied && rreason.satisfied) {
+				if (this.splitnode.isMax()) {
+					this.reason = lreason;
+				} else {
+					if (!lreason.contains(this.splitnode.getVal())) {
+						this.reason = lreason;
+					} else if (!rreason.contains(-this.splitnode.getVal())) {
+						this.reason = rreason;
+					} else {
+						lreason.resolve(rreason, this.splitnode.getVal(), f);
+						this.reason = lreason;
+					}
+				}
+			} else {
+				if (!this.splitnode.isMax()) {
+					this.reason = lreason;
+				} else {
+					if (!lreason.contains(-this.splitnode.getVal())) {
+						this.reason = lreason;
+					} else if (!rreason.contains(this.splitnode.getVal())) {
+						this.reason = rreason;
+					} else {
+						lreason.resolve(rreason, this.splitnode.getVal(), f);
+						this.reason = lreason;
+					}
+				}
 			}
 		}
+		
+		MyLog.log(lm, 2, "result", this.reason, f.assign.assignment);
+		// System.out.println("resolve" + L + " :: " + R + " get: " + this.reason + " split node: " + this.splitnode.getVal());
+	}
+	
+	private ConflictSolutionCDCLSBJPNS cast(ConflictSolution r) {
+		if (r == null) return null;
+		return (ConflictSolutionCDCLSBJPNS) r;
 	}
 	
 	/**
@@ -298,15 +336,15 @@ public class QDeepPNSLearnNode {
 	 */
 	public boolean backpropagation(TwoWatchedLiteralFormula f) {
 		if (this.isTerminal() || this.isSolved()) return false;
-		List<QDeepPNSLearnNode> child = new ArrayList<>();
+		List<QDeepPNSCDCLSBJNode> child = new ArrayList<>();
 		MyLog.log(lm, 3, "back propagation", this.splitnode.getVal());
 		child.add(this.left);
 		child.add(this.right);
-		QDeepPNSLearnNode curr = null;
+		QDeepPNSCDCLSBJNode curr = null;
 		if (this.splitnode.isMax()) {
 			this.pn = child.get(0).pn;
 			this.dn = 0;
-			for (QDeepPNSLearnNode c : child) {
+			for (QDeepPNSCDCLSBJNode c : child) {
 				this.pn = Math.min(this.pn, c.getPn());
 				this.dn += c.getDn();
 				if ((curr == null && !c.isSolved()) || (curr != null && !c.isSolved() && c.dpn() <= curr.dpn()))  {
@@ -316,7 +354,7 @@ public class QDeepPNSLearnNode {
 		} else {
 			this.pn = 0;
 			this.dn = child.get(0).dn;
-			for (QDeepPNSLearnNode c : child) {
+			for (QDeepPNSCDCLSBJNode c : child) {
 				this.pn += c.getPn();
 				this.dn = Math.min(this.dn, c.getDn());
 				if ((curr == null && !c.isSolved()) || (curr != null && !c.isSolved() && c.dpn() <= curr.dpn())) {
@@ -329,8 +367,43 @@ public class QDeepPNSLearnNode {
 			this.deep = curr.deep;
 		}
 		
-		if (!this.isSolved()) {
-			prun(f);
+		ConflictSolution L = null;
+		ConflictSolution R = null;
+		
+		if (this.left.reason != null) {
+			f.set(this.splitnode.getVal());
+			f.simplify();
+			if (f.evaluate() != -1) {
+				L = f.getReason();
+				MyLog.log(lm, 2, "we meet an UNSAT node left");
+			} else {
+				L = cast(this.left.reason).duplicate();
+				MyLog.log(lm, 2, "we meet a reason internally left");
+			}
+			f.undo(L);
+		}
+		
+		if (this.right.reason != null) {
+			f.set(-this.splitnode.getVal());
+			f.simplify();
+			if (f.evaluate() != -1) {
+				R = f.getReason();
+				MyLog.log(lm, 2, "we meet an UNSAT node right");
+			} else {
+				R = cast(this.right.reason).duplicate();
+				MyLog.log(lm, 2, "we meet a reason internally right");
+			}
+			f.undo(R);
+		}
+		
+		boolean ok = this.isSolved();
+		prun(f, L, R);
+		if (!ok && this.isSolved()) {
+			if (this.splitnode.isMax()) {
+				TwoWatchedLiteralFormula.prunE += 1;
+			} else {
+				TwoWatchedLiteralFormula.prunU += 1;
+			}
 		}
 		
 		this.size = this.left.size + this.right.size + 1;

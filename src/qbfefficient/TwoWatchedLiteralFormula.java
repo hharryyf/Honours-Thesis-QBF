@@ -2,6 +2,7 @@ package qbfefficient;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -24,18 +25,19 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	protected Set<Pair<Integer, Integer>> tempunit;
 	private boolean locked = false;
 	public static enum Method {
-		BT, BJ, CDCLSBJ, QCDCL, PBJ, PL
+		BT, BJ, CDCLSBJ, QCDCL, PBJ, PL, PLPRE_QCDCL, PLPRE_BJ, P_CDCLSBJ
 	}
 	// static command-line-argument region
 	public static int maxLevel = 1;
 	public static int maxclause = 2500, maxcube = 500;
 	public static long setcount = 0, clause_iter = 0, truecount = 0, falsecount = 0, bcpcount = 0, plecount = 0, rescount = 0, trueterminal = 0, falseterminal = 0;
-	public static boolean timer = true, depend = false, debug = false, rand = false, vsids = false, PLErule = true;
+	public static boolean timer = true, depend = false, debug = false, rand = false, vsids = false, PLErule = false, preprocess = false;
+	public static boolean power = false;
 	public static int max_clause_length = 50, max_cube_length = 50;
-	public static int max_node_in_memory = 3000000, time_limit = 900;
+	public static int max_node_in_memory = 3000000, time_limit = 900, pre_process_time_limit = 150;
 	public static long prunE = 0, prunU = 0;
-	public static int res_level = 3;
-	public static Method solvertype = Method.PL;
+	public static int res_level = 3, learn_count = 0;
+	public static Method solvertype = Method.P_CDCLSBJ;
 	public TwoWatchedLiteralFormula(int n) {
 		this.varsize = n;
 		this.tempunit = new TreeSet<>();
@@ -111,18 +113,25 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 			if (c.size() == 1) {
 				MyLog.log(lm, 1, "learned unit existential ", c.get(0));
 				this.permanantUnit.add(c.get(0));
+				TwoWatchedLiteralFormula.learn_count++;
 				return;
 			}
 			if (TwoWatchedLiteralFormula.maxclause == this.formula.get(1).formula.size()  || c.size() > max_clause_length) return;
 			this.formula.get(1).learn(c);
+			TwoWatchedLiteralFormula.learn_count++;
 		} else {
+			// we don't actually learn any cube when doing preprocessing
+			if (preprocess) return;
+			
 			if (c.size() == 1) {
+				TwoWatchedLiteralFormula.learn_count++;
 				this.permanantUnit.add(c.get(0));
 				MyLog.log(lm, 1, "learned unit universal ", c.get(0));
 				return;
 			}
 			if (TwoWatchedLiteralFormula.maxcube == this.formula.get(2).formula.size() || c.size() > max_cube_length) return;
 			this.formula.get(2).learn(c);
+			TwoWatchedLiteralFormula.learn_count++;
 		}
 	}
 	
@@ -247,6 +256,57 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		if (reason.size() == 0 && !reason.satisfied) {
 			MyLog.log(lm, 1, "empty clause learned");
 		} else if (reason.size() == 0 && reason.satisfied) {
+			MyLog.log(lm, 1, "empty reason for satisfiability derived");
+		}
+	}
+	
+	private void undoCDCLSBJPNS(ConflictSolutionCDCLSBJPNS reason) {
+		while (!this.assign.literal.isEmpty() && this.assign.peek().second.type != 'N') {
+			Pair<Integer, AssignId> pair = this.assign.unassign();
+			if (reason != null) {
+				MyLog.log(lm, 2, "propagate reason: ", reason, " split literal: ", pair.first, " reason type: ", reason.isSolution());
+			}
+			if (reason != null && !reason.isSolution()) {
+				if (reason.contains(-pair.first)) {
+					ConflictSolution other = new ConflictSolutionCDCLSBJPNS(false);
+					if (pair.second.id == -1) {
+						List<Integer> vc = new ArrayList<>();
+						vc.add(pair.first);
+						other.addAssignment(this, vc);
+						reason.resolve(other, pair.first, this);
+						
+					} else {
+						other.addLiteral(this, this.formula.get(pair.second.dimension).formula.get(pair.second.id));
+						reason.resolve(other, pair.first, this);
+					}
+				}
+			}
+			this.quantifier.insert(pair.first);
+			this.formula.get(0).unassign(pair.first);
+			this.formula.get(1).unassign(pair.first);
+		}
+		
+		if (!this.assign.literal.isEmpty()) {
+			Pair<Integer, AssignId> pair = this.assign.unassign();
+			boolean learned = true;
+			List<Integer> ret = null;
+			if (reason != null) {
+				learned = (((ConflictSolutionCDCLSBJPNS) reason).getRescount() > 0)&& reason.isUIP(this, pair.first);
+				if (learned) {
+					ret = reason.allLiteral();
+				}
+			}
+			this.quantifier.insert(pair.first);
+			this.formula.get(0).unassign(pair.first);
+			this.formula.get(1).unassign(pair.first);
+			if (learned && ret != null) {
+				this.learn(ret, true);
+			}
+		}
+		
+		if (reason != null && reason.size() == 0 && !reason.satisfied) {
+			MyLog.log(lm, 1, "empty clause learned");
+		} else if (reason != null && reason.size() == 0 && reason.satisfied) {
 			MyLog.log(lm, 1, "empty reason for satisfiability derived");
 		}
 	}
@@ -432,6 +492,12 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 			undoPBJ((ConflictBJ) reason);
 		} else if (TwoWatchedLiteralFormula.solvertype == Method.PL) {
 			undoPL((PNSLearnReason) reason);
+		} else if (TwoWatchedLiteralFormula.solvertype == Method.P_CDCLSBJ) {
+			if (reason == null) {
+				undoCDCLSBJPNS(null);
+			} else {
+				undoCDCLSBJPNS((ConflictSolutionCDCLSBJPNS) reason);
+			}
 		}
 	}
 	
@@ -560,6 +626,14 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 		return this.quantifier.peek();
 	}
 	
+	public int heuristic(Quantifier q) {
+		int re = this.quantifier.peek_depth_remaining(q);
+		if (re < 1) return 2;
+		if (re > 7) return 128;
+		return 1 << re;
+	}
+	
+	
 	@Override
 	public boolean isMax(int v) {
 		if (v < 0) v = -v;
@@ -678,6 +752,56 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	}
 	
 	public String toString() {
-		return null;
+		List<List<Integer>> clause = new ArrayList<>();
+		StringBuilder sb = new StringBuilder();
+		int tol_var = this.qlist.size();
+		for (Integer v : this.permanantUnit) {
+			List<Integer> c = new ArrayList<>();
+			c.add(v);
+			clause.add(c);
+		}
+		
+		
+		for (int d = 0 ; d < 2; ++d) {
+			for (int i = 0 ; i < this.formula.get(d).formula.size(); ++i) {
+				if (d == 1 && this.formula.get(d).formula.get(i).existential.size() + this.formula.get(d).formula.get(i).universal.size() > 6) continue;
+				List<Integer> c = new ArrayList<>();
+				for (int j = 0 ; j < this.formula.get(d).formula.get(i).existential.size(); ++j) {
+					c.add(this.formula.get(d).formula.get(i).existential.get(j));
+				}
+				
+				for (int j = 0 ; j < this.formula.get(d).formula.get(i).universal.size(); ++j) {
+					c.add(this.formula.get(d).formula.get(i).universal.get(j));
+				}
+				clause.add(c);
+			}
+		}
+		
+		Collections.sort(clause, new Comparator<List<Integer>>() {
+
+			@Override
+			public int compare(List<Integer> arg0, List<Integer> arg1) {
+				Integer v1 = arg0.size();
+				return v1.compareTo(arg1.size());
+			}
+			
+		});
+		
+		sb.append("p cnf ");
+		sb.append(tol_var + " " + clause.size() + "\n");
+		for (int i = 0 ; i < qlist.size(); ++i) {
+			if (qlist.get(i).isMax()) {
+				sb.append("e " + qlist.get(i).getVal() + " 0\n");
+			} else {
+				sb.append("a " + qlist.get(i).getVal() + " 0\n");
+			}
+		}
+		for (List<Integer> c : clause) {
+			for (Integer lit : c) {
+				sb.append(lit + " ");
+			}
+			sb.append(0 + "\n");
+		}
+		return sb.toString();
 	}
 }

@@ -3,7 +3,7 @@ package qbfsolver;
 public class ResultGenerator {
 	private static Result ret = null;
 	private static CmdArgs cmd = null;
-	public static boolean satsolver = true;
+	public static boolean satsolver = false;
 	public static boolean cdcl = false;
 	public static boolean learnpreprocess = false;
 	public static boolean nopure = false;

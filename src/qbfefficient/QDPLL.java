@@ -1,5 +1,7 @@
 package qbfefficient;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -193,9 +195,12 @@ public class QDPLL {
 			return new Pair<>(f.getReason(), false);
 		}
 		if (ret == 1) return new Pair<>(f.getReason(), true);
+		Random rd = new Random();
+		int idx = rd.nextInt(2) == 1 ? 1 : -1;
+		if (!TwoWatchedLiteralFormula.rand) idx = 1;
 		Quantifier q = f.peek();
 		if (q.isMax()) {
-			f.set(q.getVal());
+			f.set(idx * q.getVal());
 			f.simplify();
 			Pair<ConflictSolution, Boolean> res = backjumping(f, d + 1);
 			f.undo(res.first);
@@ -207,7 +212,7 @@ public class QDPLL {
 				res.first.drop(null, q.getVal());
 				return res;
 			}
-			f.set(-q.getVal());
+			f.set(-idx * q.getVal());
 			f.simplify();
 			Pair<ConflictSolution, Boolean> other = backjumping(f, d + 1);
 			f.undo(other.first);
@@ -218,7 +223,7 @@ public class QDPLL {
 			return other;
 		}
 		
-		f.set(q.getVal());
+		f.set(idx * q.getVal());
 		f.simplify();
 		Pair<ConflictSolution, Boolean> res = backjumping(f, d + 1);
 		f.undo(res.first);
@@ -230,7 +235,7 @@ public class QDPLL {
 			res.first.drop(null, q.getVal());
 			return res;
 		}
-		f.set(-q.getVal());
+		f.set(-idx * q.getVal());
 		f.simplify();
 		Pair<ConflictSolution, Boolean> other = backjumping(f, d + 1);
 		f.undo(other.first);
@@ -302,6 +307,56 @@ public class QDPLL {
 				} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL) {
 					MyLog.log(lm, 1, "clause_len_limit= ", TwoWatchedLiteralFormula.max_clause_length, "cube_len_limit= ", TwoWatchedLiteralFormula.max_cube_length);
 					res = solver.qcdcl(ret, 0).second;
+				} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PLPRE_QCDCL) {
+					QDeepPNS solve = new QDeepPNS();
+					TwoWatchedLiteralFormula.preprocess = true;
+					TwoWatchedLiteralFormula.solvertype = TwoWatchedLiteralFormula.Method.PL;
+					int re = solve.deeppnsqcdcl_pre(ret);
+					if (re == 0) {
+						return false;
+					} else if (re == 1) {
+						return true;
+					}
+					
+					try {
+						FileWriter myWriter = new FileWriter("process.txt");
+						System.out.println("finish pns - preprocessing");
+						myWriter.write(ret.toString());
+						myWriter.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					
+					TwoWatchedLiteralFormula.preprocess = false;
+					TwoWatchedLiteralFormula.solvertype = TwoWatchedLiteralFormula.Method.QCDCL;
+					TwoWatchedLiteralFormula ret2 = reader.construct("process.txt");
+					res = solver.qcdcl(ret2, 0).second;
+					
+				} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PLPRE_BJ) {
+					QDeepPNS solve = new QDeepPNS();
+					TwoWatchedLiteralFormula.preprocess = true;
+					TwoWatchedLiteralFormula.solvertype = TwoWatchedLiteralFormula.Method.PL;
+					int re = solve.deeppnsqcdcl_pre(ret);
+					if (re == 0) {
+						return false;
+					} else if (re == 1) {
+						return true;
+					}
+					
+					try {
+						FileWriter myWriter = new FileWriter("process.txt");
+						System.out.println("finish pns - preprocessing");
+						myWriter.write(ret.toString());
+						myWriter.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					
+					TwoWatchedLiteralFormula.preprocess = false;
+					TwoWatchedLiteralFormula.solvertype = TwoWatchedLiteralFormula.Method.BJ;
+					TwoWatchedLiteralFormula ret2 = reader.construct("process.txt");
+					res = solver.backjumping(ret2, 0).second;
+					
 				} else {
 					MyLog.log(lm, 0, "Please select the correct solver");
 				}
@@ -318,8 +373,10 @@ public class QDPLL {
 			MyLog.log(lm, 1, "#bcp= ", TwoWatchedLiteralFormula.bcpcount, "#ple= ", TwoWatchedLiteralFormula.plecount);
 			MyLog.log(lm, 1, "nclause iterated per ass= " + (1.0 * cnt / (cnt2 + 1))); 
 			MyLog.log(lm, 1, "Existential Pruning= ", TwoWatchedLiteralFormula.prunE, " Universal Pruning: ", TwoWatchedLiteralFormula.prunU, "number of resolutions", TwoWatchedLiteralFormula.rescount, "total SAT terminal nodes: ", TwoWatchedLiteralFormula.trueterminal, "total UNSAT terminal nodes: ", TwoWatchedLiteralFormula.falseterminal);
+			MyLog.log(lm, 1, "#prun/#branch= ", 1.0*(TwoWatchedLiteralFormula.prunE+TwoWatchedLiteralFormula.prunU)/ResultGenerator.getInstance().getIteration());
 			MyLog.log(lm, 1, "total time " + (1.0 * (end-start) / 1000));
-		    if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
+		    if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ 
+		    		|| TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PL) {
 		    	MyLog.log(lm, 1, "total SAT nodes: ", TwoWatchedLiteralFormula.truecount, " total UNSAT nodes: ", TwoWatchedLiteralFormula.falsecount);
 		    	MyLog.log(lm, 1, "#learned clause= ", ret.tolLearnClause(), " #learned cube= ", ret.tolLearnCube());
 		    } 
@@ -333,6 +390,7 @@ public class QDPLL {
 			MyLog.log(lm, 1, "#bcp= ", TwoWatchedLiteralFormula.bcpcount, "#ple= ", TwoWatchedLiteralFormula.plecount);
 			MyLog.log(lm, 1, "nclause iterated per ass= " + (1.0 * cnt / (cnt2 + 1))); 
 			MyLog.log(lm, 1, "Existential Pruning= ", TwoWatchedLiteralFormula.prunE, " Universal Pruning: ", TwoWatchedLiteralFormula.prunU, "number of resolutions", TwoWatchedLiteralFormula.rescount, "total SAT terminal nodes: ", TwoWatchedLiteralFormula.trueterminal, "total UNSAT terminal nodes: ", TwoWatchedLiteralFormula.falseterminal);
+			MyLog.log(lm, 1, "#prun/#branch= ", 1.0*(TwoWatchedLiteralFormula.prunE+TwoWatchedLiteralFormula.prunU)/ResultGenerator.getInstance().getIteration());
 			MyLog.log(lm, 1, "total time " + (1.0 * (end-start) / 1000));
 		    if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.QCDCL || TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.CDCLSBJ) {
 		    	MyLog.log(lm, 1, "total SAT nodes: ", TwoWatchedLiteralFormula.truecount, " total UNSAT nodes: ", TwoWatchedLiteralFormula.falsecount);
