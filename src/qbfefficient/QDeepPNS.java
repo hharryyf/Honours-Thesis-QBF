@@ -1,12 +1,14 @@
 package qbfefficient;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
+//import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Stack;
 
 import qbfsolver.Result;
 import qbfsolver.ResultGenerator;
-import utilstructure.Pair;
+//import utilstructure.Pair;
 
 public class QDeepPNS {
 	protected static String lm = "Q_DEEP_PNS_SOLVE";
@@ -193,7 +195,7 @@ public class QDeepPNS {
 		long tolvisited = 0;
 		// TwoWatchedLiteralFormula.max_node_in_memory = 10000;
 		Stack<TwoWatchedLiteralFormula> stk = new Stack<TwoWatchedLiteralFormula>();
-		ArrayList<Pair<Pair<Integer, Integer>, Long>> list = new ArrayList<>();
+		//ArrayList<Pair<Pair<Integer, Integer>, Long>> list = new ArrayList<>();
 		final long start = System.currentTimeMillis();
 		boolean timeout = false, rootsimp = false;
 		while (ResultGenerator.getInstance().getLiveNode() <= TwoWatchedLiteralFormula.max_node_in_memory * 2 
@@ -203,9 +205,9 @@ public class QDeepPNS {
 				MyLog.log(lm, pndnlevel, "Iteration #" + i + " pn = " + root.getPn() + " dn= " + root.getDn());
 			}
 			
-			if (i % 100 == 0) {
+			/*if (i % 100 == 0) {
 				list.add(new Pair<>(new Pair<>(i, root.getPn() - root.getDn()), TwoWatchedLiteralFormula.trueterminal + TwoWatchedLiteralFormula.falseterminal));
-			}
+			}*/
 			
 			if (i % 5000 == 0) ResultGenerator.getCommandLine().setR(true);
 			
@@ -264,14 +266,14 @@ public class QDeepPNS {
 				break;
 			}
 		}
-		list.add(new Pair<>(new Pair<>(i, root.getPn() - root.getDn()), TwoWatchedLiteralFormula.trueterminal + TwoWatchedLiteralFormula.falseterminal));
+		//list.add(new Pair<>(new Pair<>(i, root.getPn() - root.getDn()), TwoWatchedLiteralFormula.trueterminal + TwoWatchedLiteralFormula.falseterminal));
 		MyLog.log(lm, 2, i, ", ", root.getPn() - root.getDn());
 		MyLog.log(lm, pndnlevel, "#Iteration " + i + " pn = " + root.getPn() + " dn= " + root.getDn());
 		MyLog.log(lm, 1, "#Visited: " + tolvisited);
 		MyLog.log(lm, 1, "visit ratio=", 1.0 * tolvisited / (i + 1));
-		for (Pair<Pair<Integer, Integer>, Long> pair : list) {
+		/*for (Pair<Pair<Integer, Integer>, Long> pair : list) {
 			System.out.println(pair.first.first + "," + pair.first.second + "," + pair.second);
-		}
+		}*/
 		if (root.isWin()) {
 			MyLog.log(lm, 1, root.reason);
 			System.out.println("SAT");
@@ -400,6 +402,25 @@ public class QDeepPNS {
 		MyLog.log(lm, 1, "#################### Timer Start ##################");
 		final long start = System.currentTimeMillis();
 		QDeepPNS solver = new QDeepPNS();
+		
+		Set<String> set = new HashSet<>();
+		
+		for (int i = 0 ; i < args.length; ++i) {
+			set.add(args[i]);
+		}
+		
+		if (set.contains("backjumping")) {
+			TwoWatchedLiteralFormula.solvertype = TwoWatchedLiteralFormula.Method.PBJ;
+		} else {
+			TwoWatchedLiteralFormula.solvertype = TwoWatchedLiteralFormula.Method.P_CDCLSBJ;
+		} 
+		
+		if (set.contains("pure")) {
+			TwoWatchedLiteralFormula.PLErule = true;
+		} else {
+			TwoWatchedLiteralFormula.PLErule = false;
+		}
+		
 		if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.PBJ) {
 			int res = solver.deeppnsbj(ret);
 			final long end = System.currentTimeMillis();

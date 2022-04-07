@@ -48,3 +48,22 @@ There are two deeppns-based solvers with the following features respectively:
 
 2) deeppns + conflict-driven clause learning + solution-driven backjumping + unit propagation (with 2-WL data structure)
 
+
+How to run the code:
+
+Note that the QBF solver is not a "product", but an experimental solver. The best way of actually running the solver is to run it on my local computer :).
+However, I will provide the executable jar files.
+
+To run the QCDCL solver, just run
+
+java -jar qdpllsolver.jar [solver option] [pure literal flag] < input.txt
+
+
+To run the PNS solver, just run 
+
+java -jar qdeeppnssolver.jar [solver option] [pure literal flag] < input.txt
+
+
+solver option is a string from "backjumping", "cdclsbj" or leave it empty (means QCDCL), if you want to enable pure literal elimination, just type "pure".
+
+

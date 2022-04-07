@@ -2,7 +2,9 @@ package qbfefficient;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -298,6 +300,27 @@ public class QDPLL {
 			
 			final Future<Boolean> f = service.submit(()->{
 				boolean res = false;
+				
+				Set<String> set = new HashSet<>();
+				
+				for (int i = 0 ; i < args.length; ++i) {
+					set.add(args[i]);
+				}
+				
+				if (set.contains("backjumping")) {
+					TwoWatchedLiteralFormula.solvertype = TwoWatchedLiteralFormula.Method.BJ;
+				} else if (set.contains("cdclsbj")) {
+					TwoWatchedLiteralFormula.solvertype = TwoWatchedLiteralFormula.Method.CDCLSBJ;
+				} else {
+					TwoWatchedLiteralFormula.solvertype = TwoWatchedLiteralFormula.Method.QCDCL;
+				}
+				
+				if (set.contains("pure")) {
+					TwoWatchedLiteralFormula.PLErule = true;
+				} else {
+					TwoWatchedLiteralFormula.PLErule = false;
+				}
+				
 				if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BT) {
 					res = solver.baseline(ret);
 				} else if (TwoWatchedLiteralFormula.solvertype == TwoWatchedLiteralFormula.Method.BJ) {

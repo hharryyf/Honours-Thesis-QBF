@@ -37,7 +37,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	public static int max_node_in_memory = 3000000, time_limit = 900, pre_process_time_limit = 150;
 	public static long prunE = 0, prunU = 0;
 	public static int res_level = 3, learn_count = 0;
-	public static Method solvertype = Method.P_CDCLSBJ;
+	public static Method solvertype = Method.PBJ;
 	public TwoWatchedLiteralFormula(int n) {
 		this.varsize = n;
 		this.tempunit = new TreeSet<>();

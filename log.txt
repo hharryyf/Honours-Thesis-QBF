@@ -8542,3 +8542,403 @@ e 2 4 0
 [22:33:21.870] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #learned clause=  478  #learned cube=  0 
 [22:33:21.871] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 12.74 
 [22:33:21.871] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[19:16:20.511] [QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
+[19:16:20.517] [QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
+[19:16:20.590] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  -126 
+[19:16:20.598] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  -40 
+[19:16:20.609] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  -77 
+[19:16:20.857] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  77 
+[19:16:20.857] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  77 
+[19:16:20.857] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.857] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.858] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.858] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.858] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.858] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.858] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.859] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.859] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.859] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.859] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.859] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.859] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.860] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.860] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.860] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.860] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.860] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.860] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.862] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.863] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.863] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.864] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:16:20.864] [QCDCL] [QDPLL] [INFO]: #branching= 2371 #ass= 13903 #clause iterate= 19962 
+[19:16:20.864] [QCDCL] [QDPLL] [INFO]: #bcp=  11477 #ple=  0 
+[19:16:20.869] [QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.4357019562715765 
+[19:16:20.869] [QCDCL] [QDPLL] [INFO]: Existential Pruning=  1576  Universal Pruning:  59 number of resolutions 84 total SAT terminal nodes:  59 total UNSAT terminal nodes:  165 
+[19:16:20.869] [QCDCL] [QDPLL] [INFO]: #prun/#branch=  0.6895824546604808 
+[19:16:20.869] [QCDCL] [QDPLL] [INFO]: total time 0.352 
+[19:16:20.869] [QCDCL] [QDPLL] [INFO]: total SAT nodes:  272  total UNSAT nodes:  2098 
+[19:16:20.869] [QCDCL] [QDPLL] [INFO]: #learned clause=  186  #learned cube=  0 
+[19:16:20.869] [QCDCL] [QDPLL] [INFO]: #################### EXIT SUCCESS ################## 
+[19:25:50.262] [QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
+[19:25:50.266] [QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
+[19:25:50.335] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  -126 
+[19:25:50.343] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  -40 
+[19:25:50.355] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  -77 
+[19:25:50.602] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  77 
+[19:25:50.602] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  77 
+[19:25:50.602] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.603] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.603] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.603] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.603] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.603] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.603] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.604] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.604] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.604] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.604] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.604] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.604] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.604] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.605] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.605] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.605] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.605] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.605] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.605] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.605] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.606] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.606] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:25:50.606] [QCDCL] [QDPLL] [INFO]: #branching= 2371 #ass= 13903 #clause iterate= 19962 
+[19:25:50.606] [QCDCL] [QDPLL] [INFO]: #bcp=  11477 #ple=  0 
+[19:25:50.610] [QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.4357019562715765 
+[19:25:50.610] [QCDCL] [QDPLL] [INFO]: Existential Pruning=  1576  Universal Pruning:  59 number of resolutions 84 total SAT terminal nodes:  59 total UNSAT terminal nodes:  165 
+[19:25:50.611] [QCDCL] [QDPLL] [INFO]: #prun/#branch=  0.6895824546604808 
+[19:25:50.611] [QCDCL] [QDPLL] [INFO]: total time 0.344 
+[19:25:50.611] [QCDCL] [QDPLL] [INFO]: total SAT nodes:  272  total UNSAT nodes:  2098 
+[19:25:50.611] [QCDCL] [QDPLL] [INFO]: #learned clause=  186  #learned cube=  0 
+[19:25:50.611] [QCDCL] [QDPLL] [INFO]: #################### EXIT SUCCESS ################## 
+[19:31:17.359487] [QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
+[19:32:04.749100700] [QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
+[19:32:04.756082600] [QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
+[19:32:04.935603] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  -126 
+[19:32:04.956551900] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  -40 
+[19:32:05.034338600] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  -77 
+[19:32:06.154344200] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  77 
+[19:32:06.155341700] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  77 
+[19:32:06.155341700] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.157350800] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.158335800] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.158335800] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.159335900] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.160327400] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.160327400] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.162322800] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.162322800] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.163320300] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.164317300] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.165315300] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.166312500] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.167312800] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.168307] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.169304200] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.170301200] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.171299300] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.173300800] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.174295900] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.175288400] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.176293] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.179276] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:06.180275700] [QCDCL] [QDPLL] [INFO]: #branching= 2371 #ass= 13903 #clause iterate= 19962 
+[19:32:06.181272100] [QCDCL] [QDPLL] [INFO]: #bcp=  11477 #ple=  0 
+[19:32:06.183266900] [QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.4357019562715765 
+[19:32:06.183266900] [QCDCL] [QDPLL] [INFO]: Existential Pruning=  1576  Universal Pruning:  59 number of resolutions 84 total SAT terminal nodes:  59 total UNSAT terminal nodes:  165 
+[19:32:06.183266900] [QCDCL] [QDPLL] [INFO]: #prun/#branch=  0.6895824546604808 
+[19:32:06.183266900] [QCDCL] [QDPLL] [INFO]: total time 1.43 
+[19:32:06.183266900] [QCDCL] [QDPLL] [INFO]: total SAT nodes:  272  total UNSAT nodes:  2098 
+[19:32:06.184263600] [QCDCL] [QDPLL] [INFO]: #learned clause=  186  #learned cube=  0 
+[19:32:06.184263600] [QCDCL] [QDPLL] [INFO]: #################### EXIT SUCCESS ################## 
+[19:32:58.132481100] [QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
+[19:32:58.138465400] [QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
+[19:32:58.349899800] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  -126 
+[19:32:58.373837500] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  -40 
+[19:32:58.462599200] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  -77 
+[19:32:59.638454600] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  77 
+[19:32:59.639452200] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  77 
+[19:32:59.639452200] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.641446900] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.642444500] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.643441100] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.643441100] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.644438300] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.645435600] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.645435600] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.646433400] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.647430500] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.647430500] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.648427700] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.648427700] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.649425100] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.650423700] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.652427800] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.654419200] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.655410700] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.655410700] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.656407400] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.657404200] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.657404200] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.658401400] [QCDCL] [2_WL_FORMULA] [INFO]: empty clause learned 
+[19:32:59.659404300] [QCDCL] [QDPLL] [INFO]: #branching= 2371 #ass= 13903 #clause iterate= 19962 
+[19:32:59.659404300] [QCDCL] [QDPLL] [INFO]: #bcp=  11477 #ple=  0 
+[19:32:59.660396300] [QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 1.4357019562715765 
+[19:32:59.661393100] [QCDCL] [QDPLL] [INFO]: Existential Pruning=  1576  Universal Pruning:  59 number of resolutions 84 total SAT terminal nodes:  59 total UNSAT terminal nodes:  165 
+[19:32:59.661393100] [QCDCL] [QDPLL] [INFO]: #prun/#branch=  0.6895824546604808 
+[19:32:59.661393100] [QCDCL] [QDPLL] [INFO]: total time 1.527 
+[19:32:59.661393100] [QCDCL] [QDPLL] [INFO]: total SAT nodes:  272  total UNSAT nodes:  2098 
+[19:32:59.661393100] [QCDCL] [QDPLL] [INFO]: #learned clause=  186  #learned cube=  0 
+[19:32:59.661393100] [QCDCL] [QDPLL] [INFO]: #################### EXIT SUCCESS ################## 
+[19:33:53.107196200] [QCDCL] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[19:33:56.736581100] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:33:56.736581100] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:33:56.737541700] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:33:56.737541700] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:33:56.737541700] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:33:56.738538300] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:33:56.738538300] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:33:56.738538300] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:33:56.739534600] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 100382 
+[19:33:56.739534600] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: visit ratio= 19.73304501670926 
+[19:33:56.740532800] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: [] 
+[19:33:56.741531] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:33:56.741531] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 5086 #ass= 1313924 #clause iterate= 1262560 
+[19:33:56.742529] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  1244564 #ple=  0 
+[19:33:56.742529] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.9609072055102079 
+[19:33:56.743525800] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  2135  Universal Pruning:  482 number of resolutions 0 
+[19:33:56.743525800] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #prun/#branch=  0.5145497443963822 
+[19:33:56.743525800] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 10173 total SAT nodes:  2472  total UNSAT nodes:  4609 total SAT terminal nodes:  1508 total UNSAT terminal nodes:  566 
+[19:33:56.743525800] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #learned clause=  0  #learned cube=  0 
+[19:33:56.743525800] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 3.633 
+[19:33:56.743525800] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[19:34:41.639305800] [QCDCL] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[19:34:43.273238200] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 105468 
+[19:34:43.274235] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: visit ratio= 20.732848437192846 
+[19:34:43.275234600] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 5086 #ass= 1021567 #clause iterate= 971455 
+[19:34:43.276231600] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  961186 #ple=  0 
+[19:34:43.276231600] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.9509450178549054 
+[19:34:43.276231600] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  2135  Universal Pruning:  482 number of resolutions 1024 
+[19:34:43.276231600] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #prun/#branch=  0.5145497443963822 
+[19:34:43.276231600] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 10173 total SAT nodes:  2472  total UNSAT nodes:  4609 total SAT terminal nodes:  1508 total UNSAT terminal nodes:  566 
+[19:34:43.277228900] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 1.635 
+[19:34:43.277228900] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[19:35:06.819401200] [QCDCL] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[19:35:10.370063600] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:35:10.371061200] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:35:10.372094700] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:35:10.373057400] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:35:10.373057400] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:35:10.374065700] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:35:10.374065700] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:35:10.375049400] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:35:10.375049400] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 100382 
+[19:35:10.375049400] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: visit ratio= 19.73304501670926 
+[19:35:10.377043600] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: [] 
+[19:35:10.377043600] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:35:10.377043600] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 5086 #ass= 1313924 #clause iterate= 1262560 
+[19:35:10.378041600] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  1244564 #ple=  0 
+[19:35:10.378041600] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.9609072055102079 
+[19:35:10.378041600] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  2135  Universal Pruning:  482 number of resolutions 0 
+[19:35:10.378041600] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #prun/#branch=  0.5145497443963822 
+[19:35:10.379041300] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 10173 total SAT nodes:  2472  total UNSAT nodes:  4609 total SAT terminal nodes:  1508 total UNSAT terminal nodes:  566 
+[19:35:10.379041300] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #learned clause=  0  #learned cube=  0 
+[19:35:10.379041300] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 3.558 
+[19:35:10.379041300] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[19:35:33.608391900] [QCDCL] [QDPLL] [INFO]: #################### Timer Start ################## 
+[19:35:33.614376800] [QCDCL] [QDPLL] [INFO]: clause_len_limit=  20 cube_len_limit=  50 
+[19:38:18.079454200] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  -398 
+[19:38:18.080452100] [QCDCL] [2_WL_FORMULA] [INFO]: learned unit existential  -398 
+[19:38:18.087431100] [QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[19:38:18.088428200] [QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[19:38:18.088428200] [QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[19:38:18.089426100] [QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[19:38:18.089426100] [QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[19:38:18.089426100] [QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[19:38:18.090423300] [QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[19:38:18.090423300] [QCDCL] [2_WL_FORMULA] [INFO]: empty term learned 
+[19:38:18.091420100] [QCDCL] [QDPLL] [INFO]: #branching= 398188 #ass= 8624392 #clause iterate= 8462113 
+[19:38:18.092418500] [QCDCL] [QDPLL] [INFO]: #bcp=  8226187 #ple=  0 
+[19:38:18.095409800] [QCDCL] [QDPLL] [INFO]: nclause iterated per ass= 0.9811836032982263 
+[19:38:18.095409800] [QCDCL] [QDPLL] [INFO]: Existential Pruning=  105610  Universal Pruning:  0 number of resolutions 28954 total SAT terminal nodes:  49330 total UNSAT terminal nodes:  18377 
+[19:38:18.095409800] [QCDCL] [QDPLL] [INFO]: #prun/#branch=  0.26522647593599 
+[19:38:18.096407800] [QCDCL] [QDPLL] [INFO]: total time 164.482 
+[19:38:18.096407800] [QCDCL] [QDPLL] [INFO]: total SAT nodes:  200693  total UNSAT nodes:  197494 
+[19:38:18.096407800] [QCDCL] [QDPLL] [INFO]: #learned clause=  0  #learned cube=  0 
+[19:38:18.097405300] [QCDCL] [QDPLL] [INFO]: #################### EXIT SUCCESS ################## 
+[19:44:05.954657900] [QCDCL] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[19:45:56.235] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[19:45:59.919] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:45:59.919] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:45:59.920] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:45:59.920] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:45:59.920] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:45:59.921] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:45:59.921] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:45:59.921] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:45:59.922] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 100382 
+[19:45:59.922] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: visit ratio= 19.73304501670926 
+[19:45:59.926] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: [] 
+[19:45:59.927] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:45:59.927] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 5086 #ass= 1313924 #clause iterate= 1262560 
+[19:45:59.927] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  1244564 #ple=  0 
+[19:45:59.927] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.9609072055102079 
+[19:45:59.927] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  2135  Universal Pruning:  482 number of resolutions 0 
+[19:45:59.927] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #prun/#branch=  0.5145497443963822 
+[19:45:59.928] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 10173 total SAT nodes:  2472  total UNSAT nodes:  4609 total SAT terminal nodes:  1508 total UNSAT terminal nodes:  566 
+[19:45:59.928] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #learned clause=  0  #learned cube=  0 
+[19:45:59.928] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 3.692 
+[19:45:59.928] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[19:48:44.585] [QCDCL] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[19:48:48.089] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:48:48.090] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:48:48.090] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:48:48.091] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:48:48.091] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:48:48.091] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:48:48.092] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:48:48.092] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:48:48.092] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 100382 
+[19:48:48.092] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: visit ratio= 19.73304501670926 
+[19:48:48.094] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: [] 
+[19:48:48.095] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:48:48.095] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 5086 #ass= 1313924 #clause iterate= 1262560 
+[19:48:48.095] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  1244564 #ple=  0 
+[19:48:48.095] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.9609072055102079 
+[19:48:48.096] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  2135  Universal Pruning:  482 number of resolutions 0 
+[19:48:48.096] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #prun/#branch=  0.5145497443963822 
+[19:48:48.096] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 10173 total SAT nodes:  2472  total UNSAT nodes:  4609 total SAT terminal nodes:  1508 total UNSAT terminal nodes:  566 
+[19:48:48.096] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #learned clause=  0  #learned cube=  0 
+[19:48:48.096] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 3.51 
+[19:48:48.096] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[19:49:01.432698600] [QCDCL] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[19:49:03.278233200] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 105468 
+[19:49:03.279230600] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: visit ratio= 20.732848437192846 
+[19:49:03.282222400] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 5086 #ass= 1021567 #clause iterate= 971455 
+[19:49:03.283220] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  961186 #ple=  0 
+[19:49:03.283220] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.9509450178549054 
+[19:49:03.284217600] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  2135  Universal Pruning:  482 number of resolutions 1024 
+[19:49:03.284217600] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #prun/#branch=  0.5145497443963822 
+[19:49:03.284217600] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 10173 total SAT nodes:  2472  total UNSAT nodes:  4609 total SAT terminal nodes:  1508 total UNSAT terminal nodes:  566 
+[19:49:03.285215400] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 1.849 
+[19:49:03.285215400] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[19:49:08.042374200] [QCDCL] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[19:50:12.440] [QCDCL] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[19:50:15.846] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:50:15.846] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:50:15.846] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:50:15.847] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:50:15.847] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:50:15.847] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:50:15.847] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:50:15.848] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:50:15.848] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 100382 
+[19:50:15.848] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: visit ratio= 19.73304501670926 
+[19:50:15.850] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: [] 
+[19:50:15.850] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:50:15.850] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 5086 #ass= 1313924 #clause iterate= 1262560 
+[19:50:15.851] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  1244564 #ple=  0 
+[19:50:15.851] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.9609072055102079 
+[19:50:15.851] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  2135  Universal Pruning:  482 number of resolutions 0 
+[19:50:15.851] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #prun/#branch=  0.5145497443963822 
+[19:50:15.851] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 10173 total SAT nodes:  2472  total UNSAT nodes:  4609 total SAT terminal nodes:  1508 total UNSAT terminal nodes:  566 
+[19:50:15.851] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #learned clause=  0  #learned cube=  0 
+[19:50:15.852] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 3.41 
+[19:50:15.852] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[19:50:44.078] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[19:50:48.111] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:50:48.112] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:50:48.112] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:50:48.112] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:50:48.113] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:50:48.113] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:50:48.113] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:50:48.113] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:50:48.114] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 100382 
+[19:50:48.114] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: visit ratio= 19.73304501670926 
+[19:50:48.115] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: [] 
+[19:50:48.116] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:50:48.116] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 5086 #ass= 1313924 #clause iterate= 1262560 
+[19:50:48.116] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  1244564 #ple=  0 
+[19:50:48.116] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.9609072055102079 
+[19:50:48.116] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  2135  Universal Pruning:  482 number of resolutions 0 
+[19:50:48.116] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #prun/#branch=  0.5145497443963822 
+[19:50:48.116] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 10173 total SAT nodes:  2472  total UNSAT nodes:  4609 total SAT terminal nodes:  1508 total UNSAT terminal nodes:  566 
+[19:50:48.116] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #learned clause=  0  #learned cube=  0 
+[19:50:48.117] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 4.038 
+[19:50:48.117] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[19:51:06.893] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[19:52:48.055] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 9217986 
+[19:52:48.056] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: visit ratio= 45.015631943664445 
+[19:52:48.061] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 204772 #ass= 46767385 #clause iterate= 41806654 
+[19:52:48.062] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  41392604 #ple=  458612 
+[19:52:48.062] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.8939275331745076 
+[19:52:48.062] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  75411  Universal Pruning:  0 number of resolutions 31686 
+[19:52:48.062] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #prun/#branch=  0.368268122594886 
+[19:52:48.063] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 409545 total SAT nodes:  46253  total UNSAT nodes:  165718 total SAT terminal nodes:  35573 total UNSAT terminal nodes:  21015 
+[19:52:48.063] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 101.167 
+[19:52:48.063] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[19:55:21.341441600] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[19:57:31.125395600] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 9217986 
+[19:57:31.126397700] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: visit ratio= 45.015631943664445 
+[19:57:31.131380100] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 204772 #ass= 46767385 #clause iterate= 41806654 
+[19:57:31.131380100] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  41392604 #ple=  458612 
+[19:57:31.132378300] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.8939275331745076 
+[19:57:31.133374600] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  75411  Universal Pruning:  0 number of resolutions 31686 
+[19:57:31.133374600] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #prun/#branch=  0.368268122594886 
+[19:57:31.133374600] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 409545 total SAT nodes:  46253  total UNSAT nodes:  165718 total SAT terminal nodes:  35573 total UNSAT terminal nodes:  21015 
+[19:57:31.133374600] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 129.789 
+[19:57:31.135371300] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[19:57:41.039191900] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[19:57:43.133014800] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 105468 
+[19:57:43.134012800] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: visit ratio= 20.732848437192846 
+[19:57:43.137005400] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 5086 #ass= 1021567 #clause iterate= 971455 
+[19:57:43.137005400] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  961186 #ple=  0 
+[19:57:43.137005400] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.9509450178549054 
+[19:57:43.138006500] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  2135  Universal Pruning:  482 number of resolutions 1024 
+[19:57:43.138006500] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #prun/#branch=  0.5145497443963822 
+[19:57:43.138999900] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 10173 total SAT nodes:  2472  total UNSAT nodes:  4609 total SAT terminal nodes:  1508 total UNSAT terminal nodes:  566 
+[19:57:43.141079200] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 2.096 
+[19:57:43.141079200] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[19:57:48.758824700] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[19:57:52.695339800] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:57:52.696337600] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:57:52.696337600] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:57:52.696337600] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:57:52.697335500] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:57:52.698332100] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:57:52.698332100] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:57:52.699329700] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:57:52.699329700] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 100382 
+[19:57:52.699329700] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: visit ratio= 19.73304501670926 
+[19:57:52.702322200] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: [] 
+[19:57:52.703320] [PCDCLSBJ] [2_WL_FORMULA] [INFO]: empty reason for satisfiability derived 
+[19:57:52.703320] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 5086 #ass= 1313924 #clause iterate= 1262560 
+[19:57:52.704321900] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  1244564 #ple=  0 
+[19:57:52.705314500] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.9609072055102079 
+[19:57:52.705314500] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  2135  Universal Pruning:  482 number of resolutions 0 
+[19:57:52.705314500] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #prun/#branch=  0.5145497443963822 
+[19:57:52.705314500] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 10173 total SAT nodes:  2472  total UNSAT nodes:  4609 total SAT terminal nodes:  1508 total UNSAT terminal nodes:  566 
+[19:57:52.705314500] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #learned clause=  0  #learned cube=  0 
+[19:57:52.706311800] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 3.944 
+[19:57:52.706311800] [PCDCLSBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
+[19:58:29.508862] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### Timer Start ################## 
+[20:00:55.101132700] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #Visited: 9217986 
+[20:00:55.102130300] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: visit ratio= 45.015631943664445 
+[20:00:55.105123100] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #branching= 204772 #ass= 46767385 #clause iterate= 41806654 
+[20:00:55.105123100] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #bcp=  41392604 #ple=  458612 
+[20:00:55.106120200] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: nclause iterated per ass= 0.8939275331745076 
+[20:00:55.107121] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: Existential Pruning=  75411  Universal Pruning:  0 number of resolutions 31686 
+[20:00:55.107121] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #prun/#branch=  0.368268122594886 
+[20:00:55.107121] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total nodes 409545 total SAT nodes:  46253  total UNSAT nodes:  165718 total SAT terminal nodes:  35573 total UNSAT terminal nodes:  21015 
+[20:00:55.108116500] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: total time 145.597 
+[20:00:55.108116500] [PBJ] [Q_DEEP_PNS_SOLVE] [INFO]: #################### EXIT SUCCESS ################## 
