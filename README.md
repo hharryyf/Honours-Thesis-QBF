@@ -24,14 +24,27 @@ It seems like it is necessary to decide how to compute a more accurate set of re
 
 8. 3/9/2021: QCDCL preprocessor, not sure if the idea is correct
 
+The end of "informal" implementation
+
 9. 7/10/2021: 2-watched-literal data structure for QBF implemented
 
 10. 13/10/2021: 2-watched-literal + backjumping solver implemented, significant efficiency improvement
 
-11. 18/10/2021: 2-watched-literal + cdcl solver implemented, the solver can equalize Quaffle and QUBE on some families
+11. 18/10/2021: 2-watched-literal + cdcl + sbj solver implemented, the solver can equalize Quaffle and QUBE on some families
 
 12. 15/2/2022: 2-watched-literal + qcdcl solver implemented, 2-watched-literal + backjumping + deeppns solver implemented, insignificant improvement
 
 13. 17/2/2022: pure-literal-elimination for deeppns/dfs based backjumping solver added, significantly improved the deeppns + backjumping solver
 
 14. 9/3/2022: deeppns + qcdcl solver implemented, it's correct, but not competitive with current state of art, might be competitive with 2004 solvers.
+
+15. 15/3/2022: solution driven cube learning cannot be activated in deeppns solver, shutdown any cube learning
+
+16. 22/3/2022: store the assertion clauses in tree nodes, could enable solution driven backjumping
+
+There are two deeppns-based solvers with the following features respectively:
+
+1) deeppns + backjumping + unit propagation (with 2-WL data structure) + pure literal elimination (with clause watching data structure)
+
+2) deeppns + conflict-driven clause learning + solution-driven backjumping + unit propagation (with 2-WL data structure)
+
