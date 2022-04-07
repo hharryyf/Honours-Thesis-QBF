@@ -31,7 +31,7 @@ public class TwoWatchedLiteralFormula implements EfficientQBFFormula {
 	public static int maxLevel = 1;
 	public static int maxclause = 2500, maxcube = 500;
 	public static long setcount = 0, clause_iter = 0, truecount = 0, falsecount = 0, bcpcount = 0, plecount = 0, rescount = 0, trueterminal = 0, falseterminal = 0;
-	public static boolean timer = true, depend = false, debug = false, rand = false, vsids = false, PLErule = false, preprocess = false;
+	public static boolean timer = true, depend = false, debug = false, rand = false, vsids = false, PLErule = true, preprocess = false;
 	public static boolean power = false;
 	public static int max_clause_length = 50, max_cube_length = 50;
 	public static int max_node_in_memory = 3000000, time_limit = 900, pre_process_time_limit = 150;

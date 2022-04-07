@@ -14,7 +14,7 @@ public class QDeepPNSCDCLSBJNode {
 	int visited = 0;
 	ConflictSolution reason;
 	QDeepPNSCDCLSBJNode left = null, right = null, parent = null;
-	int pn, dn, depth, size;
+	int pn, dn, depth, size, failcount = 0;
 	double deep;
 	public static int inf = 120000000;
 	public QDeepPNSCDCLSBJNode(TwoWatchedLiteralFormula f, int depth) {
@@ -37,6 +37,7 @@ public class QDeepPNSCDCLSBJNode {
 			this.pn = 1;
 			this.dn = 1;
 			this.splitnode = f.peek();
+			// if (this.splitnode.isMax()) System.out.println(this.depth);
 			if (this.splitnode.isMax()) {
 				this.dn = 2;
 			} else {
@@ -191,6 +192,7 @@ public class QDeepPNSCDCLSBJNode {
 				this.pn = this.left.pn;
 				this.dn = this.left.dn;
 				this.reason = this.left.reason;
+				this.failcount = this.left.failcount;
 				this.splitnode = this.left.splitnode;
 				this.deep = this.left.deep;
 				this.size = this.left.size;
@@ -200,6 +202,7 @@ public class QDeepPNSCDCLSBJNode {
 				this.pn = this.right.pn;
 				this.dn = this.right.dn;
 				this.reason = this.right.reason;
+				this.failcount = this.right.failcount;
 				this.splitnode = this.right.splitnode;
 				this.deep = this.right.deep;
 				this.size = this.right.size;
@@ -370,24 +373,63 @@ public class QDeepPNSCDCLSBJNode {
 		ConflictSolution L = null;
 		ConflictSolution R = null;
 		
-		if (this.left.reason != null) {
+		if (this.left.reason != null && this.right.reason != null) {
 			f.set(this.splitnode.getVal());
 			f.simplify();
 			if (f.evaluate() != -1) {
 				L = f.getReason();
+				if (f.evaluate() == 1) {
+					TwoWatchedLiteralFormula.trueterminal--;
+				} else {
+					TwoWatchedLiteralFormula.falseterminal--;
+				}
 				MyLog.log(lm, 2, "we meet an UNSAT node left");
 			} else {
 				L = cast(this.left.reason).duplicate();
 				MyLog.log(lm, 2, "we meet a reason internally left");
 			}
 			f.undo(L);
-		}
-		
-		if (this.right.reason != null) {
 			f.set(-this.splitnode.getVal());
 			f.simplify();
 			if (f.evaluate() != -1) {
 				R = f.getReason();
+				if (f.evaluate() == 1) {
+					TwoWatchedLiteralFormula.trueterminal--;
+				} else {
+					TwoWatchedLiteralFormula.falseterminal--;
+				}
+				MyLog.log(lm, 2, "we meet an UNSAT node right");
+			} else {
+				R = cast(this.right.reason).duplicate();
+				MyLog.log(lm, 2, "we meet a reason internally right");
+			}
+			f.undo(R);
+		} else if (this.left.reason != null && this.failcount < 2) {
+			f.set(this.splitnode.getVal());
+			f.simplify();
+			if (f.evaluate() != -1) {
+				L = f.getReason();
+				if (f.evaluate() == 1) {
+					TwoWatchedLiteralFormula.trueterminal--;
+				} else {
+					TwoWatchedLiteralFormula.falseterminal--;
+				}
+				MyLog.log(lm, 2, "we meet an UNSAT node left");
+			} else {
+				L = cast(this.left.reason).duplicate();
+				MyLog.log(lm, 2, "we meet a reason internally left");
+			}
+			f.undo(L);
+		} else if (this.right.reason != null && this.failcount < 2) {
+			f.set(-this.splitnode.getVal());
+			f.simplify();
+			if (f.evaluate() != -1) {
+				R = f.getReason();
+				if (f.evaluate() == 1) {
+					TwoWatchedLiteralFormula.trueterminal--;
+				} else {
+					TwoWatchedLiteralFormula.falseterminal--;
+				}
 				MyLog.log(lm, 2, "we meet an UNSAT node right");
 			} else {
 				R = cast(this.right.reason).duplicate();
@@ -397,14 +439,19 @@ public class QDeepPNSCDCLSBJNode {
 		}
 		
 		boolean ok = this.isSolved();
-		prun(f, L, R);
-		if (!ok && this.isSolved()) {
-			if (this.splitnode.isMax()) {
-				TwoWatchedLiteralFormula.prunE += 1;
-			} else {
-				TwoWatchedLiteralFormula.prunU += 1;
+		if (L != null || R != null) {
+			prun(f, L, R);
+			if (!ok && this.isSolved()) {
+				if (this.splitnode.isMax()) {
+					TwoWatchedLiteralFormula.prunE += 1;
+				} else {
+					TwoWatchedLiteralFormula.prunU += 1;
+				}
 			}
+			
+			if (!this.isSolved()) this.failcount += 1;
 		}
+		
 		
 		this.size = this.left.size + this.right.size + 1;
 		

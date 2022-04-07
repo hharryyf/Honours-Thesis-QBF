@@ -193,9 +193,9 @@ public class QDeepPNS {
 		long tolvisited = 0;
 		// TwoWatchedLiteralFormula.max_node_in_memory = 10000;
 		Stack<TwoWatchedLiteralFormula> stk = new Stack<TwoWatchedLiteralFormula>();
-		ArrayList<Pair<Integer, Integer>> list = new ArrayList<>();
+		ArrayList<Pair<Pair<Integer, Integer>, Long>> list = new ArrayList<>();
 		final long start = System.currentTimeMillis();
-		boolean timeout = false;
+		boolean timeout = false, rootsimp = false;
 		while (ResultGenerator.getInstance().getLiveNode() <= TwoWatchedLiteralFormula.max_node_in_memory * 2 
 				&& i <= 4 * TwoWatchedLiteralFormula.max_node_in_memory 
 				&& !root.isSolved()) {
@@ -204,7 +204,7 @@ public class QDeepPNS {
 			}
 			
 			if (i % 100 == 0) {
-				list.add(new Pair<>(i, root.getPn() - root.getDn()));
+				list.add(new Pair<>(new Pair<>(i, root.getPn() - root.getDn()), TwoWatchedLiteralFormula.trueterminal + TwoWatchedLiteralFormula.falseterminal));
 			}
 			
 			if (i % 5000 == 0) ResultGenerator.getCommandLine().setR(true);
@@ -252,7 +252,10 @@ public class QDeepPNS {
 				tolvisited++;
 			}
 			
-			if (curr == root) f.simplify();
+			if (curr == root) {
+				f.simplify();
+				if (f.evaluate() != -1) rootsimp = true;
+			}
 			i++;
 			Result rr = ResultGenerator.getInstance();
 			rr.setIteration(1 + rr.getIteration());
@@ -261,14 +264,14 @@ public class QDeepPNS {
 				break;
 			}
 		}
-		list.add(new Pair<>(i, root.getPn() - root.getDn()));
+		list.add(new Pair<>(new Pair<>(i, root.getPn() - root.getDn()), TwoWatchedLiteralFormula.trueterminal + TwoWatchedLiteralFormula.falseterminal));
 		MyLog.log(lm, 2, i, ", ", root.getPn() - root.getDn());
 		MyLog.log(lm, pndnlevel, "#Iteration " + i + " pn = " + root.getPn() + " dn= " + root.getDn());
 		MyLog.log(lm, 1, "#Visited: " + tolvisited);
 		MyLog.log(lm, 1, "visit ratio=", 1.0 * tolvisited / (i + 1));
-		/*for (Pair<Integer, Integer> pair : list) {
-			System.out.println(pair.first + "," + pair.second);
-		}*/
+		for (Pair<Pair<Integer, Integer>, Long> pair : list) {
+			System.out.println(pair.first.first + "," + pair.first.second + "," + pair.second);
+		}
 		if (root.isWin()) {
 			MyLog.log(lm, 1, root.reason);
 			System.out.println("SAT");
@@ -276,7 +279,11 @@ public class QDeepPNS {
 			return 0;
 		} else if (root.isLost()) {
 			System.out.println("UNSAT");
-			f.undo(root.reason);
+			if (rootsimp) {
+				MyLog.log(lm, 1, "Learned Unit can simplify the formula to a contradictory status");
+			} else {
+				f.undo(root.reason);
+			}
 			return 0;
 		} 
 		System.out.println("UNSOLVED");
