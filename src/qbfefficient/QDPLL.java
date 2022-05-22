@@ -303,6 +303,8 @@ public class QDPLL {
 				
 				Set<String> set = new HashSet<>();
 				
+				
+				
 				for (int i = 0 ; i < args.length; ++i) {
 					set.add(args[i]);
 				}
@@ -403,6 +405,7 @@ public class QDPLL {
 		    	MyLog.log(lm, 1, "total SAT nodes: ", TwoWatchedLiteralFormula.truecount, " total UNSAT nodes: ", TwoWatchedLiteralFormula.falsecount);
 		    	MyLog.log(lm, 1, "#learned clause= ", ret.tolLearnClause(), " #learned cube= ", ret.tolLearnCube());
 		    } 
+		    MyLog.log_final((1.0 * (end-start) / 1000), ResultGenerator.getInstance().getIteration());
 		    MyLog.log(lm, 1, "#################### EXIT SUCCESS ##################");
 		    System.out.println((res ? "SAT" : "UNSAT"));
 		}  catch (final TimeoutException e) {

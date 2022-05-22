@@ -1,14 +1,14 @@
 package qbfefficient;
 
 import java.io.FileNotFoundException;
-//import java.util.ArrayList;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Stack;
 
 import qbfsolver.Result;
 import qbfsolver.ResultGenerator;
-//import utilstructure.Pair;
+import utilstructure.Pair;
 
 public class QDeepPNS {
 	protected static String lm = "Q_DEEP_PNS_SOLVE";
@@ -195,7 +195,7 @@ public class QDeepPNS {
 		long tolvisited = 0;
 		// TwoWatchedLiteralFormula.max_node_in_memory = 10000;
 		Stack<TwoWatchedLiteralFormula> stk = new Stack<TwoWatchedLiteralFormula>();
-		//ArrayList<Pair<Pair<Integer, Integer>, Long>> list = new ArrayList<>();
+		ArrayList<Pair<Pair<Integer, Integer>, Long>> list = new ArrayList<>();
 		final long start = System.currentTimeMillis();
 		boolean timeout = false, rootsimp = false;
 		while (ResultGenerator.getInstance().getLiveNode() <= TwoWatchedLiteralFormula.max_node_in_memory * 2 
@@ -205,9 +205,9 @@ public class QDeepPNS {
 				MyLog.log(lm, pndnlevel, "Iteration #" + i + " pn = " + root.getPn() + " dn= " + root.getDn());
 			}
 			
-			/*if (i % 100 == 0) {
+			if (i % 100 == 0) {
 				list.add(new Pair<>(new Pair<>(i, root.getPn() - root.getDn()), TwoWatchedLiteralFormula.trueterminal + TwoWatchedLiteralFormula.falseterminal));
-			}*/
+			}
 			
 			if (i % 5000 == 0) ResultGenerator.getCommandLine().setR(true);
 			
@@ -266,14 +266,14 @@ public class QDeepPNS {
 				break;
 			}
 		}
-		//list.add(new Pair<>(new Pair<>(i, root.getPn() - root.getDn()), TwoWatchedLiteralFormula.trueterminal + TwoWatchedLiteralFormula.falseterminal));
+		list.add(new Pair<>(new Pair<>(i, root.getPn() - root.getDn()), TwoWatchedLiteralFormula.trueterminal + TwoWatchedLiteralFormula.falseterminal));
 		MyLog.log(lm, 2, i, ", ", root.getPn() - root.getDn());
 		MyLog.log(lm, pndnlevel, "#Iteration " + i + " pn = " + root.getPn() + " dn= " + root.getDn());
 		MyLog.log(lm, 1, "#Visited: " + tolvisited);
 		MyLog.log(lm, 1, "visit ratio=", 1.0 * tolvisited / (i + 1));
-		/*for (Pair<Pair<Integer, Integer>, Long> pair : list) {
+		for (Pair<Pair<Integer, Integer>, Long> pair : list) {
 			System.out.println(pair.first.first + "," + pair.first.second + "," + pair.second);
-		}*/
+		}
 		if (root.isWin()) {
 			MyLog.log(lm, 1, root.reason);
 			System.out.println("SAT");
@@ -415,7 +415,7 @@ public class QDeepPNS {
 			TwoWatchedLiteralFormula.solvertype = TwoWatchedLiteralFormula.Method.P_CDCLSBJ;
 		} 
 		
-		if (set.contains("pure")) {
+		if (set.contains("pure") && args.length != 0) {
 			TwoWatchedLiteralFormula.PLErule = true;
 		} else {
 			TwoWatchedLiteralFormula.PLErule = false;
@@ -435,6 +435,7 @@ public class QDeepPNS {
 					TwoWatchedLiteralFormula.falsecount, "total SAT terminal nodes: ", TwoWatchedLiteralFormula.trueterminal, "total UNSAT terminal nodes: ", TwoWatchedLiteralFormula.falseterminal);
 			MyLog.log(lm, 1, "total time " + (1.0 * (end-start) / 1000));
 			if (res == 0) {
+				MyLog.log_final((1.0 * (end-start) / 1000), ResultGenerator.getInstance().getNode());
 				MyLog.log(lm, 1, "#################### EXIT SUCCESS ##################");
 			} else if (res == 1) {
 				MyLog.log(lm, 1, "#################### OUT OF MEMORY ##################");
@@ -456,6 +457,7 @@ public class QDeepPNS {
 			MyLog.log(lm, 1, "#learned clause= ", ret.tolLearnClause(), " #learned cube= ", ret.tolLearnCube());
 			MyLog.log(lm, 1, "total time " + (1.0 * (end-start) / 1000));
 			if (res == 0) {
+				MyLog.log_final((1.0 * (end-start) / 1000), ResultGenerator.getInstance().getNode());
 				MyLog.log(lm, 1, "#################### EXIT SUCCESS ##################");
 			} else if (res == 1) {
 				MyLog.log(lm, 1, "#################### OUT OF MEMORY ##################");
@@ -477,6 +479,7 @@ public class QDeepPNS {
 			MyLog.log(lm, 1, "#learned clause= ", ret.tolLearnClause(), " #learned cube= ", ret.tolLearnCube());
 			MyLog.log(lm, 1, "total time " + (1.0 * (end-start) / 1000));
 			if (res == 0) {
+				MyLog.log_final((1.0 * (end-start) / 1000), ResultGenerator.getInstance().getNode());
 				MyLog.log(lm, 1, "#################### EXIT SUCCESS ##################");
 			} else if (res == 1) {
 				MyLog.log(lm, 1, "#################### OUT OF MEMORY ##################");

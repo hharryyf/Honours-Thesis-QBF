@@ -40,6 +40,7 @@ public class CmdArgs {
 			}
 			if (((iter / 10000) & 1) == 1) this.R= 1.0;
 		}
+		//this.R = 1.0;
 	}
 
 	
